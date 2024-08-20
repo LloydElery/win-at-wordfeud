@@ -18,19 +18,19 @@ import {
  */
 export const createTable = pgTableCreator((name) => `win-at-wordfeud_${name}`);
 
-export const posts = createTable(
-  "post",
+export const words = createTable(
+  "words",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    letters: varchar("letters", { length: 256 }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
+      () => new Date(),
     ),
   },
   (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+    nameIndex: index("name_idx").on(example.letters),
+  }),
 );
