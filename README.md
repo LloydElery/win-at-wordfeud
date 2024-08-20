@@ -1,7 +1,7 @@
 # TODO
 
-- [ ] Deploy (Vercel)
-- [ ] Set up database (Vercel Postgres)
+- [x] Deploy (Vercel)
+- [x] Set up database (Vercel Postgres)
 - [ ] Authentication (clerk)
 - [ ] Error management (Sentry)
 - [ ] Routing (Parallel route)
