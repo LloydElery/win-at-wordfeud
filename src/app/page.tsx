@@ -9,7 +9,6 @@ const mockWords = mockData.map((words, index) => ({
 export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      Win @ Wordfeud
       <div className="flex flex-wrap gap-1">
         {mockWords.map((word) => (
           <div key={word.id} className="w-1/2 p-4">
