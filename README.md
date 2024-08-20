@@ -9,7 +9,21 @@
 - [ ] Analytics (Posthog)
 - [ ] Ratelimit (upstash)
 
-# Project
+# Win at Wordfeud
+
+This project was inspired by my girlfriend who does not let me win at the game of `Wordfeud`.
+By doing so, she has left me no choise but to find a new way for me to win.
+
+By typing in the letters you are given by the game, this application will find you words containing your letters.
+
+## [T3 Stack](https://create.t3.gg/)
+
+**NextJS** for _Backend_
+**ReactJS** for _Frontend_
+**PostgresDB** as _Database_
+**PNPM** as _Package Manager_
+**Vercel** for _Database and Deployment_
+**Clerk** for _Authentication_
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
