@@ -7,7 +7,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  async function populateDatabase() {
+  /*   async function populateDatabase() {
     try {
       const url = process.env.URL;
       fetchSAOL14FilteredWords(url!).then((filteredWords) => {
@@ -26,7 +26,7 @@ export default async function HomePage() {
       console.error("Error populating database:", error);
     }
   }
-  populateDatabase();
+  populateDatabase(); */
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
