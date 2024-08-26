@@ -1,31 +1,58 @@
-// This function fetches all the words from "SAOL 14"
-// sorts them and adds them to the database
+// scrape.ts
+// This file contains the logic for scraping words from 'SAOL14' the Swedish dictionary
+// sorting, filtering and adding them to a PostgresSQL database.
 
-const url = process.env.URL;
-console.log(url);
+import { db, words } from "../db";
 
-export async function fetchSAOL14FilteredWords(url: string): Promise<string[]> {
-  const words = await fetchSAOL14TextFile(url);
+/**
+ *
+ * @param url = SAOL 14 words
+ * @returns words[] = the usable words when playing wordfeud in Swedish
+ */
+export async function fetchSAOL14FilteredWords(
+  url: string | undefined,
+): Promise<string[]> {
+  url = process.env.URL;
+  const words = await fetchSAOL14TextFile(url!);
   const filteredWords = filterSAOL14Words(words);
 
   return filteredWords;
 }
-/**
- *
- * @param url all SAOL14 words from a .txt file
- * @returns
- */
+// Fetching all the words in SAOL 14, the swedish dictionary.
 async function fetchSAOL14TextFile(url: string): Promise<string[]> {
   const response = await fetch(url);
   const text = await response.text();
   const words = text.split(/\r?\n/);
   return words;
 }
-/**
- *
- * @param words an array of words from SAOL14
- * @returns a filterd array without words containing a dash("-"), a space(" ") and words that contain only one letter.
- */
+// Filtering the words and creating an array excluding the words containing
+//  a dash("-"), a space(" ") and words that contain only one letter.
 function filterSAOL14Words(words: string[]): string[] {
   return words.filter((word) => !/[-\s]/.test(word) && word.length > 1);
+}
+
+/***
+ * Creating a normalized word from each word in the dictionary
+ * to make searching for words faster and easier.
+ */
+
+// Normalizing of a word (apple = aelpp)
+function normalizeWord(word: string): string {
+  return word.split("").sort().join("");
+}
+
+// Save filtered word in the database
+export async function saveFilteredWordsToDataBase(filteredWords: string[]) {
+  for (const word of filteredWords) {
+    const normalizedWord = normalizeWord(word);
+
+    // Adding it to the database
+    await db
+      .insert(words)
+      .values({
+        word: word,
+        normalized_word: normalizedWord,
+      })
+      .execute();
+  }
 }
