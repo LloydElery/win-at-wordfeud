@@ -3,7 +3,6 @@ import {
   SignedOut,
   SignInButton,
   SignOutButton,
-  SignUpButton,
 } from "@clerk/nextjs";
 
 export function Nav() {
