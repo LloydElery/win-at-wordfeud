@@ -4,11 +4,13 @@
 import { sql } from "drizzle-orm";
 import {
   index,
+  text,
   pgTableCreator,
   serial,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
+import { drizzle } from "drizzle-orm/vercel-postgres";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -22,15 +24,12 @@ export const words = createTable(
   "words",
   {
     id: serial("id").primaryKey(),
-    letters: varchar("letters", { length: 256 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date(),
-    ),
+    word: text("word").notNull(),
+    normalized_word: text("normalized_word").notNull(),
   },
   (example) => ({
-    nameIndex: index("name_idx").on(example.letters),
+    normalized_word_index: index("normalized_word_index").on(
+      example.normalized_word,
+    ),
   }),
 );
