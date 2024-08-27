@@ -1,6 +1,9 @@
+// Adding and deleating words from the database
+
 import { NextRequest, NextResponse } from "next/server";
 import { saveFilteredWordsToDataBase } from "~/server/api/scrape";
 
+// Add a word to the database
 export async function POST(req: NextRequest) {
   const { word } = await req.json();
 
@@ -15,3 +18,18 @@ export async function POST(req: NextRequest) {
     { status: 200 },
   );
 }
+
+//TODO Add a GET function
+/* export async function GET(res: NextResponse) {
+  const { word } = await res.json();
+
+  if (!word) {
+    return NextResponse.json(
+      { error: "This word is not in the database" },
+      { status: 400 },
+    );
+  }
+
+  await 
+}
+ */

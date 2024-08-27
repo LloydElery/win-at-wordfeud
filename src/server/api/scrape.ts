@@ -56,3 +56,9 @@ export async function saveFilteredWordsToDataBase(filteredWords: string[]) {
       .execute();
   }
 }
+
+//TODO Add a GET function to test basic search function
+/* export async function findFilteredWordsInDatabase() {
+  
+  await db.select()
+} */
