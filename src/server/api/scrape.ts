@@ -2,6 +2,7 @@
 // This file contains the logic for scraping words from 'SAOL14' the Swedish dictionary
 // sorting, filtering and adding them to a PostgresSQL database.
 
+import { normalizeWord } from "~/utils/wordUtils";
 import { db, words } from "../db";
 
 /**
@@ -29,16 +30,6 @@ async function fetchSAOL14TextFile(url: string): Promise<string[]> {
 //  a dash("-"), a space(" ") and words that contain only one letter.
 function filterSAOL14Words(words: string[]): string[] {
   return words.filter((word) => !/[-\s]/.test(word) && word.length > 1);
-}
-
-/***
- * Creating a normalized word from each word in the dictionary
- * to make searching for words faster and easier.
- */
-
-// Normalizing of a word (apple = aelpp)
-function normalizeWord(word: string): string {
-  return word.split("").sort().join("");
 }
 
 // Save filtered word in the database
