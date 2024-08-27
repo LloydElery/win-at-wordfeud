@@ -1,3 +1,5 @@
+// This script is intended to not be used unless the db needs total re-building.
+
 import {
   fetchSAOL14FilteredWords,
   saveFilteredWordsToDataBase,
