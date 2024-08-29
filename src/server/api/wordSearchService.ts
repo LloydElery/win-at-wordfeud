@@ -1,33 +1,51 @@
+// The wordSearchService.ts file contains all specific logic for serching,
+// finding and sorting words from the user input to the database.
+//
+// The file is structured in a way were the exported function(s) are using
+// all or some of the functions above it within this file.
+
 import { db, words } from "../db";
 import { sql } from "drizzle-orm";
 import { countMatchingLetters } from "~/utils/wordUtils";
 
 /**
- * Normalizes the input by converting to lowercase.
- * @param word the input word.
+ * Normalizes the input by converting to lowercase and sorting @chars alphabeticly
+ * @param word the input combination of @chars
  * @returns the normalized version of the word.
+ * @example 'äpple' = 'elppä' & 'bord' = 'bdor'
  */
 export function normalizeWord(word: string): string {
-  return word.toLowerCase();
+  return word.split("").sort().join("").toLowerCase();
 }
 
 /**
  * Searches for words in the database that are similar to the given letters.
- * Uses pg_trgm index for efficient searching.
- * @param letters the letters to search for.
- * @returns a list of matching words.
+ * @param letters - User input in the form of letters
+ * @const normalizedLetters - Uses @function normalizedWord to normalize @param letters
+ * @const likeClauses - Match words that contain any of the letters
+ * @const result - Search using the dynamic LIKE clauses combined with OR
+ * @const filteredResults - Filters @const result to ensure no word contains letters outside @param letters
+ * @returns - A filtered list of matching words only containing @param letters
  */
-export async function searchWordsWithLetters(letters: string) {
-  // Normalize input letters
+async function searchWordsWithLetters(letters: string) {
   const normalizedLetters = normalizeWord(letters);
 
-  // Perform a trigram search using pg_trgm index
+  const likeClauses = normalizedLetters
+    .split("")
+    .map((char) => sql`${words.word} like ${"%" + char + "%"}`);
+
   const result = await db
     .selectDistinct({ word: sql<string>`lower(${words.word})` })
     .from(words)
-    .where(sql`${words.normalized_word} % ${normalizedLetters}`);
+    .where(sql.join(likeClauses, sql` OR `));
 
-  return result.map((row) => row.word);
+  const filterResults = result
+    .map((row) => row.word)
+    .filter((word) => {
+      return [...word].every((char) => normalizedLetters.includes(char));
+    });
+
+  return filterResults;
 }
 
 /**
@@ -43,5 +61,6 @@ export async function sortedSearchResults(query: string): Promise<String[]> {
 
     return matchCountB - matchCountA;
   });
+  console.log("sortedResults: ", sortedResults);
   return sortedResults;
 }
