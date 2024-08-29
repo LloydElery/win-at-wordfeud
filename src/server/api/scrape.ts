@@ -2,8 +2,8 @@
 // This file contains the logic for scraping words from 'SAOL14' the Swedish dictionary
 // sorting, filtering and adding them to a PostgresSQL database.
 
-import { normalizeWord } from "~/utils/wordUtils";
 import { db, words } from "../db";
+import { normalizeWord } from "./wordSearchService";
 
 /**
  *

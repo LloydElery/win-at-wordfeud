@@ -1,18 +1,77 @@
-// wordSearchService contains the logic for finding the words containing the letters a user might input.
+// The wordSearchService.ts file contains all specific logic for serching,
+// finding and sorting words from the user input to the database.
+//
+// The file is structured in a way were the exported function(s) are using
+// all or some of the functions above it within this file.
 
-import { normalizeWord } from "~/utils/wordUtils";
 import { db, words } from "../db";
 import { sql } from "drizzle-orm";
 
+/**
+ * Normalizes the input by converting to lowercase and sorting @chars alphabeticly
+ * @param word the input combination of @chars
+ * @returns the normalized version of the word.
+ * @example 'äpple' = 'elppä' & 'bord' = 'bdor'
+ */
+export function normalizeWord(word: string): string {
+  return word.split("").sort().join("").toLowerCase();
+}
+
+/**
+ * Counts the number of letters that exist in both @word and @query.
+ * @param word a word from the database.
+ * @param query the searched letters.
+ * @returns the number of matching letters.
+ */
+export function countMatchingLetters(word: string, letters: string): number {
+  const wordLetters = word.split("").sort();
+  const letterSet = new Set(letters.split(""));
+
+  return wordLetters.reduce((count, letter) => {
+    if (letterSet.has(letter)) {
+      count += 1;
+    }
+    return count;
+  }, 0);
+}
+
+/**
+ * Searches for words in the database that are similar to the given letters.
+ * @param letters - User input in the form of letters
+ * @const normalizedLetters - Uses @function normalizedWord to normalize @param letters
+ * @const likeClauses - Match words that contain any of the letters
+ * @const result - A list of words from the db containing one or multible @param letters provided
+ * @const filteredResults - Filters @const result to ensure no word contains letters outside @param letters
+ * @returns - A filtered list of matching words only containing @param letters
+ */
 export async function searchWordsWithLetters(letters: string) {
-  const normalizedLetters = normalizeWord(letters).toLowerCase();
+  const normalizedLetters = normalizeWord(letters);
+
+  const likeClauses = normalizedLetters
+    .split("")
+    .map((char) => sql`${words.word} like ${"%" + char + "%"}`);
 
   const result = await db
     .selectDistinct({ word: sql<string>`lower(${words.word})` })
     .from(words)
-    .where(
-      sql`${normalizedLetters} ILIKE '%' || ${words.normalized_word} || '%'`,
-    );
+    .where(sql.join(likeClauses, sql` OR `));
 
-  return result.map((row) => row.word);
+  const filteredResults = result
+    .map((row) => row.word)
+    .filter((word) => {
+      return [...word].every((char) => normalizedLetters.includes(char));
+    });
+
+  console.log("filteredResults: ", filteredResults);
+
+  const sortedResults = filteredResults.sort((a, b) => {
+    const countA = countMatchingLetters(a, normalizedLetters);
+    const countB = countMatchingLetters(b, normalizedLetters);
+
+    return countB - countA;
+  });
+
+  console.log("sortedResults: ", sortedResults);
+
+  return sortedResults;
 }
