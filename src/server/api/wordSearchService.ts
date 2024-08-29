@@ -6,7 +6,6 @@
 
 import { db, words } from "../db";
 import { sql } from "drizzle-orm";
-import { countMatchingLetters } from "~/utils/wordUtils";
 
 /**
  * Normalizes the input by converting to lowercase and sorting @chars alphabeticly
@@ -19,15 +18,33 @@ export function normalizeWord(word: string): string {
 }
 
 /**
+ * Counts the number of letters that exist in both @word and @query.
+ * @param word a word from the database.
+ * @param query the searched letters.
+ * @returns the number of matching letters.
+ */
+export function countMatchingLetters(word: string, letters: string): number {
+  const wordLetters = word.split("").sort();
+  const letterSet = new Set(letters.split(""));
+
+  return wordLetters.reduce((count, letter) => {
+    if (letterSet.has(letter)) {
+      count += 1;
+    }
+    return count;
+  }, 0);
+}
+
+/**
  * Searches for words in the database that are similar to the given letters.
  * @param letters - User input in the form of letters
  * @const normalizedLetters - Uses @function normalizedWord to normalize @param letters
  * @const likeClauses - Match words that contain any of the letters
- * @const result - Search using the dynamic LIKE clauses combined with OR
+ * @const result - A list of words from the db containing one or multible @param letters provided
  * @const filteredResults - Filters @const result to ensure no word contains letters outside @param letters
  * @returns - A filtered list of matching words only containing @param letters
  */
-async function searchWordsWithLetters(letters: string) {
+export async function searchWordsWithLetters(letters: string) {
   const normalizedLetters = normalizeWord(letters);
 
   const likeClauses = normalizedLetters
@@ -39,28 +56,22 @@ async function searchWordsWithLetters(letters: string) {
     .from(words)
     .where(sql.join(likeClauses, sql` OR `));
 
-  const filterResults = result
+  const filteredResults = result
     .map((row) => row.word)
     .filter((word) => {
       return [...word].every((char) => normalizedLetters.includes(char));
     });
 
-  return filterResults;
-}
+  console.log("filteredResults: ", filteredResults);
 
-/**
- * Sorts the search results by the number of matching letters.
- * @param query the letters to match against.
- * @returns a sorted list of matching words.
- */
-export async function sortedSearchResults(query: string): Promise<String[]> {
-  const results = await searchWordsWithLetters(query);
-  const sortedResults = results.sort((a, b) => {
-    const matchCountA = countMatchingLetters(a, query);
-    const matchCountB = countMatchingLetters(b, query);
+  const sortedResults = filteredResults.sort((a, b) => {
+    const countA = countMatchingLetters(a, normalizedLetters);
+    const countB = countMatchingLetters(b, normalizedLetters);
 
-    return matchCountB - matchCountA;
+    return countB - countA;
   });
+
   console.log("sortedResults: ", sortedResults);
+
   return sortedResults;
 }
