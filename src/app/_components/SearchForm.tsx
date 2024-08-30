@@ -18,13 +18,13 @@ const SearchForm = () => {
           className="text-black"
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value.toUpperCase())}
           placeholder="SÖK ORD"
         />
         <button type="submit">Sök</button>
         <ul>
           {results.map((word, index) => (
-            <li key={index}>{word}</li>
+            <li key={index}>{word.toUpperCase()}</li>
           ))}
         </ul>
       </form>
