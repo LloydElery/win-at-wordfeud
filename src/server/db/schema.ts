@@ -1,7 +1,13 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { index, text, pgTableCreator, serial } from "drizzle-orm/pg-core";
+import {
+  index,
+  text,
+  pgTableCreator,
+  serial,
+  integer,
+} from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -17,6 +23,7 @@ export const words = createTable(
     id: serial("id").primaryKey(),
     word: text("word").notNull(),
     normalized_word: text("normalized_word").notNull(),
+    word_value: integer("word_value").notNull().default(0),
   },
   (example) => ({
     normalized_word_index: index("normalized_word_index").on(

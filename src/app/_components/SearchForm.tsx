@@ -4,16 +4,36 @@ import { useSearch } from "../hooks/useSearch";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
-  const { results, search } = useSearch();
+  const { results, search, sortBy, setSortBy } = useSearch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     search(query);
   };
 
+  const handleSortChange = (event: { target: { value: string } }) => {
+    setSortBy(event.target.value as "length" | "value");
+    console.log(sortBy);
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
+        <label className="switch">
+          <input
+            type="checkbox"
+            checked={sortBy === "length"}
+            onChange={(e) =>
+              handleSortChange({
+                target: { value: e.target.checked ? "length" : "value" },
+              })
+            }
+          />
+          <span className="slider">Sorterar efter</span>
+          <span className="label-text">
+            <strong>{sortBy === "length" ? "värde" : "längd"}</strong>
+          </span>
+        </label>
         <input
           className="text-black"
           type="text"
@@ -21,13 +41,15 @@ const SearchForm = () => {
           onChange={(e) => setQuery(e.target.value.toUpperCase())}
           placeholder="SÖK ORD"
         />
+
         <button type="submit">Sök</button>
-        <ul>
-          {results.map((word, index) => (
-            <li key={index}>{word.toUpperCase()}</li>
-          ))}
-        </ul>
       </form>
+
+      <ul>
+        {results.map((word, index) => (
+          <li key={index}>{word.toUpperCase()}</li>
+        ))}
+      </ul>
     </>
   );
 };
