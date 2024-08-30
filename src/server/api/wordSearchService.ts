@@ -44,7 +44,10 @@ export function countMatchingLetters(word: string, letters: string): number {
  * @const filteredResults - Filters @const result to ensure no word contains letters outside @param letters
  * @returns - A filtered list of matching words only containing @param letters
  */
-export async function searchWordsWithLetters(letters: string) {
+export async function searchWordsWithLetters(
+  letters: string,
+  sortBy: "length" | "value" = "length",
+) {
   const normalizedLetters = normalizeWord(letters);
 
   const likeClauses = normalizedLetters
@@ -52,26 +55,27 @@ export async function searchWordsWithLetters(letters: string) {
     .map((char) => sql`${words.word} like ${"%" + char + "%"}`);
 
   const result = await db
-    .selectDistinct({ word: sql<string>`lower(${words.word})` })
+    .selectDistinct({
+      word: sql<string>`lower(${words.word})`,
+      value: words.word_value,
+    })
     .from(words)
     .where(sql.join(likeClauses, sql` OR `));
 
   const filteredResults = result
-    .map((row) => row.word)
-    .filter((word) => {
-      return [...word].every((char) => normalizedLetters.includes(char));
-    });
-
-  console.log("filteredResults: ", filteredResults);
+    .map((row) => row)
+    .filter(({ word }) =>
+      [...word].every((char) => normalizedLetters.includes(char)),
+    );
 
   const sortedResults = filteredResults.sort((a, b) => {
-    const countA = countMatchingLetters(a, normalizedLetters);
-    const countB = countMatchingLetters(b, normalizedLetters);
-
-    return countB - countA;
+    const lengthDifferance = b.word.length - a.word.length;
+    if (lengthDifferance !== 0) return lengthDifferance;
+    return (b.value ?? 0) - (a.value ?? 0);
   });
 
+  console.log("sortBy: ", sortBy);
   console.log("sortedResults: ", sortedResults);
 
-  return sortedResults;
+  return sortedResults.map(({ word }) => word);
 }
