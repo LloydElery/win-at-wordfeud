@@ -4,6 +4,7 @@
 // The file is structured in a way were the exported function(s) are using
 // all or some of the functions above it within this file.
 
+import { Word } from "~/app/utils/WordInterface";
 import { db, words } from "../db";
 import { sql } from "drizzle-orm";
 
@@ -57,25 +58,29 @@ function canFormWord(word: string, letters: string): boolean {
   return true;
 }
 
+export function sortByValueDesc(results: Word[]): Word[] {
+  return [...results].sort((a, b) => {
+    return b.value - a.value;
+  });
+}
+
 /**
  * Searches for words in the database that are similar to the given letters.
  * @param letters - User input in the form of letters
- * @const normalizedLetters - Uses @function normalizedWord to normalize @param letters
- * @const likeClauses - Match words that contain any of the letters
- * @const result - A list of words from the db containing one or multible @param letters provided
- * @const filteredResults - Filters @const result to ensure no word contains letters outside @param letters
  * @returns - A filtered list of matching words only containing @param letters
  */
 export async function searchWordsWithLetters(
   letters: string,
-  sortBy: "length" | "value" = "length",
+  sortBy: "length" | "value" | "default" = "length",
 ) {
   const normalizedLetters = normalizeWord(letters);
 
+  // Match words that contain any of the letters
   const likeClauses = normalizedLetters
     .split("")
     .map((char) => sql`${words.word} like ${"%" + char + "%"}`);
 
+  // A list of words from the db containing two or more letters provided
   const result = await db
     .selectDistinct({
       word: sql<string>`lower(${words.word})`,
@@ -84,11 +89,18 @@ export async function searchWordsWithLetters(
     .from(words)
     .where(sql.join(likeClauses, sql` OR `));
 
+  // Filters results and returns a list of words without excessive
   const formableWords = result.filter(({ word }) =>
     canFormWord(word, normalizedLetters),
   );
 
-  const filteredResults = formableWords
+  // Filers results and returns them in alphabetical order
+  const alphabeticallySortedResults = formableWords.sort((a, b) => {
+    return a.word.localeCompare(b.word);
+  });
+
+  // Filters result to ensure no word contains letters outside letters
+  const filteredResults = alphabeticallySortedResults
     .map((row) => row)
     .filter(({ word }) =>
       [...word].every((char) => normalizedLetters.includes(char)),
@@ -97,10 +109,9 @@ export async function searchWordsWithLetters(
   const sortedResults = filteredResults.sort((a, b) => {
     const lengthDifferance = b.word.length - a.word.length;
     if (lengthDifferance !== 0) return lengthDifferance;
-    return (b.value ?? 0) - (a.value ?? 0);
+    return a.word.length - b.word.length || a.word.localeCompare(b.word);
   });
 
-  console.log("sortBy: ", sortBy);
   console.log("sortedResults: ", sortedResults);
   return sortedResults;
 }
