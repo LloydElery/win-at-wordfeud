@@ -69,7 +69,10 @@ export function sortByValueDesc(results: Word[]): Word[] {
  * @param letters - User input in the form of letters
  * @returns - A filtered list of matching words only containing @param letters
  */
-export async function searchWordsWithLetters(letters: string) {
+export async function searchWordsWithLetters(
+  letters: string,
+  sortBy: "length" | "value" | "default" = "length",
+) {
   const normalizedLetters = normalizeWord(letters);
 
   // Match words that contain any of the letters
@@ -77,7 +80,7 @@ export async function searchWordsWithLetters(letters: string) {
     .split("")
     .map((char) => sql`${words.word} like ${"%" + char + "%"}`);
 
-  // A list of words from the db containing one or multible @param letters provided
+  // A list of words from the db containing two or more letters provided
   const result = await db
     .selectDistinct({
       word: sql<string>`lower(${words.word})`,
@@ -106,7 +109,7 @@ export async function searchWordsWithLetters(letters: string) {
   const sortedResults = filteredResults.sort((a, b) => {
     const lengthDifferance = b.word.length - a.word.length;
     if (lengthDifferance !== 0) return lengthDifferance;
-    return (b.value ?? 0) - (a.value ?? 0);
+    return a.word.length - b.word.length || a.word.localeCompare(b.word);
   });
 
   console.log("sortedResults: ", sortedResults);
