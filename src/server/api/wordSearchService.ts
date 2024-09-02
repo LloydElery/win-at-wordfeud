@@ -36,6 +36,28 @@ export function countMatchingLetters(word: string, letters: string): number {
 }
 
 /**
+ * Looks at each letter in each word in search results
+ * @param word each word from the search result
+ * @param letters each letter in @param word
+ * @returns an array of words that can be created using only the letters provided
+ */
+function canFormWord(word: string, letters: string): boolean {
+  const letterCount: Record<string, number> = {};
+
+  for (const letter of letters) {
+    letterCount[letter] = (letterCount[letter] || 0) + 1;
+  }
+
+  for (const letter of word) {
+    if (!letterCount[letter]) {
+      return false;
+    }
+    letterCount[letter] -= 1;
+  }
+  return true;
+}
+
+/**
  * Searches for words in the database that are similar to the given letters.
  * @param letters - User input in the form of letters
  * @const normalizedLetters - Uses @function normalizedWord to normalize @param letters
@@ -62,7 +84,11 @@ export async function searchWordsWithLetters(
     .from(words)
     .where(sql.join(likeClauses, sql` OR `));
 
-  const filteredResults = result
+  const formableWords = result.filter(({ word }) =>
+    canFormWord(word, normalizedLetters),
+  );
+
+  const filteredResults = formableWords
     .map((row) => row)
     .filter(({ word }) =>
       [...word].every((char) => normalizedLetters.includes(char)),
