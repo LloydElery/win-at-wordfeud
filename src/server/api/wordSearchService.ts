@@ -76,6 +76,5 @@ export async function searchWordsWithLetters(
 
   console.log("sortBy: ", sortBy);
   console.log("sortedResults: ", sortedResults);
-
-  return sortedResults.map(({ word }) => word);
+  return sortedResults;
 }
