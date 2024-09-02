@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { Word } from "../utils/WordInterface";
 
 export const useSearch = () => {
-  const [results, setResults] = useState<string[]>([]);
+  const [results, setResults] = useState<Word[]>([]);
   const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState<"length" | "value">("length");
 

@@ -5,6 +5,7 @@ import { useSearch } from "../hooks/useSearch";
 const SearchForm = () => {
   const [query, setQuery] = useState("");
   const { results, search, sortBy, setSortBy } = useSearch();
+  console.log("results: ", results);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +48,9 @@ const SearchForm = () => {
 
       <ul>
         {results.map((word, index) => (
-          <li key={index}>{word.toUpperCase()}</li>
+          <li key={index}>
+            {word.word.toUpperCase()} : {word.value} poäng
+          </li>
         ))}
       </ul>
     </>
