@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { reportWord } from "~/server/queries";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
@@ -63,14 +64,28 @@ const SearchForm = () => {
         {results.map((word, index) => (
           <li key={index}>
             {word.word.toUpperCase()} - {word.value}{" "}
-            <button
-              onClick={() => {
-                handleReport(word.word);
-                alert("Tack för att du rapporterar oanvändbara ord!");
-              }}
-            >
-              Report
-            </button>
+            <SignedIn>
+              <button
+                onClick={() => {
+                  handleReport(word.word);
+                  alert("Tack för att du rapporterar oanvändbara ord!");
+                }}
+              >
+                Report
+              </button>
+            </SignedIn>
+            <SignedOut>
+              <button
+                onClick={() => {
+                  alert(`
+                    Du måste vara inloggad för att repportera ord!\n
+                    Klicka på 'Sign in' nere i hörnet för att skapa ett konto.
+                  `);
+                }}
+              >
+                Report
+              </button>
+            </SignedOut>
           </li>
         ))}
       </ul>
