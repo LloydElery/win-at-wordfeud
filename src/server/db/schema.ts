@@ -24,6 +24,7 @@ export const words = createTable(
     word: text("word").notNull(),
     normalized_word: text("normalized_word").notNull(),
     word_value: integer("word_value").notNull().default(0),
+    reports: integer("reports").notNull().default(0),
   },
   (example) => ({
     normalized_word_index: index("normalized_word_index").on(

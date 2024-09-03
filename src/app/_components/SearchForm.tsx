@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useSearch } from "../hooks/useSearch";
+import { reportWord } from "~/server/queries";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
@@ -16,10 +18,25 @@ const SearchForm = () => {
     setSortByValue(!sortByValue);
   };
 
-  /* const handleSortChange = (event: { target: { value: string } }) => {
-    setSortBy(event.target.value as "length" | "value");
-    console.log(sortBy);
-  }; */
+  const handleReport = async (word: string) => {
+    try {
+      const response = await fetch("/api/report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ word }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to report word");
+      }
+      const data = await response.json();
+      console.log(data.message);
+    } catch (error) {
+      console.error("Failed to report word:", error);
+    }
+  };
 
   return (
     <>
@@ -46,7 +63,29 @@ const SearchForm = () => {
       <ul>
         {results.map((word, index) => (
           <li key={index}>
-            {word.word.toUpperCase()} - {word.value}
+            {word.word.toUpperCase()} - {word.value}{" "}
+            <SignedIn>
+              <button
+                onClick={() => {
+                  handleReport(word.word);
+                  alert("Tack för att du rapporterar oanvändbara ord!");
+                }}
+              >
+                Report
+              </button>
+            </SignedIn>
+            <SignedOut>
+              <button
+                onClick={() => {
+                  alert(`
+                    Du måste vara inloggad för att repportera ord!\n
+                    Klicka på 'Sign in' nere i hörnet för att skapa ett konto.
+                  `);
+                }}
+              >
+                Report
+              </button>
+            </SignedOut>
           </li>
         ))}
       </ul>
