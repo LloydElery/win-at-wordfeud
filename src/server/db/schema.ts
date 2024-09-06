@@ -7,6 +7,8 @@ import {
   pgTableCreator,
   serial,
   integer,
+  timestamp,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -30,5 +32,20 @@ export const words = createTable(
     normalized_word_index: index("normalized_word_index").on(
       example.normalized_word,
     ),
+  }),
+);
+
+export const userReports = createTable(
+  "user_reports",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id").notNull(), // Clerk user_id
+    wordId: integer("word_id")
+      .notNull()
+      .references(() => words.id),
+    reportedAt: timestamp("reported_at").defaultNow().notNull(),
+  },
+  (userReports) => ({
+    uniqueUserReport: primaryKey(userReports.userId, userReports.wordId),
   }),
 );

@@ -3,6 +3,8 @@ import {
   SignedOut,
   SignInButton,
   SignOutButton,
+  UserButton,
+  UserProfile,
 } from "@clerk/nextjs";
 
 export function Nav() {
@@ -14,7 +16,7 @@ export function Nav() {
           <SignInButton />
         </SignedOut>
         <SignedIn>
-          <SignOutButton />
+          <UserButton />
         </SignedIn>
       </div>
     </nav>
