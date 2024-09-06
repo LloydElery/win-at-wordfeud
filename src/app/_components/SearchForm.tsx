@@ -1,13 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useSearch } from "../hooks/useSearch";
-import { reportWord } from "~/server/queries";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { words } from "~/server/db";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
   const { results, search, sortByValue, setSortByValue } = useSearch();
-  console.log("results: ", results);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +37,28 @@ const SearchForm = () => {
     }
   };
 
+  const handleWordDeletion = async (word: string) => {
+    try {
+      const response = await fetch("/api/word", {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ word }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(`Word: ${word} has been processed: ${data.word}`);
+      } else {
+        console.error(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Failed to delete word:", error);
+    }
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -63,12 +84,14 @@ const SearchForm = () => {
       <ul>
         {results.map((word, index) => (
           <li key={index}>
-            {word.word.toUpperCase()} - {word.value}{" "}
+            {word.word.toUpperCase()} - {word.value} {word.id}
             <SignedIn>
               <button
                 onClick={() => {
                   handleReport(word.word);
-                  alert("Tack för att du rapporterar oanvändbara ord!");
+                  alert(
+                    `Tack för att du rapporterar oanvändbara ord: ${word.word.toUpperCase()}`,
+                  );
                 }}
               >
                 Report
@@ -85,7 +108,18 @@ const SearchForm = () => {
               >
                 Report
               </button>
-            </SignedOut>
+            </SignedOut>{" "}
+            <button
+              className="h-5 w-5 rounded-full bg-red-600"
+              onClick={() => {
+                handleWordDeletion(word.word);
+                alert(
+                  `Ordet är nu borttaget från databasen: ${word.word.toUpperCase()}`,
+                );
+              }}
+            >
+              X
+            </button>
           </li>
         ))}
       </ul>

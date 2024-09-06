@@ -1,25 +1,29 @@
-import { getAuth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { db, words } from "~/server/db";
-import { reportWord } from "~/server/queries";
+import { deleteWordFromDatabase } from "~/server/queries";
 
-export async function POST(req: NextRequest) {
-  const { word } = await req.json();
-  const { userId } = getAuth(req);
+export async function DELETE(req: NextRequest) {
+  try {
+    const { word } = await req.json();
 
-  if (!word || typeof word !== "string") {
-    return NextResponse.json({ error: "Word is required" }, { status: 400 });
-  }
+    if (!word) {
+      return NextResponse.json(
+        { error: `Missing word in request` },
+        { status: 400 },
+      );
+    }
 
-  if (!userId) {
+    /*   const { userId } = getAuth(req);
+  console.log("userId: ", userId); */
+
+    /*   if (!userId) {
     return NextResponse.json(
-      { error: "User must be logged in" },
+      { error: "User is not administrator" },
       { status: 401 },
     );
-  }
+  } */
 
-  try {
     const wordRecord = await db
       .select({ id: words.id })
       .from(words)
@@ -31,21 +35,21 @@ export async function POST(req: NextRequest) {
 
     const wordId = wordRecord[0]?.id;
 
-    const updatedWord = await reportWord(userId, wordId!);
+    const result = await deleteWordFromDatabase(wordId!);
 
-    if (!updatedWord) {
+    if (!result) {
       return NextResponse.json(
-        { error: "Word already reported by user or not found" },
+        { error: "Word already deleted or not found" },
         { status: 404 },
       );
     }
 
     return NextResponse.json(
-      { message: `Reported word as not usable: ${word}` },
+      { message: `Word has been deleted from the database: ${result.word}` },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Failed to report word:", error);
+    console.error("Failed to delete word:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
