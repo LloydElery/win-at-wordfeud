@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useSearch } from "../hooks/useSearch";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import { words } from "~/server/db";
+import { Protect, RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
+import DeleteWordButton from "./_ui/deleteWordBTN";
 
 const SearchForm = () => {
   const [query, setQuery] = useState("");
@@ -100,6 +100,7 @@ const SearchForm = () => {
             <SignedOut>
               <button
                 onClick={() => {
+                  <RedirectToSignIn />;
                   alert(`
                     Du måste vara inloggad för att repportera ord!\n
                     Klicka på 'Sign in' nere i hörnet för att skapa ett konto.
@@ -109,7 +110,8 @@ const SearchForm = () => {
                 Report
               </button>
             </SignedOut>{" "}
-            <button
+            <DeleteWordButton {...word} />
+            {/* <button
               className="h-5 w-5 rounded-full bg-red-600"
               onClick={() => {
                 handleWordDeletion(word.word);
@@ -119,7 +121,7 @@ const SearchForm = () => {
               }}
             >
               X
-            </button>
+            </button> */}
           </li>
         ))}
       </ul>
