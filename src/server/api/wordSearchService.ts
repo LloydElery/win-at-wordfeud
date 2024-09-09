@@ -112,6 +112,5 @@ export async function searchWordsWithLetters(
     return a.word.length - b.word.length || a.word.localeCompare(b.word);
   });
 
-  console.log("sortedResults: ", sortedResults);
   return sortedResults;
 }

@@ -27,3 +27,23 @@ export async function reportWord(userId: string, wordId: number) {
 
   return result[0];
 }
+
+export async function deleteWordFromDatabase(wordId: number) {
+  try {
+    const deleteUserReports = await db
+      .delete(userReports)
+      .where(eq(userReports.wordId, wordId));
+
+    if (!deleteUserReports) return null;
+
+    const wordToDelete = await db
+      .delete(words)
+      .where(eq(words.id, wordId))
+      .returning();
+
+    return wordToDelete.length > 0 ? wordToDelete[0] : null;
+  } catch (error) {
+    console.error("Error deleting word:", error);
+    throw new Error("Failed to delete word");
+  }
+}

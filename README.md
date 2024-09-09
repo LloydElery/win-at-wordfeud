@@ -39,3 +39,7 @@ This project is deployed on [Vercel](https://create.t3.gg/en/deployment/vercel)
 ---
 
 [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+
+## Setting an admin user
+
+Go to [Clerk.com/docs](https://clerk.com/docs/guides/basic-rbac#:~:text=Set%20the%20admin%20role%20for%20your%20user) and follow their instructions for setting specific accounts as administrators or any other role.
