@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Nav } from "./_components/Nav";
+import { Nav } from "./_components/nav";
 
 export const metadata: Metadata = {
   title: "Wordfeud Hjälpen",
