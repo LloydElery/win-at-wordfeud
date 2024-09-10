@@ -8,7 +8,9 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
     return Array.from({ length: size }, (_, row) =>
       Array.from({ length: size }, (_, col) => {
         const specialGridItem = specialGridItems.find(
-          (sq) => sq.row === row && sq.col === col,
+          (sq) =>
+            sq.row === row &&
+            (Array.isArray(sq.col) ? sq.col.includes(col) : sq.col === col),
         );
         return {
           id: row * size + col,
@@ -24,7 +26,7 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
 
   return (
     <>
-      <div className="gridContainer grid-rows-15border bg-gameboardBG grid grid-cols-15 border border-black">
+      <div className="gridContainer grid-rows-15border grid grid-cols-15 border border-black bg-gameboardBG">
         {grid.map((row) =>
           row.map((gridItem) => {
             const SpecialComponent = gridItem.specialType

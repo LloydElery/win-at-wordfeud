@@ -99,8 +99,8 @@ const specialGridLayout: SpecialGridLayoutItem[] = [
   {
     row: 13,
     columns: [
-      { col: [0, 14], type: "TrippleLetter" },
-      { col: [4, 10], type: "TrippleWord" },
+      { col: [1, 13], type: "DubbleLetter" },
+      { col: [5, 9], type: "TrippleLetter" },
     ],
   },
   {
