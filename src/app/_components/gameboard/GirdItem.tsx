@@ -3,7 +3,7 @@ const GridItem = () => {
 
   return (
     <>
-      <div className="w-26 h-26 border border-orange-500"> </div>
+      <div className="h-26 w-26 border border-black"></div>
     </>
   );
 };
