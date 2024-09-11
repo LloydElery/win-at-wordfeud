@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
@@ -15,6 +15,11 @@ const SearchForm = () => {
 
   const handleSortToggle = () => {
     setSortByValue(!sortByValue);
+  };
+
+  const handleLength = (word: string) => {
+    if (word.length === 0) return null;
+    return word.length;
   };
 
   const handleReport = async (word: string) => {
@@ -36,6 +41,9 @@ const SearchForm = () => {
       console.error("Failed to report word:", error);
     }
   };
+
+  // Keeps track of headings for word by letter count.
+  const displayedWordH2ByLength = new Set();
 
   return (
     <>
@@ -71,37 +79,49 @@ const SearchForm = () => {
 
         <div className="h-full min-h-56 border border-green-500">
           <ul>
-            {results.map((word, index) => (
-              <li key={index}>
-                {word.word.toUpperCase()} - {word.value} {word.id}
-                <SignedIn>
-                  <button
-                    onClick={() => {
-                      handleReport(word.word);
-                      alert(
-                        `Tack för att du rapporterar oanvändbara ord: ${word.word.toUpperCase()}`,
-                      );
-                    }}
-                  >
-                    Report
-                  </button>
-                </SignedIn>
-                <SignedOut>
-                  <button
-                    onClick={() => {
-                      <RedirectToSignIn />;
-                      alert(`
+            {results.map((word, index) => {
+              const wordLength = word.word.length;
+              const showHeadingByWordLength =
+                !displayedWordH2ByLength.has(wordLength);
+
+              if (showHeadingByWordLength)
+                displayedWordH2ByLength.add(wordLength);
+
+              return (
+                <React.Fragment key={index}>
+                  {showHeadingByWordLength && <h2>{wordLength} bokstäver</h2>}
+                  <li key={index}>
+                    {word.word.toUpperCase()} - {word.value} {word.id}
+                    <SignedIn>
+                      <button
+                        onClick={() => {
+                          handleReport(word.word);
+                          alert(
+                            `Tack för att du rapporterar oanvändbara ord: ${word.word.toUpperCase()}`,
+                          );
+                        }}
+                      >
+                        Report
+                      </button>
+                    </SignedIn>
+                    <SignedOut>
+                      <button
+                        onClick={() => {
+                          <RedirectToSignIn />;
+                          alert(`
                     Du måste vara inloggad för att repportera ord!\n
                     Klicka på 'Sign in' nere i hörnet för att skapa ett konto.
                   `);
-                    }}
-                  >
-                    Report
-                  </button>
-                </SignedOut>{" "}
-                <DeleteWordButton {...word} />
-              </li>
-            ))}
+                        }}
+                      >
+                        Report
+                      </button>
+                    </SignedOut>{" "}
+                    <DeleteWordButton {...word} />
+                  </li>
+                </React.Fragment>
+              );
+            })}
           </ul>
         </div>
       </section>
