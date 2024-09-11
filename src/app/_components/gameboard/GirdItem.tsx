@@ -1,9 +1,29 @@
-const GridItem = () => {
-  // Logic & functionality
+"use client";
+
+import { useState } from "react";
+
+const GridItem = ({
+  id,
+  onInputLetter,
+}: {
+  id: number;
+  onInputLetter: (id: number, letter: string) => void;
+}) => {
+  const [letter, setLetter] = useState("");
+
+  const handleClick = () => {
+    const userLetter = prompt("Ange en bokstav:");
+    if (userLetter && userLetter.length === 1) {
+      setLetter(userLetter.toUpperCase());
+      onInputLetter(id, userLetter.toUpperCase());
+    }
+  };
 
   return (
     <>
-      <div className="h-26 w-26 border border-black"></div>
+      <div className="grid-item" onClick={handleClick}>
+        <p>{letter}</p>
+      </div>
     </>
   );
 };

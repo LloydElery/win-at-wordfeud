@@ -3,10 +3,14 @@ import React, { useState } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
+import { AiOutlineSearch } from "react-icons/ai";
 
-const SearchForm = () => {
-  const [query, setQuery] = useState("");
+const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue } = useSearch();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value.toUpperCase());
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,11 +19,6 @@ const SearchForm = () => {
 
   const handleSortToggle = () => {
     setSortByValue(!sortByValue);
-  };
-
-  const handleLength = (word: string) => {
-    if (word.length === 0) return null;
-    return word.length;
   };
 
   const handleReport = async (word: string) => {
@@ -57,11 +56,11 @@ const SearchForm = () => {
               className="text-black"
               type="text"
               value={query}
-              onChange={(e) => setQuery(e.target.value.toUpperCase())}
+              onChange={handleInputChange}
               placeholder="SÖK ORD"
             />
-            <button className="border border-black text-black" type="submit">
-              Sök
+            <button className="search bg-letterTile" type="submit">
+              <AiOutlineSearch size={26} />
             </button>
           </form>
 
@@ -78,6 +77,7 @@ const SearchForm = () => {
             </label>
           </div>
         </div>
+
         <div className="result-heading ml-1 w-fit tracking-wider">
           Resultat:
         </div>

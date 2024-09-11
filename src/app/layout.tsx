@@ -1,5 +1,4 @@
 import "~/styles/globals.css";
-
 import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Nav } from "./_components/nav";
@@ -22,10 +21,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="se" className={`${readex_pro.variable} font-sans`}>
-        <body>
-          <Nav />
-          {children}
-        </body>
+        <body>{children}</body>
       </html>
     </ClerkProvider>
   );

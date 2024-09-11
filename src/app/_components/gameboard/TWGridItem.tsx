@@ -3,7 +3,9 @@ const TWGridItem = () => {
 
   return (
     <>
-      <div className="bg-gameboardTW">TW</div>
+      <div className="special-grid-item bg-gameboardTW">
+        <p>TW</p>
+      </div>
     </>
   );
 };
