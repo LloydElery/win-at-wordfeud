@@ -89,7 +89,11 @@ const SearchForm = () => {
 
               return (
                 <React.Fragment key={index}>
-                  {showHeadingByWordLength && <h2>{wordLength} bokstäver</h2>}
+                  {sortByValue
+                    ? null
+                    : showHeadingByWordLength && (
+                        <h2>{wordLength} bokstäver</h2>
+                      )}
                   <li key={index}>
                     {word.word.toUpperCase()} - {word.value} {word.id}
                     <SignedIn>
