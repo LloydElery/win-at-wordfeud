@@ -3,7 +3,9 @@ const DWGridItem = () => {
 
   return (
     <>
-      <div className="bg-gameboardDW">DW</div>
+      <div className="special-grid-item bg-gameboardDW">
+        <p>DW</p>
+      </div>
     </>
   );
 };

@@ -3,7 +3,9 @@ const DLGridItem = () => {
 
   return (
     <>
-      <div className="bg-gameboardDL">DL</div>
+      <div className="special-grid-item bg-gameboardDL">
+        <p>DL</p>
+      </div>
     </>
   );
 };

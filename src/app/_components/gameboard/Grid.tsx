@@ -26,7 +26,7 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
 
   return (
     <>
-      <div className="gridContainer grid-rows-15border grid grid-cols-15 border border-black bg-gameboardBG">
+      <div className="grid-container inner-border inner-border-black m-[7px] grid grid-cols-15 grid-rows-15 bg-gameboardBG">
         {grid.map((row) =>
           row.map((gridItem) => {
             const SpecialComponent = gridItem.specialType

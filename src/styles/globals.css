@@ -5,3 +5,10 @@
 /* COLORES */
 
 /* GRID */
+.special-grid-item {
+  @apply inner-border inner-border-black min-h-[26px] min-w-[26px] content-center text-center text-xs tracking-[0.1em];
+}
+
+.grid-item {
+  @apply inner-border inner-border-black min-h-[26px] min-w-[26px];
+}
