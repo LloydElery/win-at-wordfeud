@@ -76,6 +76,9 @@ const SearchForm = () => {
             </label>
           </div>
         </div>
+        <div className="result-heading ml-1 w-fit border border-yellow-500">
+          Resultat:
+        </div>
 
         <div className="h-full min-h-56 border border-green-500">
           <ul>

@@ -1,9 +1,14 @@
 import "~/styles/globals.css";
 
-import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Nav } from "./_components/nav";
+import { Readex_Pro } from "next/font/google";
+
+const readex_pro = Readex_Pro({
+  subsets: ["latin"],
+  variable: "--font-readex_pro",
+});
 
 export const metadata: Metadata = {
   title: "Wordfeud Hjälpen",
@@ -16,7 +21,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable}`}>
+      <html lang="se" className={`${readex_pro.variable} font-sans`}>
         <body>
           <Nav />
           {children}
