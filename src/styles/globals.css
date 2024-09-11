@@ -12,3 +12,11 @@
 .grid-item {
   @apply inner-border inner-border-black min-h-[26px] min-w-[26px];
 }
+
+.letter-tile {
+  @apply inner-border inner-border-black min-h-[26px] min-w-[26px] self-center text-center text-black;
+}
+
+.search {
+  @apply self-center text-center text-black;
+}

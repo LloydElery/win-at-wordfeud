@@ -1,9 +1,12 @@
-import DLGridItem from "./DLGridItem";
+"use client";
 import GridItem from "./GirdItem";
 import { gridItemMap } from "./Map";
 import { GridItemType, GridProps } from "./T";
 
 const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
+  const handleInputLetter = (id: number, letter: string) => {
+    console.log(`Letter ${letter} placed on square ${id}`);
+  };
   const create2DGrid = (): GridItemType[][] => {
     return Array.from({ length: size }, (_, row) =>
       Array.from({ length: size }, (_, col) => {
@@ -36,7 +39,11 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
             return SpecialComponent ? (
               <SpecialComponent key={gridItem.id} />
             ) : (
-              <GridItem key={gridItem.id} />
+              <GridItem
+                key={gridItem.id}
+                id={gridItem.id}
+                onInputLetter={handleInputLetter}
+              />
             );
           }),
         )}
