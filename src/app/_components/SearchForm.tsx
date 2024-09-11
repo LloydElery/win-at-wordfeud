@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useSearch } from "../hooks/useSearch";
-import { Protect, RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
 
 const SearchForm = () => {
@@ -39,59 +39,72 @@ const SearchForm = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input
-          className="text-black"
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value.toUpperCase())}
-          placeholder="SÖK ORD"
-        />
-        <button type="submit">Sök</button>
-      </form>
+      <section className="min-h-72">
+        <div className="search-container grid grid-cols-3 grid-rows-1 gap-2 border border-orange-500">
+          <form
+            className="col-span-2 grid grid-cols-[1fr_auto] border border-purple-500"
+            onSubmit={handleSubmit}
+          >
+            <input
+              className="text-black"
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value.toUpperCase())}
+              placeholder="SÖK ORD"
+            />
+            <button className="border border-black text-black" type="submit">
+              Sök
+            </button>
+          </form>
 
-      <label>
-        Sortera efter poäng
-        <input
-          type="checkbox"
-          checked={sortByValue}
-          onChange={handleSortToggle}
-        />
-      </label>
+          <div className="border border-red-500">
+            <label>
+              Sortera efter poäng
+              <input
+                type="checkbox"
+                checked={sortByValue}
+                onChange={handleSortToggle}
+              />
+            </label>
+          </div>
+        </div>
 
-      <ul>
-        {results.map((word, index) => (
-          <li key={index}>
-            {word.word.toUpperCase()} - {word.value} {word.id}
-            <SignedIn>
-              <button
-                onClick={() => {
-                  handleReport(word.word);
-                  alert(
-                    `Tack för att du rapporterar oanvändbara ord: ${word.word.toUpperCase()}`,
-                  );
-                }}
-              >
-                Report
-              </button>
-            </SignedIn>
-            <SignedOut>
-              <button
-                onClick={() => {
-                  <RedirectToSignIn />;
-                  alert(`
+        <div className="h-full min-h-56 border border-green-500">
+          <ul>
+            {results.map((word, index) => (
+              <li key={index}>
+                {word.word.toUpperCase()} - {word.value} {word.id}
+                <SignedIn>
+                  <button
+                    onClick={() => {
+                      handleReport(word.word);
+                      alert(
+                        `Tack för att du rapporterar oanvändbara ord: ${word.word.toUpperCase()}`,
+                      );
+                    }}
+                  >
+                    Report
+                  </button>
+                </SignedIn>
+                <SignedOut>
+                  <button
+                    onClick={() => {
+                      <RedirectToSignIn />;
+                      alert(`
                     Du måste vara inloggad för att repportera ord!\n
                     Klicka på 'Sign in' nere i hörnet för att skapa ett konto.
                   `);
-                }}
-              >
-                Report
-              </button>
-            </SignedOut>{" "}
-            <DeleteWordButton {...word} />
-          </li>
-        ))}
-      </ul>
+                    }}
+                  >
+                    Report
+                  </button>
+                </SignedOut>{" "}
+                <DeleteWordButton {...word} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
     </>
   );
 };
