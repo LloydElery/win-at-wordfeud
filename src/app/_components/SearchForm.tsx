@@ -47,10 +47,10 @@ const SearchForm = () => {
 
   return (
     <>
-      <section className="min-h-72">
-        <div className="search-container grid grid-cols-3 grid-rows-1 gap-2 border border-orange-500">
+      <section className="ml-3 min-h-72">
+        <div className="search-container grid grid-cols-3 grid-rows-1 gap-2">
           <form
-            className="col-span-2 grid grid-cols-[1fr_auto] border border-purple-500"
+            className="col-span-2 grid h-fit grid-cols-[1fr_auto] self-center"
             onSubmit={handleSubmit}
           >
             <input
@@ -65,22 +65,24 @@ const SearchForm = () => {
             </button>
           </form>
 
-          <div className="border border-red-500">
-            <label>
-              Sortera efter poäng
-              <input
-                type="checkbox"
-                checked={sortByValue}
-                onChange={handleSortToggle}
-              />
+          <div>
+            <label className="grid grid-cols-1 grid-rows-2 text-xs">
+              <div className="text-[1.05em]">Sortera efter poäng</div>
+              <div className="mr-3 flex justify-end">
+                <input
+                  type="checkbox"
+                  checked={sortByValue}
+                  onChange={handleSortToggle}
+                />
+              </div>
             </label>
           </div>
         </div>
-        <div className="result-heading ml-1 w-fit border border-yellow-500">
+        <div className="result-heading ml-1 w-fit tracking-wider">
           Resultat:
         </div>
 
-        <div className="h-full min-h-56 border border-green-500">
+        <div className="h-full min-h-56">
           <ul>
             {results.map((word, index) => {
               const wordLength = word.word.length;

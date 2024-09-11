@@ -8,6 +8,9 @@ export default {
       fontFamily: {
         sans: ["var(--font-readex_pro)", ...fontFamily.sans],
       },
+      letterSpacing: {
+        custom: "5%",
+      },
       colors: {
         primaryBlue: "#1E212E",
         accentBlue: "#191731",
