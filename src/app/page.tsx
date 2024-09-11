@@ -10,8 +10,8 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-primaryBlue text-white">
       <Header />
-      <Grid size={15} specialGridItems={specialGridLayoutItems} />
       <SearchForm />
+      <Grid size={15} specialGridItems={specialGridLayoutItems} />
     </main>
   );
 }
