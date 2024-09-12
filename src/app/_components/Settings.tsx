@@ -7,19 +7,19 @@ import { useRouter } from "next/navigation";
 
 const Settings: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  /*   const router = useRouter(); */
 
   const toggleSettings = () => {
-    router.push("/settings");
+    /*  router.push("/settings"); */
     setIsOpen(!isOpen);
   };
 
   return (
     <>
       <div>
-        <Link href={"/"}>
-          <AiFillSetting onClick={toggleSettings} size={30} />
-        </Link>
+        {/*    <Link href={"/"}> */}
+        <AiFillSetting onClick={toggleSettings} size={30} />
+        {/*  </Link> */}
       </div>
       <div>
         {isOpen && (

@@ -5,8 +5,7 @@ const CustomSignIn = () => {
     <>
       <div>
         <SignIn
-          path="/"
-          routing="path"
+          routing="hash"
           appearance={{
             variables: {
               colorPrimary: "#D9D9D9", // Primär färg
