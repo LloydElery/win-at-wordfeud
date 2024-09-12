@@ -20,6 +20,7 @@ export default {
         gameboardTW: "#6F1515",
         gameboardBG: "rgba(35, 35, 37, 0.50)",
         letterTile: "rgba(249, 246, 240, 0.9)",
+        modalGrey: "#232325",
       },
       gridTemplateColumns: {
         "15": "repeat(15, minmax(0, 1fr))",

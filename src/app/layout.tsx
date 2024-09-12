@@ -1,7 +1,6 @@
 import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Nav } from "./_components/nav";
 import { Readex_Pro } from "next/font/google";
 
 const readex_pro = Readex_Pro({
