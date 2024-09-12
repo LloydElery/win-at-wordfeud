@@ -6,17 +6,35 @@
 
 /* GRID */
 .special-grid-item {
-  @apply inner-border inner-border-black min-h-[26px] min-w-[26px] content-center text-center text-xs tracking-[0.1em];
+  @apply min-h-[26px] min-w-[26px] content-center text-center text-xs tracking-[0.1em] inner-border inner-border-black;
 }
 
 .grid-item {
-  @apply inner-border inner-border-black min-h-[26px] min-w-[26px];
+  @apply min-h-[26px] min-w-[26px] inner-border inner-border-black;
 }
 
 .letter-tile {
-  @apply inner-border inner-border-black min-h-[26px] min-w-[26px] self-center text-center text-black;
+  @apply min-h-[26px] min-w-[26px] self-center text-center text-black inner-border inner-border-black;
 }
 
 .search {
   @apply self-center text-center text-black;
+}
+
+/* SETTINGS */
+.settings-panel {
+  @apply fixed left-0 right-0 top-[8%] z-10 m-[7px] flex h-[25rem] max-w-md flex-col items-center justify-self-center overflow-hidden border border-white p-2 shadow-md;
+}
+
+.settings-header {
+  @apply flex w-full justify-between gap-3 text-sm;
+}
+
+/* LOGIN & REGISTER */
+.login-panel {
+  @apply z-10 flex h-[21rem] flex-col;
+}
+
+.login-header {
+  @apply flex items-center justify-center text-sm font-light text-white;
 }
