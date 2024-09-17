@@ -78,12 +78,12 @@ const SearchForm = ({ query, setQuery }: any) => {
           </div>
         </div>
 
-        <div className="result-heading ml-1 w-fit tracking-wider">
+        <div className="result-heading ml-1 w-fit text-xl font-light tracking-wider">
           Resultat:
         </div>
 
-        <div className="search-results bg-searchResultsBG fixed max-h-[242px] w-full overflow-auto">
-          <ul className="grid grid-flow-row grid-cols-2">
+        <div className="search-results bg-searchResultsBG border-searchResultsBorder fixed max-h-[242px] w-full overflow-auto border">
+          <ul className="ml-1 mr-1">
             {results.map((word, index) => {
               const wordLength = word.word.length;
               const showHeadingByWordLength =
@@ -97,9 +97,11 @@ const SearchForm = ({ query, setQuery }: any) => {
                   {sortByValue
                     ? null
                     : showHeadingByWordLength && (
-                        <h2>{wordLength} bokstäver</h2>
+                        <h2 className="text-md border-searchResultsBorder border-b-[1px] font-light">
+                          {wordLength} bokstäver
+                        </h2>
                       )}
-                  <li key={index}>
+                  <li className="text-sm font-extralight" key={index}>
                     {word.word.toUpperCase()} - {word.value} {word.id}
                     <SignedIn>
                       <button
@@ -120,7 +122,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                           alert(`
                     Du måste vara inloggad för att repportera ord!\n
                     Klicka på 'Sign in' nere i hörnet för att skapa ett konto.
-                  `);
+                    `);
                         }}
                       >
                         Report

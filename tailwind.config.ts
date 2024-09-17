@@ -22,6 +22,7 @@ export default {
         letterTile: "rgba(249, 246, 240, 0.9)",
         modalGrey: "#232325",
         searchResultsBG: "rgba(217, 217, 217, 0.1)",
+        searchResultsBorder: "rgba(255, 255, 255, 0.2)",
       },
       gridTemplateColumns: {
         "15": "repeat(15, minmax(0, 1fr))",
