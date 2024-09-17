@@ -3,8 +3,8 @@ const DLGridItem = () => {
 
   return (
     <>
-      <div className="special-grid-item bg-gameboardDL">
-        <p>DL</p>
+      <div className="h-full bg-gameboardDL">
+        <p className="h-full place-content-center">DL</p>
       </div>
     </>
   );

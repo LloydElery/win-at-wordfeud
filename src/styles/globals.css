@@ -2,19 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* COLORES */
+/* SEARCH */
 
 /* GRID */
+.grid-container {
+  @apply fixed bottom-[75px] grid grid-cols-15 grid-rows-15;
+}
+
 .special-grid-item {
-  @apply min-h-[26px] min-w-[26px] content-center text-center text-xs tracking-[0.1em] inner-border inner-border-black;
+  @apply w-full content-center p-px text-center text-xs tracking-[0.1em] inner-border inner-border-black;
 }
 
 .grid-item {
-  @apply min-h-[26px] min-w-[26px] inner-border inner-border-black;
+  @apply min-h-[26px] min-w-[26px] p-px inner-border inner-border-black;
 }
 
 .letter-tile {
-  @apply min-h-[26px] min-w-[26px] self-center text-center text-black inner-border inner-border-black;
+  @apply min-h-[26px] min-w-[26px] self-center text-center text-black;
 }
 
 .search {
@@ -30,6 +34,10 @@
   @apply flex w-full justify-between gap-3 text-sm;
 }
 
+.search-results {
+  @apply fixed max-h-[238px] w-full overflow-auto border;
+}
+
 /* LOGIN & REGISTER */
 .login-panel {
   @apply z-10 flex h-[21rem] flex-col;
@@ -37,4 +45,13 @@
 
 .login-header {
   @apply flex items-center justify-center text-sm font-light text-white;
+}
+
+/* UTILS */
+.text-shadow-black.sm {
+  @apply [text-shadow:_0_2px_4px_#000000];
+}
+
+.circle-icon {
+  @apply h-5 w-5 content-center place-self-center rounded-full border border-black text-center text-xs font-normal text-black;
 }

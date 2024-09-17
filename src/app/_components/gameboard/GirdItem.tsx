@@ -21,7 +21,7 @@ const GridItem = ({
 
   return (
     <>
-      <div className="grid-item" onClick={handleClick}>
+      <div onClick={handleClick}>
         <p>{letter}</p>
       </div>
     </>

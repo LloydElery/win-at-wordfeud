@@ -1,4 +1,3 @@
-import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
@@ -21,6 +20,10 @@ export default {
         gameboardBG: "rgba(35, 35, 37, 0.50)",
         letterTile: "rgba(249, 246, 240, 0.9)",
         modalGrey: "#232325",
+        searchResultsBG: "rgba(217, 217, 217, 0.1)",
+        searchResultsBorder: "rgba(255, 255, 255, 0.2)",
+        searchResultsPointsBG: "#FFB800",
+        informationIconBG: "rgb(45, 45, 45, 0.7)",
       },
       gridTemplateColumns: {
         "15": "repeat(15, minmax(0, 1fr))",
@@ -37,4 +40,4 @@ export default {
     },
   },
   plugins: [require("tailwindcss-inner-border")],
-} satisfies Config;
+};

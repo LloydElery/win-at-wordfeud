@@ -46,7 +46,7 @@ const SearchForm = ({ query, setQuery }: any) => {
 
   return (
     <>
-      <section className="ml-3 min-h-72">
+      <section>
         <div className="search-container grid grid-cols-3 grid-rows-1 gap-2">
           <form
             className="col-span-2 grid h-fit grid-cols-[1fr_auto] self-center"
@@ -78,12 +78,12 @@ const SearchForm = ({ query, setQuery }: any) => {
           </div>
         </div>
 
-        <div className="result-heading ml-1 w-fit tracking-wider">
+        <div className="result-heading ml-1 w-fit text-xl font-light tracking-wider">
           Resultat:
         </div>
 
-        <div className="h-full min-h-56">
-          <ul>
+        <div className="search-results bg-searchResultsBG border-searchResultsBorder">
+          <ul className="ml-1 mr-1">
             {results.map((word, index) => {
               const wordLength = word.word.length;
               const showHeadingByWordLength =
@@ -97,12 +97,21 @@ const SearchForm = ({ query, setQuery }: any) => {
                   {sortByValue
                     ? null
                     : showHeadingByWordLength && (
-                        <h2>{wordLength} bokstäver</h2>
+                        <h2 className="text-md border-searchResultsBorder border-b-[1px] font-light">
+                          {wordLength} bokstäver
+                        </h2>
                       )}
-                  <li key={index}>
-                    {word.word.toUpperCase()} - {word.value} {word.id}
+                  <li
+                    className="mb-[2px] ml-[0.8rem] grid grid-cols-4 text-sm font-extralight"
+                    key={index}
+                  >
+                    <p>{word.word.toUpperCase()}</p>
+                    <div className="bg-searchResultsPointsBG circle-icon">
+                      {word.value}
+                    </div>
                     <SignedIn>
                       <button
+                        className="border border-cyan-500"
                         onClick={() => {
                           handleReport(word.word);
                           alert(
@@ -115,15 +124,19 @@ const SearchForm = ({ query, setQuery }: any) => {
                     </SignedIn>
                     <SignedOut>
                       <button
+                        className="flex justify-evenly"
                         onClick={() => {
                           <RedirectToSignIn />;
                           alert(`
                     Du måste vara inloggad för att repportera ord!\n
                     Klicka på 'Sign in' nere i hörnet för att skapa ett konto.
-                  `);
+                    `);
                         }}
                       >
-                        Report
+                        <p className="text-shadow-black-sm">Report</p>{" "}
+                        <div className="circle-icon bg-informationIconBG !text-white">
+                          i
+                        </div>
                       </button>
                     </SignedOut>{" "}
                     <DeleteWordButton {...word} />

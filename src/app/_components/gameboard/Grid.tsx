@@ -29,7 +29,7 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
 
   return (
     <>
-      <div className="grid-container inner-border inner-border-black m-[7px] grid grid-cols-15 grid-rows-15 bg-gameboardBG">
+      <div className="grid-container bg-gameboardBG">
         {grid.map((row) =>
           row.map((gridItem) => {
             const SpecialComponent = gridItem.specialType
@@ -37,13 +37,17 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
               : null;
 
             return SpecialComponent ? (
-              <SpecialComponent key={gridItem.id} />
+              <div className="special-grid-item">
+                <SpecialComponent key={gridItem.id} />
+              </div>
             ) : (
-              <GridItem
-                key={gridItem.id}
-                id={gridItem.id}
-                onInputLetter={handleInputLetter}
-              />
+              <div className="grid-item">
+                <GridItem
+                  key={gridItem.id}
+                  id={gridItem.id}
+                  onInputLetter={handleInputLetter}
+                />
+              </div>
             );
           }),
         )}
