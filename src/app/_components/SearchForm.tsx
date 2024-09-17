@@ -47,9 +47,9 @@ const SearchForm = ({ query, setQuery }: any) => {
   return (
     <>
       <section className="mb-1">
-        <div className="search-container grid max-h-11 grid-cols-5 grid-rows-1 border border-lime-500">
+        <div className="search-container flex max-h-11 gap-1">
           <form
-            className="col-span-2 grid h-fit grid-cols-[1fr_auto] self-center border border-red-500"
+            className="grid h-fit w-fit grid-cols-[1fr_auto] self-center"
             onSubmit={handleSubmit}
           >
             <input
@@ -64,9 +64,9 @@ const SearchForm = ({ query, setQuery }: any) => {
             </button>
           </form>
 
-          <div className="sort-by-points col-span-2 col-start-4 m-1">
-            <label className="flex text-xs">
-              <p className="w-full">Sortera efter poäng</p>
+          <div className="sort-by-points flex items-center">
+            <label className="p-px text-xs">
+              Sortera efter poäng
               <input
                 type="checkbox"
                 checked={sortByValue}
@@ -109,7 +109,6 @@ const SearchForm = ({ query, setQuery }: any) => {
                     </div>
                     <SignedIn>
                       <button
-                        className="border border-cyan-500"
                         onClick={() => {
                           handleReport(word.word);
                           alert(
