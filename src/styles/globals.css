@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* COLORES */
+/* SEARCH */
 
 /* GRID */
 .grid-container {
-  @apply grid grid-cols-15 grid-rows-15;
+  @apply fixed bottom-[75px] grid grid-cols-15 grid-rows-15;
 }
 
 .special-grid-item {

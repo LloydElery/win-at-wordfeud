@@ -46,7 +46,7 @@ const SearchForm = ({ query, setQuery }: any) => {
 
   return (
     <>
-      <section className="ml-3 min-h-72">
+      <section>
         <div className="search-container grid grid-cols-3 grid-rows-1 gap-2">
           <form
             className="col-span-2 grid h-fit grid-cols-[1fr_auto] self-center"
@@ -82,8 +82,8 @@ const SearchForm = ({ query, setQuery }: any) => {
           Resultat:
         </div>
 
-        <div className="h-full min-h-56">
-          <ul>
+        <div className="search-results bg-searchResultsBG fixed max-h-[242px] w-full overflow-auto">
+          <ul className="grid grid-flow-row grid-cols-2">
             {results.map((word, index) => {
               const wordLength = word.word.length;
               const showHeadingByWordLength =
