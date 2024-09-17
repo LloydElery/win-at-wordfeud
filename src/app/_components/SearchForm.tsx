@@ -64,16 +64,14 @@ const SearchForm = ({ query, setQuery }: any) => {
             </button>
           </form>
 
-          <div className="sort-by-points flex items-center">
-            <label className="p-px text-xs">
-              Sortera efter poäng
-              <input
-                type="checkbox"
-                checked={sortByValue}
-                onChange={handleSortToggle}
-              />
-            </label>
-          </div>
+          <label className="flex gap-1 text-xs">
+            Sortera efter poäng
+            <input
+              type="checkbox"
+              checked={sortByValue}
+              onChange={handleSortToggle}
+            />
+          </label>
         </div>
 
         <div className="result-heading ml-1 w-fit text-xl font-light tracking-wider">
