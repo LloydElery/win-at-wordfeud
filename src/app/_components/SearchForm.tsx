@@ -82,7 +82,7 @@ const SearchForm = ({ query, setQuery }: any) => {
           Resultat:
         </div>
 
-        <div className="search-results bg-searchResultsBG border-searchResultsBorder fixed max-h-[242px] w-full overflow-auto border">
+        <div className="search-results bg-searchResultsBG border-searchResultsBorder">
           <ul className="ml-1 mr-1">
             {results.map((word, index) => {
               const wordLength = word.word.length;
@@ -101,10 +101,17 @@ const SearchForm = ({ query, setQuery }: any) => {
                           {wordLength} bokstäver
                         </h2>
                       )}
-                  <li className="text-sm font-extralight" key={index}>
-                    {word.word.toUpperCase()} - {word.value} {word.id}
+                  <li
+                    className="mb-[2px] ml-[0.8rem] grid grid-cols-4 text-sm font-extralight"
+                    key={index}
+                  >
+                    <p>{word.word.toUpperCase()}</p>
+                    <div className="bg-searchResultsPointsBG circle-icon">
+                      {word.value}
+                    </div>
                     <SignedIn>
                       <button
+                        className="border border-cyan-500"
                         onClick={() => {
                           handleReport(word.word);
                           alert(
@@ -117,6 +124,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                     </SignedIn>
                     <SignedOut>
                       <button
+                        className="flex justify-evenly"
                         onClick={() => {
                           <RedirectToSignIn />;
                           alert(`
@@ -125,7 +133,10 @@ const SearchForm = ({ query, setQuery }: any) => {
                     `);
                         }}
                       >
-                        Report
+                        <p className="text-shadow-black-sm">Report</p>{" "}
+                        <div className="circle-icon bg-informationIconBG !text-white">
+                          i
+                        </div>
                       </button>
                     </SignedOut>{" "}
                     <DeleteWordButton {...word} />

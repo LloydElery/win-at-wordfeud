@@ -34,6 +34,10 @@
   @apply flex w-full justify-between gap-3 text-sm;
 }
 
+.search-results {
+  @apply fixed max-h-[238px] w-full overflow-auto border;
+}
+
 /* LOGIN & REGISTER */
 .login-panel {
   @apply z-10 flex h-[21rem] flex-col;
@@ -41,4 +45,13 @@
 
 .login-header {
   @apply flex items-center justify-center text-sm font-light text-white;
+}
+
+/* UTILS */
+.text-shadow-black.sm {
+  @apply [text-shadow:_0_2px_4px_#000000];
+}
+
+.circle-icon {
+  @apply h-5 w-5 content-center place-self-center rounded-full border border-black text-center text-xs font-normal text-black;
 }
