@@ -5,7 +5,7 @@ import Settings from "./Settings";
 const Header = () => {
   return (
     <>
-      <section className="header-section flex min-h-20 w-full items-end justify-between p-4 text-xl font-bold tracking-wider text-white">
+      <section className="header-section flex w-full items-end justify-between text-xl font-bold tracking-wider text-white">
         <div>Wordfeud Hjälpen</div>
         <div className="header-icons flex gap-5">
           <Settings />

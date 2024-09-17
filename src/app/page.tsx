@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   return (
-    <main className="min-h-screen bg-primaryBlue text-white">
+    <main className="min-h-screen bg-primaryBlue p-[7px] text-white">
       <Header />
       <ClientSideWrapper />
       <Grid size={15} specialGridItems={specialGridLayoutItems} />

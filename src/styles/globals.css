@@ -6,7 +6,7 @@
 
 /* GRID */
 .grid-container {
-  @apply fixed bottom-[75px] grid grid-cols-15 grid-rows-15;
+  @apply grid w-full grid-cols-15 grid-rows-15;
 }
 
 .special-grid-item {
@@ -14,7 +14,7 @@
 }
 
 .grid-item {
-  @apply min-h-[26px] min-w-[26px] p-px inner-border inner-border-black;
+  @apply min-h-[26px] p-px inner-border inner-border-black;
 }
 
 .letter-tile {
@@ -35,7 +35,7 @@
 }
 
 .search-results {
-  @apply fixed max-h-[238px] w-full overflow-auto border;
+  @apply max-h-[238px] w-full overflow-auto border;
 }
 
 /* LOGIN & REGISTER */

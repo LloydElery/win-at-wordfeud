@@ -47,7 +47,7 @@ const SearchForm = ({ query, setQuery }: any) => {
   return (
     <>
       <section>
-        <div className="search-container grid grid-cols-3 grid-rows-1 gap-2">
+        <div className="search-container grid max-h-11 grid-cols-5 grid-rows-1">
           <form
             className="col-span-2 grid h-fit grid-cols-[1fr_auto] self-center"
             onSubmit={handleSubmit}
@@ -64,17 +64,19 @@ const SearchForm = ({ query, setQuery }: any) => {
             </button>
           </form>
 
-          <div>
-            <label className="grid grid-cols-1 grid-rows-2 text-xs">
-              <div className="text-[1.05em]">Sortera efter poäng</div>
-              <div className="mr-3 flex justify-end">
-                <input
-                  type="checkbox"
-                  checked={sortByValue}
-                  onChange={handleSortToggle}
-                />
-              </div>
-            </label>
+          <div className="sort-by-points col-span-2 col-start-4">
+            <div className="flex justify-center">
+              <label className="col-start-1 text-xs">
+                Sortera efter poäng
+                <div className="col-start-2 mr-3">
+                  <input
+                    type="checkbox"
+                    checked={sortByValue}
+                    onChange={handleSortToggle}
+                  />
+                </div>
+              </label>
+            </div>
           </div>
         </div>
 
@@ -82,7 +84,7 @@ const SearchForm = ({ query, setQuery }: any) => {
           Resultat:
         </div>
 
-        <div className="search-results bg-searchResultsBG border-searchResultsBorder">
+        <div className="search-results border-searchResultsBorder bg-searchResultsBG">
           <ul className="ml-1 mr-1">
             {results.map((word, index) => {
               const wordLength = word.word.length;
@@ -97,7 +99,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                   {sortByValue
                     ? null
                     : showHeadingByWordLength && (
-                        <h2 className="text-md border-searchResultsBorder border-b-[1px] font-light">
+                        <h2 className="text-md border-b-[1px] border-searchResultsBorder font-light">
                           {wordLength} bokstäver
                         </h2>
                       )}
@@ -106,7 +108,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                     key={index}
                   >
                     <p>{word.word.toUpperCase()}</p>
-                    <div className="bg-searchResultsPointsBG circle-icon">
+                    <div className="circle-icon bg-searchResultsPointsBG">
                       {word.value}
                     </div>
                     <SignedIn>
