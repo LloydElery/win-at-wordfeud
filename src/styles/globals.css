@@ -6,15 +6,15 @@
 
 /* GRID */
 .grid-container {
-  @apply m-[7px] grid grid-cols-15 grid-rows-15 border;
+  @apply grid grid-cols-15 grid-rows-15;
 }
 
 .special-grid-item {
-  @apply content-center overflow-auto p-px text-center text-xs tracking-[0.1em] inner-border;
+  @apply w-full content-center p-px text-center text-xs tracking-[0.1em] inner-border inner-border-black;
 }
 
 .grid-item {
-  @apply min-h-[26px] min-w-[26px];
+  @apply min-h-[26px] min-w-[26px] p-px inner-border inner-border-black;
 }
 
 .letter-tile {
