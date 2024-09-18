@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
 import Settings from "./Settings";
+import AddWord from "./AddWord";
 
 const Header = () => {
   return (
@@ -9,9 +10,7 @@ const Header = () => {
         <div>Wordfeud Hjälpen</div>
         <div className="header-icons flex gap-5">
           <Settings />
-          <Link href={"/"}>
-            <AiOutlinePlus size={30} />
-          </Link>
+          <AddWord />
         </div>
       </section>
     </>
