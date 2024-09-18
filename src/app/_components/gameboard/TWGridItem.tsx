@@ -3,8 +3,8 @@ const TWGridItem = () => {
 
   return (
     <>
-      <div className="h-full bg-gameboardTW">
-        <p className="h-full place-content-center">TW</p>
+      <div className="inner-tile bg-gameboardTW">
+        <p className="tile-text">TW</p>
       </div>
     </>
   );

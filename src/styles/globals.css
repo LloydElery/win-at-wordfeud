@@ -25,6 +25,13 @@
   @apply self-center text-center text-black;
 }
 
+.inner-tile {
+  @apply flex h-full items-center;
+}
+
+.tile-text {
+  @apply w-full text-center font-light;
+}
 /* SETTINGS */
 .settings-panel {
   @apply fixed left-0 right-0 top-[8%] z-10 m-[7px] flex h-[25rem] max-w-md flex-col items-center justify-self-center overflow-hidden border border-white p-2 shadow-md;

@@ -3,8 +3,8 @@ import React from "react";
 const TLGridItem = () => {
   return (
     <>
-      <div className="h-full bg-gameboardTL">
-        <p className="h-full place-content-center">TL</p>
+      <div className="inner-tile bg-gameboardTL">
+        <p className="tile-text">TL</p>
       </div>
     </>
   );

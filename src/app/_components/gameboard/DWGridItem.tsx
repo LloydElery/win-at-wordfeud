@@ -3,8 +3,8 @@ const DWGridItem = () => {
 
   return (
     <>
-      <div className="h-full bg-gameboardDW">
-        <p className="h-full place-content-center">DW</p>
+      <div className="inner-tile bg-gameboardDW">
+        <p className="tile-text">DW</p>
       </div>
     </>
   );
