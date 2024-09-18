@@ -1,0 +1,116 @@
+Det finns stöd, såhär står det i dokumentationen
+```
+Database side
+Types: STORED only
+
+How It Works
+
+Automatically computes values based on other columns during insert or update.
+Capabilities
+
+Simplifies data access by precomputing complex expressions.
+Enhances query performance with index support on generated columns.
+Limitations
+
+Cannot specify default values.
+Expressions cannot reference other generated columns or include subqueries.
+Schema changes required to modify generated column expressions.
+Cannot directly use in primary keys, foreign keys, or unique constraints
+For more info, please check PostgreSQL docs
+
+Drizzle side
+In Drizzle you can specify .generatedAlwaysAs() function on any column type and add a supported sql query, that will generate this column data do you
+
+Features
+This function can accept generated expression in 3 ways:
+
+string
+
+export const test = pgTable("test", {
+    generatedName: text("gen_name").generatedAlwaysAs(`hello world!`),
+});
+CREATE TABLE IF NOT EXISTS "test" (
+    "gen_name" text GENERATED ALWAYS AS (hello world!) STORED
+);
+sql tag - if you want drizzle to escape some values for you
+
+export const test = pgTable("test", {
+    generatedName: text("gen_name").generatedAlwaysAs(sql`hello "world"!`),
+});
+CREATE TABLE IF NOT EXISTS "test" (
+    "gen_name" text GENERATED ALWAYS AS (hello "world"!) STORED,
+);
+callback - if you need to reference columns from a table
+
+export const test = pgTable("test", {
+    name: text("first_name"),
+    generatedName: text("gen_name").generatedAlwaysAs(
+      (): SQL => sql`hi, ${test.name}!`
+    ),
+});
+CREATE TABLE IF NOT EXISTS "test" (
+    "first_name" text,
+    "gen_name" text GENERATED ALWAYS AS (hi, "test"."first_name"!) STORED,
+);
+Example generated columns with full-text search
+
+
+import { SQL, sql } from "drizzle-orm";
+import { customType, index, integer, pgTable, text } from "drizzle-orm/pg-core";
+const tsVector = customType<{ data: string }>({
+  dataType() {
+    return "tsvector";
+  },
+});
+export const test = pgTable(
+  "test",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    content: text("content"),
+    contentSearch: tsVector("content_search", {
+      dimensions: 3,
+    }).generatedAlwaysAs(
+      (): SQL => sql`to_tsvector('english', ${test.content})`
+    ),
+  },
+  (t) => ({
+    idx: index("idx_content_search").using("gin", t.contentSearch),
+  })
+);
+CREATE TABLE IF NOT EXISTS "test" (
+  "id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "test_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+  "content" text,
+  "content_search" "tsvector" GENERATED ALWAYS AS (to_tsvector('english', "test"."content")) STORED
+);
+--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "idx_content_search" ON "test" USING gin ("content_search");
+```
+och angående check i drizzleORM...
+
+```
+Check
+The CHECK constraint is used to limit the value range that can be placed in a column.
+
+If you define a CHECK constraint on a column it will allow only certain values for this column.
+
+If you define a CHECK constraint on a table it can limit the values in certain columns based on values in other columns in the row.
+
+NOT YET IMPLEMENTED IN DRIZZLE ORM
+```
+Och min kod ser ut såhär med error på check
+```ts
+export const communityWords = createTable(
+ "community_words",
+ {
+  id: serial("id").primaryKey(),
+  word: text("word").notNull().unique(),
+  normalized_word: text('normalized_word').notNull(),
+  word_value: integer("word_value").notNull().default(0),
+  reports: integer("reports").notNull().default(0),
+  up_votes: integer("up_votes").notNull().default(0),
+  down_votes: integer("down_votes").notNull().default(0),
+  score: integer("score").generatedAlwaysAs(sql`up_votes - down_votes`),
+  status: varchar("status", { length: 50 }).notNull().default("pending").check(['pending', 'approved', 'rejected'])
+ }
+)
+```

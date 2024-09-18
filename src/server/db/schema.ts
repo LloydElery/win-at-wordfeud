@@ -1,7 +1,8 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { boolean } from "drizzle-orm/mysql-core";
+import { sql } from "drizzle-orm";
+import { varchar } from "drizzle-orm/pg-core";
 import {
   index,
   text,
@@ -48,5 +49,24 @@ export const userReports = createTable(
   },
   (userReports) => ({
     uniqueUserReport: primaryKey(userReports.userId, userReports.wordId),
+  }),
+);
+
+export const communityWords = createTable(
+  "community_words",
+  {
+    id: serial("id").primaryKey(),
+    word: text("word").notNull().unique(),
+    normalized_word: text("normalized_word").notNull(),
+    word_value: integer("word_value").notNull().default(0),
+    reports: integer("reports").notNull().default(0),
+    up_votes: integer("up_votes").notNull().default(0),
+    down_votes: integer("down_votes").notNull().default(0),
+    score: integer("score").generatedAlwaysAs(sql`up_votes - down_votes`),
+    status: varchar("status", { length: 50 }).notNull().default("pending"),
+    created_at: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
+  },
+  (example) => ({
+    uniqueWordCombination: sql`CONSTRAINT unique_word_combination UNIQUE (${example.word}, ${example.normalized_word})`,
   }),
 );
