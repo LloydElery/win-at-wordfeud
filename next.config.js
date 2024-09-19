@@ -4,8 +4,17 @@
  */
 await import("./src/env.js");
 
+import withPWAInit from "@ducanh2912/next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+});
+
 /** @type {import("next").NextConfig} */
 const config = {
+  reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -14,4 +23,4 @@ const config = {
   },
 };
 
-export default config;
+export default withPWA(config);

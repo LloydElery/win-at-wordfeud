@@ -1,0 +1,62 @@
+{
+    "name": "Wordfeud Hjälpen",
+    "short_name": "WH App",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/android-chrome-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-260x260.png",
+            "sizes": "260x261",
+            "type": "image/png"
+        },
+        {
+            "src": "/mstile-150x150.png",
+            "sizes": "270x270",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#191731",
+    "background_color": "#1E212E",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "description": "Använd dina bokstäver för att hitta det bästa ordet för ditt spel!",
+    "screenshots": [
+        {
+            "src": "/images/image1.png",
+            "type": "image/png",
+            "sizes": "449x794"
+        },
+        {
+            "src": "/images/image2.png",
+            "type": "image/png",
+            "sizes": "449x794"
+        },
+        {
+            "src": "/images/image1.png",
+            "type": "image/png",
+            "sizes": "449x794",
+            "form_factor": "wide"
+        },
+        {
+            "src": "/images/image2.png",
+            "type": "image/png",
+            "sizes": "449x794",
+            "form_factor": "wide"
+        }
+    ]
+}
