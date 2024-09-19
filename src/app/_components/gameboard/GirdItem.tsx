@@ -17,11 +17,12 @@ const GridItem = ({
       setLetter(userLetter.toUpperCase());
       onInputLetter(id, userLetter.toUpperCase());
     }
+    console.log("Klicked");
   };
 
   return (
     <>
-      <div onClick={handleClick}>
+      <div className="grid-item" onClick={handleClick}>
         <p>{letter}</p>
       </div>
     </>

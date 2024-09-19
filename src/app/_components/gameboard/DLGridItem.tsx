@@ -3,7 +3,7 @@ const DLGridItem = () => {
 
   return (
     <>
-      <div className="inner-tile bg-gameboardDL">
+      <div className="special-grid-item inner-tile bg-gameboardDL">
         <p className="tile-text">DL</p>
       </div>
     </>

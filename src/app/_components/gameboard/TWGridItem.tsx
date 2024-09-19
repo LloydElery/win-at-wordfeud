@@ -3,7 +3,7 @@ const TWGridItem = () => {
 
   return (
     <>
-      <div className="inner-tile bg-gameboardTW">
+      <div className="special-grid-item inner-tile bg-gameboardTW">
         <p className="tile-text">TW</p>
       </div>
     </>

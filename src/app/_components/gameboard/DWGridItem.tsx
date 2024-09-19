@@ -3,7 +3,7 @@ const DWGridItem = () => {
 
   return (
     <>
-      <div className="inner-tile bg-gameboardDW">
+      <div className="special-grid-item inner-tile bg-gameboardDW">
         <p className="tile-text">DW</p>
       </div>
     </>

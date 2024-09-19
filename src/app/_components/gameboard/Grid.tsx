@@ -37,17 +37,13 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
               : null;
 
             return SpecialComponent ? (
-              <div className="special-grid-item">
-                <SpecialComponent key={gridItem.id} />
-              </div>
+              <SpecialComponent key={gridItem.id} />
             ) : (
-              <div className="grid-item">
-                <GridItem
-                  key={gridItem.id}
-                  id={gridItem.id}
-                  onInputLetter={handleInputLetter}
-                />
-              </div>
+              <GridItem
+                key={gridItem.id}
+                id={gridItem.id}
+                onInputLetter={handleInputLetter}
+              />
             );
           }),
         )}
