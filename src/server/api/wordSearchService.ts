@@ -69,10 +69,7 @@ export function sortByValueDesc(results: Word[]): Word[] {
  * @param letters - User input in the form of letters
  * @returns - A filtered list of matching words only containing @param letters
  */
-export async function searchWordsWithLetters(
-  letters: string,
-  sortBy: "length" | "value" | "default" = "length",
-) {
+export async function searchWordsWithLetters(letters: string) {
   const normalizedLetters = normalizeWord(letters);
 
   // Match words that contain any of the letters
