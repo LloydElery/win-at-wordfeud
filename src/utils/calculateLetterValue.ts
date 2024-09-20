@@ -30,6 +30,7 @@ const letterValues: Record<string, number> = {
   å: 4,
   ä: 4,
   ö: 4,
+  _: 1,
 };
 
 export function calculateWordValue(word: string): number {
