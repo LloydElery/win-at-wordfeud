@@ -34,6 +34,7 @@ export const words = createTable(
     normalized_word_index: index("normalized_word_index").on(
       example.normalized_word,
     ),
+    word_index: index("word_index").on(example.word),
   }),
 );
 

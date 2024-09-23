@@ -93,8 +93,6 @@ export async function searchWordsWithLetters(letters: string) {
     .from(words)
     .where(likeClause);
 
-  console.log("wildcardResults: ", wildcardResults);
-
   // Match words that contain any of the letters without wildcards
   const likeClauses = normalizedLetters
     .split("")
@@ -113,14 +111,10 @@ export async function searchWordsWithLetters(letters: string) {
     .from(words)
     .where(sql.join(likeClauses, sql` OR `));
 
-  console.log("Regular result: ", result.length);
-
   const uniqueCombinedResults = [...result, ...wildcardResults].filter(
     (item, index, self) =>
       index === self.findIndex((t) => t.word === item.word),
   );
-
-  console.log("uniqueCombinedResults: ", uniqueCombinedResults.length);
 
   // Filters results and returns a list of words without excessive
   const formableWords = uniqueCombinedResults.filter(({ word }) =>
@@ -130,14 +124,10 @@ export async function searchWordsWithLetters(letters: string) {
     ),
   );
 
-  console.log("formableWords: ", formableWords);
-
   // Filers results and returns them in alphabetical order
   const alphabeticallySortedResults = formableWords.sort((a, b) => {
     return a.word.localeCompare(b.word);
   });
-
-  console.log("alphabeticallySortedResults: ", alphabeticallySortedResults);
 
   // Filters result to ensure no word contains letters outside letters
   const filteredResults = alphabeticallySortedResults.filter(({ word }) =>
@@ -146,14 +136,11 @@ export async function searchWordsWithLetters(letters: string) {
     ),
   );
 
-  console.log("filteredResults: ", filteredResults);
-
   const sortedResults = filteredResults.sort((a, b) => {
     const lengthDifference = b.word.length - a.word.length;
     if (lengthDifference !== 0) return lengthDifference;
     return a.word.localeCompare(b.word);
   });
-  console.log("sortedResults: ", sortedResults);
 
   return sortedResults;
 }
