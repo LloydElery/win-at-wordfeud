@@ -6,7 +6,7 @@
 
 import { Word } from "~/app/utils/WordInterface";
 import { db, words } from "../db";
-import { sql } from "drizzle-orm";
+import { like, sql } from "drizzle-orm";
 
 /**
  * Normalizes the input by converting to lowercase and sorting @chars alphabeticly
@@ -42,18 +42,26 @@ export function countMatchingLetters(word: string, letters: string): number {
  * @param letters each letter in @param word
  * @returns an array of words that can be created using only the letters provided
  */
-function canFormWord(word: string, letters: string): boolean {
+function compareSearchInputToWord(word: string, letters: string): boolean {
   const letterCount: Record<string, number> = {};
 
+  // Count letters in search input
   for (const letter of letters) {
     letterCount[letter] = (letterCount[letter] || 0) + 1;
   }
 
+  // Count wildcards {" "} if there are any
+  let wildcards = letterCount[" "] || 0;
+  delete letterCount[" "];
+
   for (const letter of word) {
-    if (!letterCount[letter]) {
+    if (!letterCount[letter] && !wildcards) {
       return false;
+    } else if (letterCount[letter]) {
+      letterCount[letter] -= 1; // remove specific letter from search input, disabeling duplication
+    } else if (wildcards > 0) {
+      wildcards -= 1; // if the letter does not exist in the search input but there is a wildcard, include letter and remove wildcard
     }
-    letterCount[letter] -= 1;
   }
   return true;
 }
@@ -72,12 +80,31 @@ export function sortByValueDesc(results: Word[]): Word[] {
 export async function searchWordsWithLetters(letters: string) {
   const normalizedLetters = normalizeWord(letters);
 
-  // Match words that contain any of the letters
+  const replaceSpaceWithUnderscore = letters.replace(/\s/g, "_");
+
+  // Match words that contain any of the letters with wildcards
+  const likeClause = sql`${words.word} LIKE ${replaceSpaceWithUnderscore.toLowerCase()}`;
+
+  const wildcardResults = await db
+    .selectDistinct({
+      word: sql<string>`lower(${words.word})`,
+      value: words.word_value,
+    })
+    .from(words)
+    .where(likeClause);
+
+  console.log("wildcardResults: ", wildcardResults);
+
+  // Match words that contain any of the letters without wildcards
   const likeClauses = normalizedLetters
     .split("")
-    .map((char) => sql`${words.word} like ${"%" + char + "%"}`);
+    .map((char) => sql`${words.word} LIKE ${"%" + char + "%"}`);
 
-  // A list of words from the db containing two or more letters provided
+  if (letters.includes(" ")) {
+    const wildcardQuery = letters.replace(/ /g, "_");
+    likeClauses.push(sql`${words.word} LIKE ${wildcardQuery}`);
+  }
+
   const result = await db
     .selectDistinct({
       word: sql<string>`lower(${words.word})`,
@@ -86,28 +113,47 @@ export async function searchWordsWithLetters(letters: string) {
     .from(words)
     .where(sql.join(likeClauses, sql` OR `));
 
-  // Filters results and returns a list of words without excessive
-  const formableWords = result.filter(({ word }) =>
-    canFormWord(word, normalizedLetters),
+  console.log("Regular result: ", result.length);
+
+  const uniqueCombinedResults = [...result, ...wildcardResults].filter(
+    (item, index, self) =>
+      index === self.findIndex((t) => t.word === item.word),
   );
+
+  console.log("uniqueCombinedResults: ", uniqueCombinedResults.length);
+
+  // Filters results and returns a list of words without excessive
+  const formableWords = uniqueCombinedResults.filter(({ word }) =>
+    compareSearchInputToWord(
+      word,
+      normalizedLetters || replaceSpaceWithUnderscore,
+    ),
+  );
+
+  console.log("formableWords: ", formableWords);
 
   // Filers results and returns them in alphabetical order
   const alphabeticallySortedResults = formableWords.sort((a, b) => {
     return a.word.localeCompare(b.word);
   });
 
+  console.log("alphabeticallySortedResults: ", alphabeticallySortedResults);
+
   // Filters result to ensure no word contains letters outside letters
-  const filteredResults = alphabeticallySortedResults
-    .map((row) => row)
-    .filter(({ word }) =>
-      [...word].every((char) => normalizedLetters.includes(char)),
-    );
+  const filteredResults = alphabeticallySortedResults.filter(({ word }) =>
+    [...word].every(
+      (char) => normalizedLetters.includes(char) || letters.includes(" "),
+    ),
+  );
+
+  console.log("filteredResults: ", filteredResults);
 
   const sortedResults = filteredResults.sort((a, b) => {
-    const lengthDifferance = b.word.length - a.word.length;
-    if (lengthDifferance !== 0) return lengthDifferance;
-    return a.word.length - b.word.length || a.word.localeCompare(b.word);
+    const lengthDifference = b.word.length - a.word.length;
+    if (lengthDifference !== 0) return lengthDifference;
+    return a.word.localeCompare(b.word);
   });
+  console.log("sortedResults: ", sortedResults);
 
   return sortedResults;
 }
