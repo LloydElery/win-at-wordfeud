@@ -1,19 +1,7 @@
-// The wordSearchService.ts file contains all specific logic for serching,
-// finding and sorting words from the user input to the database.
-//
-// The file is structured in a way were the exported function(s) are using
-// all or some of the functions above it within this file.
-
 import { Word } from "~/app/utils/WordInterface";
 import { db, words } from "../db";
-import { like, sql } from "drizzle-orm";
+import { and, AnyColumn, lte, sql } from "drizzle-orm";
 
-/**
- * Normalizes the input by converting to lowercase and sorting @chars alphabeticly
- * @param word the input combination of @chars
- * @returns the normalized version of the word.
- * @example 'äpple' = 'elppä' & 'bord' = 'bdor'
- */
 export function normalizeWord(word: string): string {
   return word.split("").sort().join("").toLowerCase();
 }
@@ -92,7 +80,6 @@ export async function searchWordsWithLetters(letters: string) {
     })
     .from(words)
     .where(likeClause);
-
   // Match words that contain any of the letters without wildcards
   const likeClauses = normalizedLetters
     .split("")
@@ -102,6 +89,7 @@ export async function searchWordsWithLetters(letters: string) {
     const wildcardQuery = letters.replace(/ /g, "_");
     likeClauses.push(sql`${words.word} LIKE ${wildcardQuery}`);
   }
+  console.log("wildcardResults: ", wildcardResults);
 
   const result = await db
     .selectDistinct({
@@ -111,10 +99,14 @@ export async function searchWordsWithLetters(letters: string) {
     .from(words)
     .where(sql.join(likeClauses, sql` OR `));
 
+  console.log("result: ", result);
+
   const uniqueCombinedResults = [...result, ...wildcardResults].filter(
     (item, index, self) =>
       index === self.findIndex((t) => t.word === item.word),
   );
+
+  console.log("uniqueCombinedResults: ", uniqueCombinedResults);
 
   // Filters results and returns a list of words without excessive
   const formableWords = uniqueCombinedResults.filter(({ word }) =>
@@ -123,6 +115,8 @@ export async function searchWordsWithLetters(letters: string) {
       normalizedLetters || replaceSpaceWithUnderscore,
     ),
   );
+
+  console.log("formableWords: ", formableWords);
 
   // Filers results and returns them in alphabetical order
   const alphabeticallySortedResults = formableWords.sort((a, b) => {
@@ -142,5 +136,163 @@ export async function searchWordsWithLetters(letters: string) {
     return a.word.localeCompare(b.word);
   });
 
+  console.log("sortedResults: ", sortedResults);
   return sortedResults;
+}
+
+// ------------------------------------------------------------------------------
+export interface ISearchResult {
+  word: string;
+  value: number;
+}
+
+export async function displaySearchResultsInStages(letters: string) {
+  const normalizedLetters = normalizeWord(letters);
+
+  const searchResults: ISearchResult[] = await displaySearchResults(letters);
+
+  let combinedResults: ISearchResult[] = searchResults;
+
+  if (letters.includes(" ")) {
+    const wildcardResults: ISearchResult[] =
+      await displayWildcardSearchResults(letters);
+
+    combinedResults = [...combinedResults, ...wildcardResults];
+  }
+
+  const uniqueCombinedResults = filterUniqueResults(combinedResults);
+
+  // Filtrera ord som kan bildas med de givna bokstäverna
+  const formableWords = filterFormableWords(
+    uniqueCombinedResults,
+    letters,
+    normalizedLetters,
+  );
+
+  // Sortera i alfabetisk ordning
+  const alphabeticallySortedResults = sortAlphabetically(formableWords);
+
+  // Filtrera bort ord som innehåller ogiltiga bokstäver
+  const filteredResults = filterWordsContainingInvalidChars(
+    alphabeticallySortedResults,
+    letters,
+    normalizedLetters,
+  );
+
+  // Sortera resultat baserat på längd och bokstavsordning
+  const finalSortedResults =
+    sortResultsByLengthAndAlphabetically(filteredResults);
+
+  console.log("Displaying final sorted results:", finalSortedResults);
+
+  return finalSortedResults;
+}
+
+// Sort user input in alpabetical order
+/* export function normalizeWord(word: string): string {
+  return word.split("").sort().join("").toLowerCase();
+} */
+
+export async function displaySearchResults(letters: string) {
+  const normalizedLetters = normalizeWord(letters);
+  console.log("normalizedLetters: ", normalizedLetters);
+
+  let inputLength = normalizedLetters.length;
+
+  // Remove wildcards
+  if (letters.includes(" ")) {
+    inputLength = normalizedLetters.replace(/\s/g, "").length;
+  }
+
+  console.log("inputLength: ", inputLength);
+
+  const findWordsWithInputLetters = normalizedLetters
+    .split("")
+    .filter((char) => char !== " ")
+    .map((char) => sql`${words.word} LIKE ${"%" + char + "%"}`);
+
+  const lengthCondition = sql`char_length(${words.word}) <= ${inputLength}`;
+
+  const filters = [
+    sql.join(findWordsWithInputLetters, sql` AND `),
+    lengthCondition,
+  ];
+
+  const searchResults = await db
+    .selectDistinct({
+      word: sql<string>`lower(${words.word})`,
+      value: words.word_value,
+    })
+    .from(words)
+    .where(and(...filters));
+
+  console.log("searchResults: ", searchResults);
+  return searchResults;
+}
+
+export async function displayWildcardSearchResults(letters: string) {
+  const replaceSpaceWithUnderscore = letters.replace(/\s/g, "_");
+
+  // Match words that contain any of the letters with wildcards
+  const findWildcardsWordsWithInputLetters = sql`${words.word} LIKE ${replaceSpaceWithUnderscore.toLowerCase()}`;
+
+  const wildcardResults = await db
+    .selectDistinct({
+      word: sql<string>`lower(${words.word})`,
+      value: words.word_value,
+    })
+    .from(words)
+    .where(findWildcardsWordsWithInputLetters);
+
+  return wildcardResults;
+}
+
+export const filterSearchResultsByWordLength = (
+  column: AnyColumn,
+  length: number,
+) => {
+  return sql`char_length(${column}) <= ${length}`;
+};
+
+export function filterUniqueResults(results: ISearchResult[]): ISearchResult[] {
+  return results.filter(
+    (item, index, self) =>
+      index === self.findIndex((t) => t.word === item.word),
+  );
+}
+
+export function filterFormableWords(
+  results: ISearchResult[],
+  letters: string,
+  normalizedLetters: string,
+): ISearchResult[] {
+  return results.filter(({ word }) =>
+    compareSearchInputToWord(word, normalizedLetters || letters),
+  );
+}
+
+export function sortAlphabetically(results: ISearchResult[]): ISearchResult[] {
+  return results.sort((a, b) => a.word.localeCompare(b.word));
+}
+
+export function filterWordsContainingInvalidChars(
+  results: ISearchResult[],
+  letters: string,
+  normalizedLetters: string,
+): ISearchResult[] {
+  return results.filter(({ word }) =>
+    [...word].every(
+      (char) => normalizedLetters.includes(char) || letters.includes(" "),
+    ),
+  );
+}
+
+export function sortResultsByLengthAndAlphabetically(
+  results: ISearchResult[],
+): ISearchResult[] {
+  return results.sort((a, b) => {
+    const lengthDifference = b.word.length - a.word.length;
+    if (lengthDifference !== 0) return lengthDifference;
+    return a.word.localeCompare(b.word);
+  });
 }

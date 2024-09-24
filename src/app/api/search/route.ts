@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { searchWordsWithLetters } from "~/server/api/wordSearchService";
+import {
+  displaySearchResultsInStages,
+  searchWordsWithLetters,
+} from "~/server/api/wordSearchService";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const { searchParams } = new URL(req.url);
@@ -10,7 +13,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 
   try {
-    const words = await searchWordsWithLetters(letters);
+    const words = await displaySearchResultsInStages(letters);
     return NextResponse.json({ words }, { status: 200 });
   } catch (error) {
     console.error(error);
