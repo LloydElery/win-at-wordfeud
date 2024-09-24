@@ -35,6 +35,9 @@ export const words = createTable(
       example.normalized_word,
     ),
     word_index: index("word_index").on(example.word),
+    word_length_index: index("word_length_index").on(
+      sql`LENGTH(${example.word})`,
+    ),
   }),
 );
 
