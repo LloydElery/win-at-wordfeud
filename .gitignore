@@ -49,4 +49,4 @@ yarn-error.log*
 filestructure.bash
 
 # PWA files
-sw.js.map
+public/sw.js.map
