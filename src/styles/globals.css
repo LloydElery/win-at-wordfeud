@@ -34,11 +34,15 @@
 }
 /* SETTINGS */
 .modal-panel {
-  @apply fixed left-0 right-0 top-[8%] z-10 m-[7px] flex h-[25rem] max-w-md flex-col items-center justify-self-center overflow-hidden border border-white p-2 shadow-md;
+  @apply fixed left-0 right-0 top-[8%] z-10 m-[7px] flex h-[25rem] max-w-md flex-col items-center overflow-hidden border border-white p-2 shadow-md;
 }
 
 .modal-header {
   @apply flex w-full justify-between gap-3 text-sm;
+}
+
+.modal-content {
+  @apply flex flex-wrap items-center justify-center;
 }
 
 .search-results {
