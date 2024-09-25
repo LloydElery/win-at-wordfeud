@@ -1,71 +1,12 @@
-import { Word } from "~/app/utils/WordInterface";
 import { db, words } from "../db";
-import { and, AnyColumn, lte, sql } from "drizzle-orm";
-
-export function normalizeWord(word: string): string {
-  return word.split("").sort().join("").toLowerCase();
-}
-
-/**
- * Counts the number of letters that exist in both @word and @query.
- * @param word a word from the database.
- * @param query the searched letters.
- * @returns the number of matching letters.
- */
-export function countMatchingLetters(word: string, letters: string): number {
-  const wordLetters = word.split("").sort();
-  const letterSet = new Set(letters.split(""));
-
-  return wordLetters.reduce((count, letter) => {
-    if (letterSet.has(letter)) {
-      count += 1;
-    }
-    return count;
-  }, 0);
-}
-
-/**
- * Looks at each letter in each word in search results
- * @param word each word from the search result
- * @param letters each letter in @param word
- * @returns an array of words that can be created using only the letters provided
- */
-function compareSearchInputToWord(word: string, letters: string): boolean {
-  const letterCount: Record<string, number> = {};
-
-  // Count letters in search input
-  for (const letter of letters) {
-    letterCount[letter] = (letterCount[letter] || 0) + 1;
-  }
-
-  // Count wildcards {" "} if there are any
-  let wildcards = letterCount[" "] || 0;
-  delete letterCount[" "];
-
-  for (const letter of word) {
-    if (!letterCount[letter] && !wildcards) {
-      return false;
-    } else if (letterCount[letter]) {
-      letterCount[letter] -= 1; // remove specific letter from search input, disabeling duplication
-    } else if (wildcards > 0) {
-      wildcards -= 1; // if the letter does not exist in the search input but there is a wildcard, include letter and remove wildcard
-    }
-  }
-  return true;
-}
-
-export function sortByValueDesc(results: Word[]): Word[] {
-  return [...results].sort((a, b) => {
-    return b.value - a.value;
-  });
-}
+import { AnyColumn, lte, sql } from "drizzle-orm";
 
 /**
  * Searches for words in the database that are similar to the given letters.
  * @param letters - User input in the form of letters
  * @returns - A filtered list of matching words only containing @param letters
  */
-export async function searchWordsWithLetters(letters: string) {
+/* export async function searchWordsWithLetters(letters: string) {
   const normalizedLetters = normalizeWord(letters);
 
   const replaceSpaceWithUnderscore = letters.replace(/\s/g, "_");
@@ -138,7 +79,7 @@ export async function searchWordsWithLetters(letters: string) {
 
   console.log("sortedResults: ", sortedResults);
   return sortedResults;
-}
+} */
 
 // ------------------------------------------------------------------------------
 export interface ISearchResult {
@@ -187,30 +128,8 @@ export async function displaySearchResultsInStages(letters: string) {
   return finalSortedResults;
 }
 
-// Sort user input in alpabetical order
-/* export function normalizeWord(word: string): string {
-  return word.split("").sort().join("").toLowerCase();
-} */
-
 export async function displaySearchResults(letters: string) {
-  const normalizedLetters = normalizeWord(letters)
-    .toLowerCase()
-    .replace(/\s/g, ""); // Remove wildcard
-  /* console.log("normalizedLetters: ", normalizedLetters); */
-
-  let inputLength = normalizedLetters.length;
-  /* console.log("inputLength: ", inputLength); */
-
-  /*   const findWordsWithInputLetters = normalizedLetters
-    .split("")
-    .filter((char) => char !== " ")
-    .map((char) => sql`${words.word} LIKE ${"%" + char + "%"}`);
- */
-  /* const letterCondition = sql.join(findWordsWithInputLetters, sql` AND `); */
-
-  /* const filterWordsByInputLetters = sql`${words.word} ~ ${"^[" + normalizedLetters.split("").join("") + "]+$"}`; */
-
-  /*   const filters = [sql.join(findWordsWithInputLetters, sql` OR `)]; */
+  const normalizedInputLetters = normalizeWord(letters).replace(/\s/g, ""); // Remove wildcard
 
   const wordLength = sql`char_length(${words.word})`;
 
@@ -220,25 +139,16 @@ export async function displaySearchResults(letters: string) {
       value: words.word_value,
     })
     .from(words)
-    .where(lte(wordLength, inputLength));
-  /* .where(and(...filters)); */
-  /* .where(and(lengthCondition, letterCondition, filterWordsByInputLetters)) */
+    .where(lte(wordLength, normalizedInputLetters.length));
 
-  /* console.log("searchResults: ", searchResults); */
+  console.log("searchResults: ", searchResults);
   return searchResults;
 }
 
 export async function displayWildcardSearchResults(letters: string) {
-  const normalizedLetters = normalizeWord(letters)
-    .toLowerCase()
-    .replace(/\s/g, "_"); // Add wildcard
+  const normalizedInputLetters = normalizeWord(letters).replace(/\s/g, "_"); // Add wildcard
 
-  const inputLength = normalizedLetters.length;
   const wordLength = sql`char_length(${words.word})`;
-
-  // Match words that contain any of the letters with wildcards
-  /* const findWildcardsWordsWithInputLetters = sql`${words.word} LIKE ${normalizedLetters}`;
-   */
 
   const wildcardResults = await db
     .selectDistinct({
@@ -246,10 +156,14 @@ export async function displayWildcardSearchResults(letters: string) {
       value: words.word_value,
     })
     .from(words)
-    .where(lte(wordLength, inputLength));
+    .where(lte(wordLength, normalizedInputLetters.length));
 
   console.log("wildcardResults: ", wildcardResults);
   return wildcardResults;
+}
+
+export function normalizeWord(word: string): string {
+  return word.split("").sort().join("").toLowerCase();
 }
 
 export const filterSearchResultsByWordLength = (
@@ -274,6 +188,36 @@ export function filterFormableWords(
   return results.filter(({ word }) =>
     compareSearchInputToWord(word, normalizedLetters || letters),
   );
+}
+
+/**
+ * Looks at each letter in each word in search results
+ * @param word each word from the search result
+ * @param letters each letter in @param word
+ * @returns an array of words that can be created using only the letters provided
+ */
+function compareSearchInputToWord(word: string, letters: string): boolean {
+  const letterCount: Record<string, number> = {};
+
+  // Count letters in search input
+  for (const letter of letters) {
+    letterCount[letter] = (letterCount[letter] || 0) + 1;
+  }
+
+  // Count wildcards {" "} if there are any
+  let wildcards = letterCount[" "] || 0;
+  delete letterCount[" "];
+
+  for (const letter of word) {
+    if (!letterCount[letter] && !wildcards) {
+      return false;
+    } else if (letterCount[letter]) {
+      letterCount[letter] -= 1; // remove specific letter from search input, disabeling duplication
+    } else if (wildcards > 0) {
+      wildcards -= 1; // if the letter does not exist in the search input but there is a wildcard, include letter and remove wildcard
+    }
+  }
+  return true;
 }
 
 export function sortAlphabetically(results: ISearchResult[]): ISearchResult[] {

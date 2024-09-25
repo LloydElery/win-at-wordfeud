@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  displaySearchResultsInStages,
-  searchWordsWithLetters,
-} from "~/server/api/wordSearchService";
+import { displaySearchResultsInStages } from "~/server/api/wordSearchService";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const { searchParams } = new URL(req.url);
