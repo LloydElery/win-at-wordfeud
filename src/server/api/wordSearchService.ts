@@ -195,16 +195,21 @@ export async function displaySearchResultsInStages(letters: string) {
 
 export async function displaySearchResults(letters: string) {
   const normalizedLetters = normalizeWord(letters);
+  /*     .toLowerCase()
+    .replace(/\s/g, ""); */
+
   console.log("normalizedLetters: ", normalizedLetters);
 
-  let inputLength = normalizedLetters.length;
+  /*   const lengthCondition = sql`LENGTH(${words.word}) <= ${normalizedLetters.length}`; */
 
+  let inputLength = normalizedLetters.length;
   // Remove wildcards
   if (letters.includes(" ")) {
     inputLength = normalizedLetters.replace(/\s/g, "").length;
   }
-
   console.log("inputLength: ", inputLength);
+
+  /*   const filterWordsByLength = sql`${sql`LENGTH(${words.word})`} <= ${inputLength}`; */
 
   const findWordsWithInputLetters = normalizedLetters
     .split("")
@@ -213,8 +218,12 @@ export async function displaySearchResults(letters: string) {
 
   const lengthCondition = sql`char_length(${words.word}) <= ${inputLength}`;
 
+  /* const letterCondition = sql.join(findWordsWithInputLetters, sql` AND `); */
+
+  /* const filterWordsByInputLetters = sql`${words.word} ~ ${"^[" + normalizedLetters.split("").join("") + "]+$"}`; */
+
   const filters = [
-    sql.join(findWordsWithInputLetters, sql` AND `),
+    sql.join(findWordsWithInputLetters, sql` OR `),
     lengthCondition,
   ];
 
@@ -224,7 +233,9 @@ export async function displaySearchResults(letters: string) {
       value: words.word_value,
     })
     .from(words)
-    .where(and(...filters));
+    .where(lte(sql`char_length(${words.word})`, inputLength));
+  /* .where(and(...filters)); */
+  /* .where(and(lengthCondition, letterCondition, filterWordsByInputLetters)) */
 
   console.log("searchResults: ", searchResults);
   return searchResults;
@@ -244,6 +255,7 @@ export async function displayWildcardSearchResults(letters: string) {
     .from(words)
     .where(findWildcardsWordsWithInputLetters);
 
+  console.log("wildcardResults: ", wildcardResults);
   return wildcardResults;
 }
 
