@@ -8,10 +8,10 @@ const readex_pro = Readex_Pro({
   variable: "--font-readex_pro",
 });
 
-export const APP_NAME = "Wf Hjälpen";
-export const APP_DEFAULT_TITLE = "Wordfeud Hjälpen";
-export const APP_TITLE_TEMPLATE = "%s - WH App";
-export const APP_DESCRIPTION =
+const APP_NAME = "Wf Hjälpen";
+const APP_DEFAULT_TITLE = "Wordfeud Hjälpen";
+const APP_TITLE_TEMPLATE = "%s - WH App";
+const APP_DESCRIPTION =
   "Använd dina bokstäver för att hitta det bästa ordet för ditt spel!";
 
 export const metadata: Metadata = {

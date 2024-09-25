@@ -1,6 +1,11 @@
 import { useMemo, useState } from "react";
 import { Word } from "../utils/WordInterface";
-import { sortByValueDesc } from "~/server/api/wordSearchService";
+
+export function sortByValueDesc(results: Word[]): Word[] {
+  return [...results].sort((a, b) => {
+    return b.value - a.value;
+  });
+}
 
 export const useSearch = () => {
   const [results, setResults] = useState<Word[]>([]);
