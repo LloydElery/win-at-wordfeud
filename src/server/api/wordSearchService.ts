@@ -156,7 +156,6 @@ export async function displaySearchResultsInStages(letters: string) {
   if (letters.includes(" ")) {
     const wildcardResults: ISearchResult[] =
       await displayWildcardSearchResults(letters);
-
     combinedResults = [...combinedResults, ...wildcardResults];
   }
 
@@ -194,38 +193,26 @@ export async function displaySearchResultsInStages(letters: string) {
 } */
 
 export async function displaySearchResults(letters: string) {
-  const normalizedLetters = normalizeWord(letters);
-  /*     .toLowerCase()
-    .replace(/\s/g, ""); */
-
-  console.log("normalizedLetters: ", normalizedLetters);
-
-  /*   const lengthCondition = sql`LENGTH(${words.word}) <= ${normalizedLetters.length}`; */
+  const normalizedLetters = normalizeWord(letters)
+    .toLowerCase()
+    .replace(/\s/g, ""); // Remove wildcard
+  /* console.log("normalizedLetters: ", normalizedLetters); */
 
   let inputLength = normalizedLetters.length;
-  // Remove wildcards
-  if (letters.includes(" ")) {
-    inputLength = normalizedLetters.replace(/\s/g, "").length;
-  }
-  console.log("inputLength: ", inputLength);
+  /* console.log("inputLength: ", inputLength); */
 
-  /*   const filterWordsByLength = sql`${sql`LENGTH(${words.word})`} <= ${inputLength}`; */
-
-  const findWordsWithInputLetters = normalizedLetters
+  /*   const findWordsWithInputLetters = normalizedLetters
     .split("")
     .filter((char) => char !== " ")
     .map((char) => sql`${words.word} LIKE ${"%" + char + "%"}`);
-
-  const lengthCondition = sql`char_length(${words.word}) <= ${inputLength}`;
-
+ */
   /* const letterCondition = sql.join(findWordsWithInputLetters, sql` AND `); */
 
   /* const filterWordsByInputLetters = sql`${words.word} ~ ${"^[" + normalizedLetters.split("").join("") + "]+$"}`; */
 
-  const filters = [
-    sql.join(findWordsWithInputLetters, sql` OR `),
-    lengthCondition,
-  ];
+  /*   const filters = [sql.join(findWordsWithInputLetters, sql` OR `)]; */
+
+  const wordLength = sql`char_length(${words.word})`;
 
   const searchResults = await db
     .selectDistinct({
@@ -233,19 +220,25 @@ export async function displaySearchResults(letters: string) {
       value: words.word_value,
     })
     .from(words)
-    .where(lte(sql`char_length(${words.word})`, inputLength));
+    .where(lte(wordLength, inputLength));
   /* .where(and(...filters)); */
   /* .where(and(lengthCondition, letterCondition, filterWordsByInputLetters)) */
 
-  console.log("searchResults: ", searchResults);
+  /* console.log("searchResults: ", searchResults); */
   return searchResults;
 }
 
 export async function displayWildcardSearchResults(letters: string) {
-  const replaceSpaceWithUnderscore = letters.replace(/\s/g, "_");
+  const normalizedLetters = normalizeWord(letters)
+    .toLowerCase()
+    .replace(/\s/g, "_"); // Add wildcard
+
+  const inputLength = normalizedLetters.length;
+  const wordLength = sql`char_length(${words.word})`;
 
   // Match words that contain any of the letters with wildcards
-  const findWildcardsWordsWithInputLetters = sql`${words.word} LIKE ${replaceSpaceWithUnderscore.toLowerCase()}`;
+  /* const findWildcardsWordsWithInputLetters = sql`${words.word} LIKE ${normalizedLetters}`;
+   */
 
   const wildcardResults = await db
     .selectDistinct({
@@ -253,7 +246,7 @@ export async function displayWildcardSearchResults(letters: string) {
       value: words.word_value,
     })
     .from(words)
-    .where(findWildcardsWordsWithInputLetters);
+    .where(lte(wordLength, inputLength));
 
   console.log("wildcardResults: ", wildcardResults);
   return wildcardResults;
