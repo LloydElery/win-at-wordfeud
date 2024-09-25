@@ -88,28 +88,34 @@ export interface ISearchResult {
 }
 
 export async function displaySearchResultsInStages(letters: string) {
+  // Sort user input letters in alphabetical order
   const normalizedLetters = normalizeWord(letters);
 
-  const searchResults: ISearchResult[] = await displaySearchResults(letters);
+  const searchResultsBeforeFiltering: ISearchResult[] =
+    await displaySearchResults(normalizedLetters);
 
-  let combinedResults: ISearchResult[] = searchResults;
+  let combinedResultsBeforeFiltering: ISearchResult[] =
+    searchResultsBeforeFiltering;
 
   if (letters.includes(" ")) {
-    const wildcardResults: ISearchResult[] =
-      await displayWildcardSearchResults(letters);
-    combinedResults = [...combinedResults, ...wildcardResults];
+    const wildcardResultsBeforeFiltering: ISearchResult[] =
+      await displayWildcardSearchResults(normalizedLetters);
+    combinedResultsBeforeFiltering = [
+      ...combinedResultsBeforeFiltering,
+      ...wildcardResultsBeforeFiltering,
+    ];
   }
 
-  const uniqueCombinedResults = filterUniqueResults(combinedResults);
+  const uniqueCombinedResults = filterUniqueResults(
+    combinedResultsBeforeFiltering,
+  );
 
-  // Filtrera ord som kan bildas med de givna bokstäverna
   const formableWords = filterFormableWords(
     uniqueCombinedResults,
     letters,
     normalizedLetters,
   );
 
-  // Sortera i alfabetisk ordning
   const alphabeticallySortedResults = sortAlphabetically(formableWords);
 
   // Filtrera bort ord som innehåller ogiltiga bokstäver
@@ -128,8 +134,8 @@ export async function displaySearchResultsInStages(letters: string) {
   return finalSortedResults;
 }
 
-export async function displaySearchResults(letters: string) {
-  const normalizedInputLetters = normalizeWord(letters).replace(/\s/g, ""); // Remove wildcard
+export async function displaySearchResults(normalizedLetters: string) {
+  const userInputLetters = normalizedLetters.replace(/\s/g, ""); // Remove wildcard
 
   const wordLength = sql`char_length(${words.word})`;
 
@@ -139,14 +145,14 @@ export async function displaySearchResults(letters: string) {
       value: words.word_value,
     })
     .from(words)
-    .where(lte(wordLength, normalizedInputLetters.length));
+    .where(lte(wordLength, userInputLetters.length));
 
   console.log("searchResults: ", searchResults);
   return searchResults;
 }
 
-export async function displayWildcardSearchResults(letters: string) {
-  const normalizedInputLetters = normalizeWord(letters).replace(/\s/g, "_"); // Add wildcard
+export async function displayWildcardSearchResults(normalizedLetters: string) {
+  const userInputLettersAndWildcard = normalizedLetters.replace(/\s/g, "_"); // Add wildcard
 
   const wordLength = sql`char_length(${words.word})`;
 
@@ -156,7 +162,7 @@ export async function displayWildcardSearchResults(letters: string) {
       value: words.word_value,
     })
     .from(words)
-    .where(lte(wordLength, normalizedInputLetters.length));
+    .where(lte(wordLength, userInputLettersAndWildcard.length));
 
   console.log("wildcardResults: ", wildcardResults);
   return wildcardResults;
