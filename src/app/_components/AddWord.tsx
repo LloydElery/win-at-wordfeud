@@ -4,8 +4,6 @@ import ToggleModal from "../utils/ToggleModal";
 import WordContributionForm from "./AddWord/WordContributionForm";
 
 const AddWord = () => {
-  // Logic & functionality
-
   return (
     <ToggleModal
       IconComponent={AiOutlinePlus}

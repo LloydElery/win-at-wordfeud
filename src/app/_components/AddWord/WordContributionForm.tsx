@@ -29,6 +29,7 @@ const WordContributionForm: React.FC = () => {
       <input
         className="text-black"
         type="text"
+        pattern="[a-zåäöA-ZÅÄÖ]"
         value={word}
         onChange={(e) => setWord(e.target.value)}
         placeholder="Skriv ditt ord"
