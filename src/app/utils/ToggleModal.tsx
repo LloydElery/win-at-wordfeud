@@ -27,7 +27,8 @@ const ToggleModal: React.FC<IToggleModal> = ({
         {isOpen && (
           <div className="modal-panel bg-modalGrey">
             <div className="modal-header">
-              <h2>{title}</h2>
+              <h2 className="font-light">{title}</h2>
+
               <button
                 onClick={toggleModal}
                 className="close-button cursor-pointer bg-none"
@@ -35,7 +36,7 @@ const ToggleModal: React.FC<IToggleModal> = ({
                 X
               </button>
             </div>
-            <div className="modal-content flex items-center justify-between">
+            <div className="modal-content">
               <ContentComponent />
             </div>
           </div>
