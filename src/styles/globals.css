@@ -70,8 +70,9 @@
 /* GAMEBOARD LANGUAGE */
 
 .gameboard-language-title {
-  @apply col-span-3 content-center justify-self-center;
+  @apply border-b-[1px] border-letterTile text-center font-light;
 }
+
 .gameboard-language-flag {
   @apply size-7 content-center place-self-center justify-self-center;
 }

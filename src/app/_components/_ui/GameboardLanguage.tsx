@@ -23,8 +23,14 @@ const GameboardLanguage: React.FC<IGameboardLanguage> = ({
   };
   return (
     <>
-      <div className="gameboard-language grid grid-cols-5 grid-rows-1 text-sm font-light">
-        <h2 className="gameboard-language-title">Gameboard Language:</h2>
+      <h2
+        className={`gameboard-language-title ${gameboardLanguage === "se" ? "mx-16" : "mx-10"}`}
+      >
+        {gameboardLanguage === "se"
+          ? "Spelbrädans språk:"
+          : "Gameboard Language:"}
+      </h2>
+      <div className="gameboard-language grid grid-cols-2 grid-rows-1 text-sm font-light">
         <button
           onClick={() => handleLanguageChange("se")}
           className={`gameboard-language-flag ${gameboardLanguage === "se" ? "selected" : ""}`}
@@ -39,32 +45,6 @@ const GameboardLanguage: React.FC<IGameboardLanguage> = ({
         </button>
       </div>
       <section className="special-grid-item-language-container m-[7px] grid grid-cols-2 grid-rows-1">
-        <div className="special-grid-item-container-en grid grid-cols-4 grid-rows-1 gap-px justify-self-center">
-          <div className="h-[26px] w-[26px]">
-            <TLGridItem
-              language="en"
-              BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
-            />
-          </div>
-          <div className="h-[26px] w-[26px]">
-            <DLGridItem
-              language="en"
-              BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
-            />
-          </div>
-          <div className="h-[26px] w-[26px]">
-            <TWGridItem
-              language="en"
-              BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
-            />
-          </div>
-          <div className="h-[26px] w-[26px]">
-            <DWGridItem
-              language="en"
-              BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
-            />
-          </div>
-        </div>
         <div className="special-grid-item-container-sv grid grid-cols-4 grid-rows-1 gap-px justify-self-center">
           <div className="h-[26px] w-[26px]">
             <TLGridItem
@@ -88,6 +68,32 @@ const GameboardLanguage: React.FC<IGameboardLanguage> = ({
             <DWGridItem
               language="se"
               BGColor={gameboardLanguage === "se" ? "" : "bg-none"}
+            />
+          </div>
+        </div>
+        <div className="special-grid-item-container-en grid grid-cols-4 grid-rows-1 gap-px justify-self-center">
+          <div className="h-[26px] w-[26px]">
+            <TLGridItem
+              language="en"
+              BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
+            />
+          </div>
+          <div className="h-[26px] w-[26px]">
+            <DLGridItem
+              language="en"
+              BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
+            />
+          </div>
+          <div className="h-[26px] w-[26px]">
+            <TWGridItem
+              language="en"
+              BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
+            />
+          </div>
+          <div className="h-[26px] w-[26px]">
+            <DWGridItem
+              language="en"
+              BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
             />
           </div>
         </div>
