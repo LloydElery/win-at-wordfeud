@@ -70,7 +70,7 @@
 /* GAMEBOARD LANGUAGE */
 
 .gameboard-language-title {
-  @apply border-b-[1px] border-letterTile text-center font-light;
+  @apply my-[7px] border-b-[1px] border-letterTile text-center font-light;
 }
 
 .gameboard-language-flag {
