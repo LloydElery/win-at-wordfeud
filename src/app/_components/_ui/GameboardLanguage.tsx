@@ -38,53 +38,53 @@ const GameboardLanguage: React.FC<IGameboardLanguage> = ({
           <GB />
         </button>
       </div>
-      <section className="special-grid-item-language-container grid grid-cols-2 grid-rows-1 border">
-        <div className="special-grid-item-container-en grid w-full grid-cols-4 grid-rows-1 border">
-          <div className="special-grid-item">
+      <section className="special-grid-item-language-container m-[7px] grid grid-cols-2 grid-rows-1">
+        <div className="special-grid-item-container-en grid grid-cols-4 grid-rows-1 gap-px justify-self-center">
+          <div className="h-[26px] w-[26px]">
             <TLGridItem
               language="en"
               BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
             />
           </div>
-          <div className="special-grid-item">
+          <div className="h-[26px] w-[26px]">
             <DLGridItem
               language="en"
               BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
             />
           </div>
-          <div className="special-grid-item">
+          <div className="h-[26px] w-[26px]">
             <TWGridItem
               language="en"
               BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
             />
           </div>
-          <div className="special-grid-item">
+          <div className="h-[26px] w-[26px]">
             <DWGridItem
               language="en"
               BGColor={gameboardLanguage === "en" ? "" : "bg-none"}
             />
           </div>
         </div>
-        <div className="special-grid-item-container-sv grid w-full grid-cols-4 grid-rows-1 border">
-          <div className="special-grid-item">
+        <div className="special-grid-item-container-sv grid grid-cols-4 grid-rows-1 gap-px justify-self-center">
+          <div className="h-[26px] w-[26px]">
             <TLGridItem
               language="se"
               BGColor={gameboardLanguage === "se" ? "" : "bg-none"}
             />
           </div>
-          <div className="special-grid-item">
+          <div className="h-[26px] w-[26px]">
             <DLGridItem
               language="se"
               BGColor={gameboardLanguage === "se" ? "" : "bg-none"}
             />
           </div>
-          <div className="special-grid-item">
+          <div className="h-[26px] w-[26px]">
             <TWGridItem
               language="se"
               BGColor={gameboardLanguage === "se" ? "" : "bg-none"}
             />
           </div>
-          <div className="special-grid-item">
+          <div className="h-[26px] w-[26px]">
             <DWGridItem
               language="se"
               BGColor={gameboardLanguage === "se" ? "" : "bg-none"}
