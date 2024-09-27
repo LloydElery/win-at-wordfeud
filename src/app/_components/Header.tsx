@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { AiOutlinePlus } from "react-icons/ai";
 import Settings from "./Settings";
 import AddWord from "./AddWord";
 
