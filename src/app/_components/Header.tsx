@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
 import Settings from "./Settings";
 import AddWord from "./AddWord";
+import { SignedOut } from "@clerk/nextjs";
 
 const Header = () => {
   return (
