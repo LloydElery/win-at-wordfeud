@@ -1,4 +1,4 @@
 export interface ISpecialGridItems {
   BGColor: string;
-  language: string;
+  menuLanguage: string;
 }

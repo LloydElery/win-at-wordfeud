@@ -7,6 +7,7 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
   const handleInputLetter = (id: number, letter: string) => {
     console.log(`Letter ${letter} placed on square ${id}`);
   };
+
   const create2DGrid = (): GridItemType[][] => {
     return Array.from({ length: size }, (_, row) =>
       Array.from({ length: size }, (_, col) => {
@@ -37,7 +38,7 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
               : null;
 
             return SpecialComponent ? (
-              <SpecialComponent language="" BGColor="" key={gridItem.id} />
+              <SpecialComponent menuLanguage="" BGColor="" key={gridItem.id} />
             ) : (
               <GridItem
                 key={gridItem.id}
