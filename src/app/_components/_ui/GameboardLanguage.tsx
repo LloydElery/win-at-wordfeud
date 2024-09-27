@@ -24,7 +24,7 @@ const GameboardLanguage: React.FC<IGameboardLanguage> = ({
   return (
     <>
       <h2
-        className={`gameboard-language-title ${gameboardLanguage === "se" ? "mx-16" : "mx-10"}`}
+        className={`gameboard-language-title ${gameboardLanguage === "se" ? "mx-14" : "mx-10"}`}
       >
         {gameboardLanguage === "se"
           ? "Spelbrädans språk:"
