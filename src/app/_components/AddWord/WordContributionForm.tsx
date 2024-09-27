@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import GameboardLanguage from "../_ui/GameboardLanguage";
+import { useLanguage } from "~/app/context/gameboard/GBLContext";
 
 const WordContributionForm: React.FC = () => {
   const [word, setWord] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("svenska"); // Hanterar valt språk
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -24,12 +24,6 @@ const WordContributionForm: React.FC = () => {
     }
 
     setWord("");
-  };
-
-  const handleLanguageChange = (language: string) => {
-    setSelectedLanguage(language);
-    console.log(`Selected language: ${language}`);
-    // Här kan du lägga till logik för vad som ska hända vid språkbyte
   };
 
   return (
@@ -64,7 +58,7 @@ const WordContributionForm: React.FC = () => {
         </label>
       </form>
       <div className="m-[7px] w-full border">
-        <GameboardLanguage onLanguageChange={handleLanguageChange} />
+        <GameboardLanguage />
       </div>
     </>
   );
