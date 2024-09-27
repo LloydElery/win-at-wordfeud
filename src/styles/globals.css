@@ -69,6 +69,9 @@
 
 /* GAMEBOARD LANGUAGE */
 
+.gameboard-language {
+  @apply grid grid-cols-2 grid-rows-1 text-sm font-light;
+}
 .gameboard-language-title {
   @apply my-[7px] border-b-[1px] border-letterTile text-center font-light;
 }
