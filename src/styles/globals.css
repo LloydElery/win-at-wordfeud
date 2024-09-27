@@ -67,6 +67,10 @@
   @apply h-5 w-5 content-center place-self-center rounded-full border border-black text-center text-xs font-normal text-black;
 }
 
+.blur-animation {
+  @apply animate-pulse blur-sm;
+}
+
 /* GAMEBOARD LANGUAGE */
 
 .gameboard-language {
