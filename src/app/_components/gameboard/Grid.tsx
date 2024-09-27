@@ -37,7 +37,7 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
               : null;
 
             return SpecialComponent ? (
-              <SpecialComponent key={gridItem.id} />
+              <SpecialComponent language="" BGColor="" key={gridItem.id} />
             ) : (
               <GridItem
                 key={gridItem.id}

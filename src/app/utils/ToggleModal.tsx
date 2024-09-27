@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface IToggleModal {
   IconComponent: React.FC<{ onClick: () => void; size: number }>;
@@ -13,19 +13,43 @@ const ToggleModal: React.FC<IToggleModal> = ({
   title,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const iconRef = useRef<HTMLDivElement | null>(null);
 
   const toggleModal = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((prev) => !prev);
   };
+
+  const handleClickOutsideModal = (event: MouseEvent) => {
+    if (
+      modalRef.current &&
+      !modalRef.current.contains(event.target as Node) &&
+      iconRef.current &&
+      !iconRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutsideModal);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutsideModal);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideModal);
+    };
+  }, [isOpen]);
 
   return (
     <>
-      <div className={title + "icon"}>
+      <div ref={iconRef} className={title + "_" + "icon"}>
         <IconComponent onClick={toggleModal} size={30} />
       </div>
       <div>
-        {isOpen && (
-          <div className="modal-panel bg-modalGrey">
+        {isOpen ? (
+          <div ref={modalRef} className="modal-panel bg-modalGrey">
             <div className="modal-header">
               <h2 className="font-light">{title}</h2>
 
@@ -40,7 +64,7 @@ const ToggleModal: React.FC<IToggleModal> = ({
               <ContentComponent />
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </>
   );
