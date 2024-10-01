@@ -61,7 +61,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="se" className={`${readex_pro.variable} font-sans`}>
-        <body>{children}</body>
+        <body className="flex min-h-screen justify-center bg-primaryBlue p-[7px] text-white">
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );
