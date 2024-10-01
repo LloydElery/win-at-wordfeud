@@ -3,6 +3,17 @@
 @tailwind utilities;
 
 /* SEARCH */
+/* .search-container {
+  @apply 
+} */
+
+.search {
+  @apply self-center text-center text-black;
+}
+
+.search-results {
+  @apply max-h-[238px] w-full overflow-auto border;
+}
 
 /* GRID */
 .grid-container {
@@ -19,10 +30,6 @@
 
 .letter-tile {
   @apply min-h-[26px] min-w-[26px] self-center text-center text-black inner-border inner-border-black;
-}
-
-.search {
-  @apply self-center text-center text-black;
 }
 
 .inner-tile {
@@ -48,10 +55,6 @@
 
 .modal-content {
   @apply flex flex-col items-center;
-}
-
-.search-results {
-  @apply max-h-[238px] w-full overflow-auto border;
 }
 
 /* LOGIN & REGISTER */

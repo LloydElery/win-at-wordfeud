@@ -48,7 +48,7 @@ const SearchForm = ({ query, setQuery }: any) => {
   return (
     <>
       <section className="mb-1">
-        <div className="search-container flex max-h-11 gap-1">
+        <div className="search-container flex max-h-11 justify-between gap-1">
           <form
             className="grid h-fit w-fit grid-cols-[1fr_auto] self-center"
             onSubmit={handleSubmit}
