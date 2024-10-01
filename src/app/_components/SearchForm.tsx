@@ -5,6 +5,7 @@ import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
 import { AiOutlineSearch } from "react-icons/ai";
 import { LoadingScreen } from "./_ui/LoadingScreen";
+import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
@@ -74,7 +75,11 @@ const SearchForm = ({ query, setQuery }: any) => {
             />
           </label>
         </div>
-
+        <section className="admin-section grid grid-cols-2 grid-rows-1">
+          <div className="update-word-values-btn-container">
+            <UpdateWordValueButton />
+          </div>
+        </section>
         <div className="result-heading ml-1 w-fit text-xl font-light tracking-wider">
           Resultat:
         </div>
