@@ -32,9 +32,13 @@
 .tile-text {
   @apply w-full text-center font-light;
 }
-/* SETTINGS */
+/* MODAL */
+
+.modal-container {
+  @apply absolute left-0 right-0 top-20 z-10 w-full justify-self-center p-2 shadow-md sm:top-[10%] md:max-w-screen-md;
+}
 .modal-panel {
-  @apply fixed left-0 right-0 top-[8%] z-10 m-[7px] flex h-[25rem] max-w-md flex-col items-center overflow-hidden border border-white p-2 shadow-md;
+  @apply h-[25rem] w-full overflow-hidden border border-white p-2;
 }
 
 .modal-header {
