@@ -14,16 +14,6 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    /*   const { userId } = getAuth(req);
-  console.log("userId: ", userId); */
-
-    /*   if (!userId) {
-    return NextResponse.json(
-      { error: "User is not administrator" },
-      { status: 401 },
-    );
-  } */
-
     const wordRecord = await db
       .select({ id: words.id })
       .from(words)

@@ -1,5 +1,4 @@
 import { useUser } from "@clerk/nextjs";
-import { useSearch } from "~/app/hooks/useSearch";
 import { Word } from "~/app/utils/WordInterface";
 
 export default function DeleteWordButton(word: Word) {
