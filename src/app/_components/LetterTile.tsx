@@ -1,3 +1,11 @@
 export const LetterTile = ({ letter }: { letter: string }) => (
-  <div className="letter-tile bg-letterTile">{letter}</div>
+  <div
+    className={
+      letter === " "
+        ? `blank-letter-tile bg-letterTile`
+        : `letter-tile bg-letterTile`
+    }
+  >
+    {letter}
+  </div>
 );

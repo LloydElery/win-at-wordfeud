@@ -32,6 +32,10 @@
   @apply min-h-[26px] min-w-[26px] self-center text-center text-black inner-border inner-border-black;
 }
 
+.blank-letter-tile {
+  @apply min-h-[26px] min-w-[26px] border border-black text-center text-black;
+}
+
 .inner-tile {
   @apply flex h-full items-center;
 }
