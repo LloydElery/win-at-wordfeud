@@ -34,8 +34,8 @@ const letterValues: Record<string, number> = {
 };
 
 export function calculateWordValue(word: string): number {
-  normalizeWord(word);
-  return word
+  const normalizedWord = normalizeWord(word);
+  return normalizedWord
     .split("")
     .reduce((total, char) => total + (letterValues[char] || 0), 0);
 }
