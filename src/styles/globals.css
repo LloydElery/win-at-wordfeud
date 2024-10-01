@@ -42,11 +42,11 @@
 }
 
 .modal-header {
-  @apply flex w-full justify-between gap-3 text-sm;
+  @apply flex w-full justify-between gap-3 border-b text-sm;
 }
 
 .modal-content {
-  @apply flex flex-wrap items-center justify-center;
+  @apply flex flex-col items-center;
 }
 
 .search-results {

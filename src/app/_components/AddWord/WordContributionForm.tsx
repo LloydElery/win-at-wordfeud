@@ -57,7 +57,7 @@ const WordContributionForm: React.FC = () => {
           </button>
         </label>
       </form>
-      <div className="absolute bottom-0 m-2 rounded border bg-letterTile">
+      <div className="absolute bottom-2 m-2 rounded border border-letterTile bg-primaryBlue">
         <GameboardLanguage />
       </div>
     </>
