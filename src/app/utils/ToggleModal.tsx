@@ -50,8 +50,8 @@ const ToggleModal: React.FC<IToggleModal> = ({
       <div className="icon-container">
         {isOpen ? (
           <div className="modal-container">
-            <div ref={modalRef} className="modal-panel bg-modalGrey">
-              <div className="modal-header">
+            <div ref={modalRef} className="modal-panel bg-modalGrey80">
+              <div className="modal-header bg-modalGrey p-1">
                 <h2 className="font-light">{title}</h2>
 
                 <button
@@ -61,7 +61,7 @@ const ToggleModal: React.FC<IToggleModal> = ({
                   X
                 </button>
               </div>
-              <div className="modal-content">
+              <div className="modal-content bg-modalGrey p-1">
                 <ContentComponent />
               </div>
             </div>

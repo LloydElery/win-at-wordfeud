@@ -20,6 +20,7 @@ export default {
         gameboardBG: "rgba(35, 35, 37, 0.50)",
         letterTile: "rgba(249, 246, 240, 0.9)",
         modalGrey: "#232325",
+        modalGrey80: "rgb(35, 35, 37, 0.8)",
         searchResultsBG: "rgba(217, 217, 217, 0.1)",
         searchResultsBorder: "rgba(255, 255, 255, 0.2)",
         searchResultsPointsBG: "#FFB800",
