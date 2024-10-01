@@ -29,11 +29,11 @@
 }
 
 .letter-tile {
-  @apply min-h-[26px] min-w-[26px] self-center text-center text-black inner-border inner-border-black;
+  @apply min-h-[26px] min-w-[26px] self-center text-center text-black;
 }
 
 .blank-letter-tile {
-  @apply min-h-[26px] min-w-[26px] border border-black text-center text-black;
+  @apply min-h-[26px] min-w-[26px] text-center text-black;
 }
 
 .inner-tile {
@@ -41,7 +41,7 @@
 }
 
 .tile-text {
-  @apply w-full text-center font-light;
+  @apply w-full text-center;
 }
 /* MODAL */
 
