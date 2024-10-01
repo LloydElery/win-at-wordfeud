@@ -1,11 +1,11 @@
 export const LetterTile = ({ letter }: { letter: string }) => (
   <div
     className={
-      letter === " "
-        ? `blank-letter-tile bg-letterTile`
-        : `letter-tile bg-letterTile`
+      letter
+        ? `flex size-full content-center items-center text-center tracking-[0.1em]`
+        : `grid-item`
     }
   >
-    {letter}
+    <p className="tile-text text-black">{letter}</p>
   </div>
 );

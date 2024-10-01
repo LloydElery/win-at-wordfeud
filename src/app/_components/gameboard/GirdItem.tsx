@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { LetterTile } from "../LetterTile";
 
 const GridItem = ({
   id,
@@ -22,8 +23,15 @@ const GridItem = ({
 
   return (
     <>
-      <div className="grid-item" onClick={handleClick}>
-        <p>{letter}</p>
+      <div
+        className={
+          letter
+            ? `special-grid-item inner-tile bg-letterTile font-bold`
+            : `grid-item`
+        }
+        onClick={handleClick}
+      >
+        {letter ? <LetterTile letter={letter} /> : ""}
       </div>
     </>
   );
