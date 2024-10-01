@@ -111,10 +111,10 @@ export const filterSearchResultsByWordLength = (
 };
 
 export function filterUniqueResults(results: ISearchResult[]): ISearchResult[] {
-  const words = new Set<string>();
-  return results.filter((word) => {
-    if (words.has(word.word)) return false;
-    else words.add(word.word);
+  const uniqueWords = new Set<string>();
+  return results.filter((words) => {
+    if (uniqueWords.has(words.word)) return false;
+    else uniqueWords.add(words.word);
     return true;
   });
 }
