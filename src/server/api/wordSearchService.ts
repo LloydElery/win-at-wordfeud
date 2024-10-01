@@ -7,44 +7,63 @@ export interface ISearchResult {
 }
 
 export async function displaySearchResultsInStages(letters: string) {
+  console.log("New Search Request: ", letters);
   // Sort user input letters in alphabetical order
+  console.time("normalizedLetters");
   const normalizedLetters = normalizeWord(letters);
+  console.timeEnd("normalizedLetters");
 
+  console.time("searchResultsBeforeFiltering");
   const searchResultsBeforeFiltering: ISearchResult[] =
     await displaySearchResults(normalizedLetters);
+  console.timeEnd("searchResultsBeforeFiltering");
 
+  console.time("combinedResultsBeforeFiltering");
   let combinedResultsBeforeFiltering: ISearchResult[] =
     searchResultsBeforeFiltering;
+  console.timeEnd("combinedResultsBeforeFiltering");
 
   if (letters.includes(" ")) {
+    console.time("wildcardResultsBeforeFiltering");
     const wildcardResultsBeforeFiltering: ISearchResult[] =
       await displayWildcardSearchResults(normalizedLetters);
+    console.timeEnd("wildcardResultsBeforeFiltering");
+
+    console.time("combinedResultsBeforeFiltering");
     combinedResultsBeforeFiltering = [
       ...combinedResultsBeforeFiltering,
       ...wildcardResultsBeforeFiltering,
     ];
+    console.timeEnd("combinedResultsBeforeFiltering");
   }
 
+  console.time("uniqueCombinedResults");
   const uniqueCombinedResults = filterUniqueResults(
     combinedResultsBeforeFiltering,
   );
+  console.timeEnd("uniqueCombinedResults");
 
+  console.time("formableWords");
   const formableWords = filterFormableWords(
     uniqueCombinedResults,
     letters,
     normalizedLetters,
   );
+  console.timeEnd("formableWords");
 
+  console.time("filteredResults");
   const filteredResults = filterWordsContainingInvalidChars(
     formableWords,
     letters,
     normalizedLetters,
   );
+  console.timeEnd("filteredResults");
 
   // Sortera resultat baserat på längd och bokstavsordning
+  console.time("finalSortedResults");
   const finalSortedResults =
     sortResultsByLengthAndAlphabetically(filteredResults);
-
+  console.timeEnd("finalSortedResults");
   return finalSortedResults;
 }
 
@@ -92,10 +111,12 @@ export const filterSearchResultsByWordLength = (
 };
 
 export function filterUniqueResults(results: ISearchResult[]): ISearchResult[] {
-  return results.filter(
-    (item, index, self) =>
-      index === self.findIndex((t) => t.word === item.word),
-  );
+  const words = new Set<string>();
+  return results.filter((word) => {
+    if (words.has(word.word)) return false;
+    else words.add(word.word);
+    return true;
+  });
 }
 
 export function filterFormableWords(
