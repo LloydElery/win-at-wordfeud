@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   return (
-    <main className="min-h-screen bg-primaryBlue p-[7px] text-white">
+    <main className="w-full md:max-w-screen-md">
       <GBLanguageProvider>
         <Header />
         <ClientSideWrapper />
