@@ -3,9 +3,10 @@ import React from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
-import { AiOutlineSearch } from "react-icons/ai";
 import { LoadingScreen } from "./_ui/LoadingScreen";
 import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
+import CircleIcon from "./_ui/CircleIcon";
+import CustomSearchForm from "./_ui/CustomSearchForm";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
@@ -50,21 +51,11 @@ const SearchForm = ({ query, setQuery }: any) => {
     <>
       <section className="mb-1">
         <div className="search-container flex max-h-11 justify-between gap-1">
-          <form
-            className="grid h-fit w-fit grid-cols-[1fr_auto] self-center"
-            onSubmit={handleSubmit}
-          >
-            <input
-              className="text-black"
-              type="text"
-              value={query}
-              onChange={handleInputChange}
-              placeholder="SÖK ORD"
-            />
-            <button className="search bg-letterTile" type="submit">
-              <AiOutlineSearch size={26} />
-            </button>
-          </form>
+          <CustomSearchForm
+            query={query}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+          />
 
           <label className="flex gap-1 text-xs">
             Sortera efter poäng
@@ -106,13 +97,18 @@ const SearchForm = ({ query, setQuery }: any) => {
                           </h2>
                         )}
                     <li
-                      className="mb-[2px] ml-[0.8rem] grid grid-cols-4 text-sm font-extralight"
+                      className="my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight"
                       key={index}
                     >
                       <p>{word.word.toUpperCase()}</p>
-                      <div className="circle-icon bg-searchResultsPointsBG">
-                        {word.value}
-                      </div>
+                      <CircleIcon
+                        bgColor="bg-searchResultsPointsBG"
+                        textColor="text-black"
+                        borderColor="border-black"
+                        content={word.value}
+                        tooltip={`Ordet är värt ${word.value} poäng`}
+                        placement="right"
+                      />
                       <SignedIn>
                         <button
                           className="flex justify-evenly"
@@ -123,11 +119,18 @@ const SearchForm = ({ query, setQuery }: any) => {
                             );
                           }}
                         >
-                          <p className="text-shadow-black-sm">Report</p>{" "}
-                          <div className="circle-icon bg-informationIconBG !text-white">
-                            i
-                          </div>
+                          <p className="text-shadow-black-sm border-b">
+                            Report
+                          </p>{" "}
                         </button>
+                        <CircleIcon
+                          bgColor="bg-informationIconBG"
+                          textColor="text-letterTile"
+                          borderColor="border-black"
+                          content="?"
+                          tooltip="Rapportera ord som inte gick att spela i ditt wordfeud spel"
+                          placement="left"
+                        />
                       </SignedIn>
                       <SignedOut>
                         <button
@@ -141,10 +144,15 @@ const SearchForm = ({ query, setQuery }: any) => {
                           }}
                         >
                           <p className="text-shadow-black-sm">Report</p>{" "}
-                          <div className="circle-icon bg-informationIconBG !text-white">
-                            i
-                          </div>
                         </button>
+                        <CircleIcon
+                          bgColor="bg-informationIconBG"
+                          textColor="text-letterTile"
+                          borderColor="border-black"
+                          content="?"
+                          tooltip="Inloggade användare kan rapportera ord som inte gick att spela i ditt wordfeud spel"
+                          placement="left"
+                        />
                       </SignedOut>{" "}
                       <DeleteWordButton {...word} />
                     </li>

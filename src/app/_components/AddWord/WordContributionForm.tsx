@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import GameboardLanguage from "../_ui/GameboardLanguage";
-import { useLanguage } from "~/app/context/gameboard/GBLContext";
 
 const WordContributionForm: React.FC = () => {
   const [word, setWord] = useState("");

@@ -18,6 +18,7 @@
     "@clerk/themes": "^2.1.29",
     "@ducanh2912/next-pwa": "^10.2.9",
     "@next/font": "^14.2.9",
+    "@nextui-org/tooltip": "^2.0.41",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@vercel/postgres": "^0.9.0",
     "country-flag-icons": "^1.5.13",

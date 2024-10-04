@@ -29,7 +29,7 @@ export const LoadingScreen: React.FC<{ queryLength: number }> = ({
               key={`placeholder-${lettersInSearchQuery}-${index}`}
             >
               <p>{placeholder.word}</p>
-              <div className="circle-icon bg-searchResultsPointsBG">
+              <div className="h-5 w-5 content-center place-self-center rounded-full border border-black bg-searchResultsPointsBG text-center text-xs font-normal text-black">
                 {placeholder.value}
               </div>
 
