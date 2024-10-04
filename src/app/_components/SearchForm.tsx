@@ -6,6 +6,8 @@ import DeleteWordButton from "./_ui/deleteWordBTN";
 import { AiOutlineSearch } from "react-icons/ai";
 import { LoadingScreen } from "./_ui/LoadingScreen";
 import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
+import { Tooltip } from "@nextui-org/tooltip";
+import CircleIcon from "./_ui/CircleIcon";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
@@ -54,13 +56,15 @@ const SearchForm = ({ query, setQuery }: any) => {
             className="grid h-fit w-fit grid-cols-[1fr_auto] self-center"
             onSubmit={handleSubmit}
           >
-            <input
-              className="text-black"
-              type="text"
-              value={query}
-              onChange={handleInputChange}
-              placeholder="SÖK ORD"
-            />
+            <Tooltip content="Använd mellanslag för blanka bokstäver">
+              <input
+                className="text-black"
+                type="text"
+                value={query}
+                onChange={handleInputChange}
+                placeholder="SÖK ORD"
+              />
+            </Tooltip>
             <button className="search bg-letterTile" type="submit">
               <AiOutlineSearch size={26} />
             </button>
@@ -110,9 +114,12 @@ const SearchForm = ({ query, setQuery }: any) => {
                       key={index}
                     >
                       <p>{word.word.toUpperCase()}</p>
-                      <div className="circle-icon bg-searchResultsPointsBG">
-                        {word.value}
-                      </div>
+                      <CircleIcon
+                        bgColor="bg-searchResultsPointsBG"
+                        textColor="text-black"
+                        borderColor="border-black"
+                        content={word.value}
+                      />
                       <SignedIn>
                         <button
                           className="flex justify-evenly"
