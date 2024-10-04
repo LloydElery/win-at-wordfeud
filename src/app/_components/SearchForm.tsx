@@ -3,7 +3,6 @@ import React from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
-import { AiOutlineSearch } from "react-icons/ai";
 import { LoadingScreen } from "./_ui/LoadingScreen";
 import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
 import { Tooltip } from "@nextui-org/tooltip";
@@ -107,6 +106,8 @@ const SearchForm = ({ query, setQuery }: any) => {
                         textColor="text-black"
                         borderColor="border-black"
                         content={word.value}
+                        tooltip={`Ordet är värt ${word.value} poäng`}
+                        placement="right"
                       />
                       <SignedIn>
                         <button
@@ -121,13 +122,15 @@ const SearchForm = ({ query, setQuery }: any) => {
                           <p className="text-shadow-black-sm border-b">
                             Report
                           </p>{" "}
-                          <CircleIcon
-                            bgColor="bg-informationIconBG"
-                            textColor="text-white"
-                            borderColor="border-black"
-                            content={"?"}
-                          />
                         </button>
+                        <CircleIcon
+                          bgColor="bg-informationIconBG"
+                          textColor="text-white"
+                          borderColor="border-black"
+                          content={"?"}
+                          tooltip="Rapportera ord som inte gick att spela i ditt wordfeud spel"
+                          placement="left"
+                        />
                       </SignedIn>
                       <SignedOut>
                         <button
@@ -140,10 +143,17 @@ const SearchForm = ({ query, setQuery }: any) => {
                     `);
                           }}
                         >
-                          <p className="text-shadow-black-sm">Report</p>{" "}
-                          <div className="circle-icon bg-informationIconBG !text-white">
-                            i
-                          </div>
+                          <Tooltip content="Rapportera ett ord som inte gick att använda i ditt wordfeudspel">
+                            <p className="text-shadow-black-sm">Report</p>{" "}
+                          </Tooltip>
+                          <CircleIcon
+                            bgColor="bg-informationIconBG"
+                            textColor="text-white"
+                            borderColor="border-black"
+                            content={"?"}
+                            tooltip="Inloggade användare kan rapportera ord som inte gick att spela i deras wordfeud spel"
+                            placement="left"
+                          />
                         </button>
                       </SignedOut>{" "}
                       <DeleteWordButton {...word} />

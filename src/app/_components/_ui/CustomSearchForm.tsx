@@ -1,4 +1,3 @@
-import { Tooltip } from "@nextui-org/tooltip";
 import CircleIcon from "./CircleIcon";
 import { AiOutlineSearch } from "react-icons/ai";
 import { ChangeEventHandler, FormEventHandler } from "react";
@@ -24,14 +23,14 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
           placeholder="SÖK ORD"
         />
 
-        <Tooltip content={"Använd mellanslag för blanka bokstäver"}>
-          <CircleIcon
-            bgColor="slate"
-            textColor="text-black"
-            borderColor="border-black"
-            content={"?"}
-          />
-        </Tooltip>
+        <CircleIcon
+          bgColor="slate"
+          textColor="text-black"
+          borderColor="border-black"
+          content={"?"}
+          tooltip="Använd mellanslag för blanka bokstäver"
+          placement="bottom-start"
+        />
         <button className="absolute text-black" type="submit">
           <AiOutlineSearch size={26} />
         </button>
