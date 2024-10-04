@@ -15,7 +15,7 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
   return (
     <>
       <form
-        className="flex w-fit gap-1 rounded-md border bg-letterTile px-1 py-px"
+        className="item-center flex w-fit gap-1 rounded-md border bg-letterTile px-1 py-px"
         onSubmit={handleSubmit}
       >
         <input
