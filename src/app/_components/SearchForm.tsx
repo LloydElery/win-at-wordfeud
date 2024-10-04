@@ -8,6 +8,7 @@ import { LoadingScreen } from "./_ui/LoadingScreen";
 import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
 import { Tooltip } from "@nextui-org/tooltip";
 import CircleIcon from "./_ui/CircleIcon";
+import CustomSearchForm from "./_ui/CustomSearchForm";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
@@ -52,23 +53,10 @@ const SearchForm = ({ query, setQuery }: any) => {
     <>
       <section className="mb-1">
         <div className="search-container flex max-h-11 justify-between gap-1">
-          <form
-            className="grid h-fit w-fit grid-cols-[1fr_auto] self-center"
-            onSubmit={handleSubmit}
-          >
-            <Tooltip content="Använd mellanslag för blanka bokstäver">
-              <input
-                className="text-black"
-                type="text"
-                value={query}
-                onChange={handleInputChange}
-                placeholder="SÖK ORD"
-              />
-            </Tooltip>
-            <button className="search bg-letterTile" type="submit">
-              <AiOutlineSearch size={26} />
-            </button>
-          </form>
+          <CustomSearchForm
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+          />
 
           <label className="flex gap-1 text-xs">
             Sortera efter poäng
@@ -130,7 +118,9 @@ const SearchForm = ({ query, setQuery }: any) => {
                             );
                           }}
                         >
-                          <p className="text-shadow-black-sm">Report</p>{" "}
+                          <p className="text-shadow-black-sm border-b">
+                            Report
+                          </p>{" "}
                           <CircleIcon
                             bgColor="bg-informationIconBG"
                             textColor="text-white"
