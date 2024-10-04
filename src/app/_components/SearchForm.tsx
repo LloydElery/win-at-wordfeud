@@ -131,9 +131,12 @@ const SearchForm = ({ query, setQuery }: any) => {
                           }}
                         >
                           <p className="text-shadow-black-sm">Report</p>{" "}
-                          <div className="circle-icon bg-informationIconBG !text-white">
-                            i
-                          </div>
+                          <CircleIcon
+                            bgColor="bg-informationIconBG"
+                            textColor="text-white"
+                            borderColor="border-black"
+                            content={"?"}
+                          />
                         </button>
                       </SignedIn>
                       <SignedOut>
