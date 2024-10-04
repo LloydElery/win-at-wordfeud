@@ -5,7 +5,6 @@ import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
 import { LoadingScreen } from "./_ui/LoadingScreen";
 import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
-import { Tooltip } from "@nextui-org/tooltip";
 import CircleIcon from "./_ui/CircleIcon";
 import CustomSearchForm from "./_ui/CustomSearchForm";
 
@@ -53,6 +52,7 @@ const SearchForm = ({ query, setQuery }: any) => {
       <section className="mb-1">
         <div className="search-container flex max-h-11 justify-between gap-1">
           <CustomSearchForm
+            query={query}
             handleInputChange={handleInputChange}
             handleSubmit={handleSubmit}
           />
@@ -97,7 +97,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                           </h2>
                         )}
                     <li
-                      className="mb-[2px] ml-[0.8rem] grid grid-cols-4 text-sm font-extralight"
+                      className="my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight"
                       key={index}
                     >
                       <p>{word.word.toUpperCase()}</p>
@@ -125,9 +125,9 @@ const SearchForm = ({ query, setQuery }: any) => {
                         </button>
                         <CircleIcon
                           bgColor="bg-informationIconBG"
-                          textColor="text-white"
+                          textColor="text-letterTile"
                           borderColor="border-black"
-                          content={"?"}
+                          content="?"
                           tooltip="Rapportera ord som inte gick att spela i ditt wordfeud spel"
                           placement="left"
                         />
@@ -143,18 +143,16 @@ const SearchForm = ({ query, setQuery }: any) => {
                     `);
                           }}
                         >
-                          <Tooltip content="Rapportera ett ord som inte gick att använda i ditt wordfeudspel">
-                            <p className="text-shadow-black-sm">Report</p>{" "}
-                          </Tooltip>
-                          <CircleIcon
-                            bgColor="bg-informationIconBG"
-                            textColor="text-white"
-                            borderColor="border-black"
-                            content={"?"}
-                            tooltip="Inloggade användare kan rapportera ord som inte gick att spela i deras wordfeud spel"
-                            placement="left"
-                          />
+                          <p className="text-shadow-black-sm">Report</p>{" "}
                         </button>
+                        <CircleIcon
+                          bgColor="bg-informationIconBG"
+                          textColor="text-letterTile"
+                          borderColor="border-black"
+                          content="?"
+                          tooltip="Inloggade användare kan rapportera ord som inte gick att spela i ditt wordfeud spel"
+                          placement="left"
+                        />
                       </SignedOut>{" "}
                       <DeleteWordButton {...word} />
                     </li>
