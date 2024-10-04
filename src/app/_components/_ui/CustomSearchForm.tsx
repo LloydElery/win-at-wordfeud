@@ -15,11 +15,21 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
   return (
     <>
       <form
-        className="item-center flex w-fit gap-1 rounded-md border bg-letterTile px-1 py-px"
+        className="item-center my-1 ml-px flex w-fit gap-1 rounded-md border bg-letterTile px-1"
         onSubmit={handleSubmit}
       >
+        <button className="" type="submit">
+          <CircleIcon
+            bgColor="none"
+            textColor="text-black"
+            borderColor="none"
+            content={<AiOutlineSearch size={20} />}
+            tooltip=""
+            placement="top"
+          />
+        </button>
         <input
-          className="ml-7 rounded-sm border border-gray-500 bg-transparent px-1 text-black"
+          className="rounded-sm border border-gray-500 bg-transparent px-1 text-black"
           type="text"
           value={query}
           onChange={handleInputChange}
@@ -34,9 +44,6 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
           tooltip="Använd mellanslag för blanka bokstäver"
           placement="bottom-start"
         />
-        <button className="absolute text-black" type="submit">
-          <AiOutlineSearch size={26} />
-        </button>
       </form>
     </>
   );

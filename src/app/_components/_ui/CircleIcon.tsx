@@ -2,7 +2,7 @@ import { Tooltip, TooltipPlacement } from "@nextui-org/tooltip";
 import React, { useEffect, useRef } from "react";
 
 export interface ICircleIcon {
-  content: string | number;
+  content: any;
   bgColor: string;
   borderColor: string;
   textColor: string;
