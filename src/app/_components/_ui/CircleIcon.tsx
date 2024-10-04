@@ -51,7 +51,7 @@ const CircleIcon: React.FC<ICircleIcon> = ({
     <div
       ref={tooltipRef}
       onClick={toggleTooltip}
-      className="flex size-fit cursor-pointer self-center"
+      className="flex size-fit cursor-pointer self-center p-px"
     >
       <Tooltip
         size="sm"

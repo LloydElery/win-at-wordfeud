@@ -1,5 +1,4 @@
 "use client";
-import TooltipWrapper from "../TooltipWrapper";
 import GridItem from "./GirdItem";
 import { gridItemMap } from "./Map";
 import { GridItemType, GridProps } from "./T";
@@ -39,21 +38,13 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
               : null;
 
             return SpecialComponent ? (
-              <TooltipWrapper tooltipContent={"Ange en bokstav!"}>
-                <SpecialComponent
-                  menuLanguage=""
-                  BGColor=""
-                  key={gridItem.id}
-                />
-              </TooltipWrapper>
+              <SpecialComponent menuLanguage="" BGColor="" key={gridItem.id} />
             ) : (
-              <TooltipWrapper tooltipContent="Ange en bokstav!">
-                <GridItem
-                  key={gridItem.id}
-                  id={gridItem.id}
-                  onInputLetter={handleInputLetter}
-                />
-              </TooltipWrapper>
+              <GridItem
+                key={gridItem.id}
+                id={gridItem.id}
+                onInputLetter={handleInputLetter}
+              />
             );
           }),
         )}

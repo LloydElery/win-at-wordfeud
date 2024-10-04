@@ -3,10 +3,12 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { ChangeEventHandler, FormEventHandler } from "react";
 
 interface ISearchFormProps {
+  query: string;
   handleSubmit: FormEventHandler;
   handleInputChange: ChangeEventHandler<HTMLInputElement>;
 }
 const CustomSearchForm: React.FC<ISearchFormProps> = ({
+  query,
   handleSubmit,
   handleInputChange,
 }) => {
@@ -19,6 +21,7 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
         <input
           className="ml-7 rounded-sm border border-gray-500 bg-transparent px-1 text-black"
           type="text"
+          value={query}
           onChange={handleInputChange}
           placeholder="SÖK ORD"
         />
