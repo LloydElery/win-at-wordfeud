@@ -1,5 +1,5 @@
 import { Tooltip, TooltipPlacement } from "@nextui-org/tooltip";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 export interface ICircleIcon {
   content: string | number;
@@ -19,13 +19,43 @@ const CircleIcon: React.FC<ICircleIcon> = ({
   placement,
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
+
+  const handleClickOutsideTooltip = (event: MouseEvent) => {
+    if (
+      tooltipRef.current &&
+      !tooltipRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
 
   const toggleTooltip = () => {
     setIsOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutsideTooltip);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutsideTooltip);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideTooltip);
+    };
+  }, [isOpen]);
+
+  //TODO Make the clickevent to close tooltip and modal a reusable function if possible
+
   return (
-    <div onClick={toggleTooltip} className="flex">
+    <div
+      ref={tooltipRef}
+      onClick={toggleTooltip}
+      className="flex size-fit cursor-pointer self-center"
+    >
       <Tooltip
+        size="sm"
+        showArrow={true}
         isOpen={isOpen}
         placement={placement}
         content={
