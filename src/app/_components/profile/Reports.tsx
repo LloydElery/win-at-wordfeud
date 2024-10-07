@@ -1,6 +1,7 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import CircleIcon from "../_ui/CircleIcon";
 
 interface IReports {
   word: string;
@@ -42,7 +43,17 @@ const Reports: React.FC = () => {
         {reportedWords.length > 0 ? (
           <ul>
             {reportedWords.map((words, index) => (
-              <li key={index}>{words.word}</li>
+              <li key={index}>
+                {words.word}
+                <CircleIcon
+                  bgColor="bg-red-500"
+                  textColor="text-black"
+                  borderColor="border-black"
+                  content={"x"}
+                  tooltip={`Ta bort ${words.word} från dina rapporterade ord`}
+                  placement={"right"}
+                />
+              </li>
             ))}
           </ul>
         ) : (
