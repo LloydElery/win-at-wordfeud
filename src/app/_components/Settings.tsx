@@ -4,6 +4,7 @@ import ToggleModal from "../utils/ToggleModal";
 import CustomSignIn from "../_components/_ui/CustomSignIn";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import AddWord from "./AddWord";
+import Profile from "./profile/Profile";
 
 const Settings = () => {
   return (
@@ -18,8 +19,8 @@ const Settings = () => {
       <SignedIn>
         <ToggleModal
           IconComponent={AiOutlineUser}
-          ContentComponent={AddWord}
-          title="My Contributions"
+          ContentComponent={Profile}
+          title="Contributions | Reported words"
         />
       </SignedIn>
     </>

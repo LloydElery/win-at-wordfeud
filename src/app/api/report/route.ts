@@ -1,7 +1,9 @@
 import { getAuth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { getReportedWordsByUserId } from "~/server/api/getReports";
 import { db, words } from "~/server/db";
+import { userReports } from "~/server/db/schema";
 import { reportWord } from "~/server/queries";
 
 export async function POST(req: NextRequest) {
@@ -46,6 +48,28 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error("Failed to report word:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET(req: NextRequest, res: NextResponse) {
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: "User id not found in database" },
+      { status: 401 },
+    );
+  }
+
+  try {
+    const userReports = await getReportedWordsByUserId(userId);
+    return NextResponse.json({ userReports }, { status: 200 });
+  } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },
