@@ -1,7 +1,6 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import CircleIcon from "../_ui/CircleIcon";
 import { DeleteButton } from "../_ui/DeleteButton";
 
 interface IReports {
@@ -14,7 +13,6 @@ const Reports: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const handleUIAfterDelete = (deletedWord: string) => {
-    console.log("deletedWord: ", deletedWord);
     setReportedWords((prevWords) =>
       prevWords.filter((word) => word.word !== deletedWord),
     );

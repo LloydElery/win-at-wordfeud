@@ -7,7 +7,7 @@ import { userReports } from "./db/schema";
  * UPDATE
  * @returns word gets +1 on words.report
  */
-export async function reportWord(userId: string, wordId: number) {
+export async function reportWord(userId: any, wordId: number) {
   const existingReport = await db
     .select()
     .from(userReports)

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { userReports, words } from "../db/schema";
 
-export async function getReportedWordsByUserId(userId: string) {
+export async function getReportedWordsByUserId(userId: any) {
   const reportedWords = await db
     .select({
       word: words.word,

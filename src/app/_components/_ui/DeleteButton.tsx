@@ -5,7 +5,7 @@ import CircleIcon from "./CircleIcon";
 interface IDeleteButton {
   itemToDelete: string;
   apiUrl: string;
-  deleteHandler?: () => void;
+  deleteHandler: (deletedItem: string) => void;
 }
 
 export const DeleteButton: React.FC<IDeleteButton> = ({
@@ -16,6 +16,7 @@ export const DeleteButton: React.FC<IDeleteButton> = ({
   const handleClick = async () => {
     try {
       await handleDeletion(apiUrl, itemToDelete);
+      deleteHandler(itemToDelete);
     } catch (error) {
       console.error(`Failed to delete item: ${itemToDelete}`, error);
     }

@@ -10,17 +10,10 @@ import { getWordId } from "../getWordId";
 
 export async function POST(req: NextRequest) {
   const { word } = await req.json();
-  const { userId } = getAuth(req);
+  const userId = await getUserId(req);
 
   if (!word || typeof word !== "string") {
     return NextResponse.json({ error: "Word is required" }, { status: 400 });
-  }
-
-  if (!userId) {
-    return NextResponse.json(
-      { error: "User must be logged in" },
-      { status: 401 },
-    );
   }
 
   try {
@@ -58,14 +51,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest, res: NextResponse) {
-  const { userId } = getAuth(req);
-
-  if (!userId) {
-    return NextResponse.json(
-      { error: "User id not found in database" },
-      { status: 401 },
-    );
-  }
+  const userId = await getUserId(req);
 
   try {
     const userReports = await getReportedWordsByUserId(userId);
@@ -80,31 +66,9 @@ export async function GET(req: NextRequest, res: NextResponse) {
 }
 
 export async function DELETE(req: NextRequest, res: NextResponse) {
-  const { word } = await req.json();
-  console.log("Word: ", word);
-  const { userId } = getAuth(req);
+  const userId = await getUserId(req);
+  const wordId = await getWordId(req);
 
-  if (!userId) {
-    return NextResponse.json(
-      { error: "User must be logged in" },
-      { status: 401 },
-    );
-  }
-
-  if (!word || typeof word !== "string") {
-    return NextResponse.json({ error: "Word is required" }, { status: 400 });
-  }
-
-  const wordRecord = await db
-    .select({ id: words.id })
-    .from(words)
-    .where(eq(words.word, word));
-
-  if (wordRecord.length === 0) {
-    throw new Error("Word not found");
-  }
-
-  const wordId = wordRecord[0]?.id;
   try {
     const userReports = await deleteReportedWordsByUserId(userId, wordId);
     return NextResponse.json({ userReports }, { status: 200 });
