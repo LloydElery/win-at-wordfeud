@@ -2,6 +2,7 @@
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import CircleIcon from "../_ui/CircleIcon";
+import { DeleteButton } from "../_ui/DeleteButton";
 
 interface IReports {
   word: string;
@@ -11,6 +12,13 @@ const Reports: React.FC = () => {
   const { user } = useUser();
   const [reportedWords, setReportedWords] = useState<IReports[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const handleUIAfterDelete = (deletedWord: string) => {
+    console.log("deletedWord: ", deletedWord);
+    setReportedWords((prevWords) =>
+      prevWords.filter((word) => word.word !== deletedWord),
+    );
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -45,13 +53,10 @@ const Reports: React.FC = () => {
             {reportedWords.map((words, index) => (
               <li key={index}>
                 {words.word}
-                <CircleIcon
-                  bgColor="bg-red-500"
-                  textColor="text-black"
-                  borderColor="border-black"
-                  content={"x"}
-                  tooltip={`Ta bort ${words.word} från dina rapporterade ord`}
-                  placement={"right"}
+                <DeleteButton
+                  itemToDelete={words.word}
+                  apiUrl="/api/report"
+                  deleteHandler={() => handleUIAfterDelete(words.word)}
                 />
               </li>
             ))}

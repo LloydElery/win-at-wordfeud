@@ -1,26 +1,21 @@
 import React from "react";
 import { handleDeletion } from "~/app/services/deleteService";
-import { ICircleIcon } from "./CircleIcon";
+import CircleIcon from "./CircleIcon";
 
 interface IDeleteButton {
-  itemToDelete: any;
+  itemToDelete: string;
   apiUrl: string;
-  authUser: string;
   deleteHandler?: () => void;
-  CircleIcon: React.FC<ICircleIcon>;
 }
 
-const DeleteButton: React.FC<IDeleteButton> = ({
+export const DeleteButton: React.FC<IDeleteButton> = ({
   itemToDelete,
   apiUrl,
-  authUser,
   deleteHandler,
-  CircleIcon,
 }) => {
   const handleClick = async () => {
     try {
       await handleDeletion(apiUrl, itemToDelete);
-      if (deleteHandler) deleteHandler();
     } catch (error) {
       console.error(`Failed to delete item: ${itemToDelete}`, error);
     }
@@ -33,12 +28,10 @@ const DeleteButton: React.FC<IDeleteButton> = ({
           textColor="text-black"
           borderColor="border-black"
           content="X"
-          tooltip={`Radera ${itemToDelete}`}
+          tooltip={`Radera "${itemToDelete}"`}
           placement="left"
         />
       </button>
     </>
   );
 };
-
-export default DeleteButton;
