@@ -3,7 +3,11 @@ import { db, words } from "./db";
 import { userReports } from "./db/schema";
 
 // UPDATE 'reports' to add 1 ontop of the current value
-export async function reportWord(userId: string, wordId: number) {
+/**
+ * UPDATE
+ * @returns word gets +1 on words.report
+ */
+export async function reportWord(userId: any, wordId: number) {
   const existingReport = await db
     .select()
     .from(userReports)
@@ -28,6 +32,10 @@ export async function reportWord(userId: string, wordId: number) {
   return result[0];
 }
 
+/**
+ * DELETE
+ * @returns deletes this word from the database
+ */
 export async function deleteWordFromDatabase(wordId: number) {
   try {
     const deleteUserReports = await db
