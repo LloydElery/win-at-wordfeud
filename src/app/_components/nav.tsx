@@ -1,29 +1,24 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { LetterTile } from "./LetterTile";
+import LetterTiles from "./_ui/LetterTiles";
+import { AiOutlineUser } from "react-icons/ai";
 
 export function Nav({ query }: { query: string }) {
   return (
-    <nav className="fixed bottom-0 flex w-full items-center justify-between bg-primaryBlue p-4 text-xl font-semibold text-white md:max-w-screen-md">
-      <div className="letter-tiles flex">
-        {query.split("").map((letter, index) => (
-          <div
-            className={
-              letter === " "
-                ? `blank-letter-tile border border-black bg-letterTile`
-                : `letter-tile bg-letterTile inner-border inner-border-black`
-            }
-          >
-            <LetterTile key={index} letter={letter} />
-          </div>
-        ))}
-      </div>
-      <div>
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+    <nav className="navigation">
+      <LetterTiles query={query} TWCSSClass="letter-tile md:flex hidden" />
+      <div className="nav-content-container">
+        <div className="sign-in-and-profile z-20 flex items-center">
+          <SignedOut>
+            <SignInButton>
+              <button className="rounded-full border border-letterTile bg-gameboardBG">
+                <AiOutlineUser size={30} />
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
       </div>
     </nav>
   );

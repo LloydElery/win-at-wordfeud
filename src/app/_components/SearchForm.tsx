@@ -7,6 +7,7 @@ import { LoadingScreen } from "./_ui/LoadingScreen";
 import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
 import CircleIcon from "./_ui/CircleIcon";
 import CustomSearchForm from "./_ui/CustomSearchForm";
+import LetterTiles from "./_ui/LetterTiles";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
@@ -50,14 +51,28 @@ const SearchForm = ({ query, setQuery }: any) => {
   return (
     <>
       <section className="mb-1">
-        <div className="search-container flex max-h-11 justify-between gap-1">
-          <CustomSearchForm
-            query={query}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSubmit}
-          />
+        <div className="search-container">
+          <div className="desktop-searchform">
+            <CustomSearchForm
+              query={query}
+              handleInputChange={handleInputChange}
+              handleSubmit={handleSubmit}
+            />
+          </div>
 
-          <label className="flex gap-1 text-xs">
+          <div className="searchform-container">
+            <div className="searchform">
+              <CustomSearchForm
+                query={query}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+              />
+            </div>
+          </div>
+
+          <LetterTiles query={query} TWCSSClass="letter-tile flex md:hidden" />
+
+          <label className="sorting-label">
             Sortera efter poäng
             <input
               type="checkbox"
@@ -66,14 +81,12 @@ const SearchForm = ({ query, setQuery }: any) => {
             />
           </label>
         </div>
-        <section className="admin-section grid grid-cols-2 grid-rows-1">
+        <section className="admin-section">
           <div className="update-word-values-btn-container">
             <UpdateWordValueButton />
           </div>
         </section>
-        <div className="result-heading ml-1 w-fit text-xl font-light tracking-wider">
-          Resultat:
-        </div>
+        <div className="result-heading">Resultat:</div>
         {loading ? (
           <LoadingScreen queryLength={query.length} />
         ) : (
