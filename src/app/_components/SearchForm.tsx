@@ -51,11 +51,22 @@ const SearchForm = ({ query, setQuery }: any) => {
     <>
       <section className="mb-1">
         <div className="search-container flex max-h-11 justify-between gap-1">
-          <CustomSearchForm
-            query={query}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSubmit}
-          />
+          <div className="desktop-searchform hidden md:block">
+            <CustomSearchForm
+              query={query}
+              handleInputChange={handleInputChange}
+              handleSubmit={handleSubmit}
+            />
+          </div>
+          <div className="absolute bottom-4 left-0 z-10 m-0 mb-px w-full p-0">
+            <div className="mobile-searchform relative flex justify-center md:hidden">
+              <CustomSearchForm
+                query={query}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+              />
+            </div>
+          </div>
 
           <label className="flex gap-1 text-xs">
             Sortera efter poäng
