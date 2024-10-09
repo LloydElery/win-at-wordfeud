@@ -7,6 +7,8 @@ import { LoadingScreen } from "./_ui/LoadingScreen";
 import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
 import CircleIcon from "./_ui/CircleIcon";
 import CustomSearchForm from "./_ui/CustomSearchForm";
+import { LetterTile } from "./LetterTile";
+import LetterTiles from "./_ui/LetterTiles";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
@@ -58,7 +60,7 @@ const SearchForm = ({ query, setQuery }: any) => {
               handleSubmit={handleSubmit}
             />
           </div>
-          <div className="absolute bottom-4 left-0 z-10 m-0 mb-px w-full p-0">
+          <div className="absolute bottom-[11px] left-0 z-10 m-0 mb-px w-full p-0">
             <div className="mobile-searchform relative flex justify-center md:hidden">
               <CustomSearchForm
                 query={query}
@@ -67,6 +69,8 @@ const SearchForm = ({ query, setQuery }: any) => {
               />
             </div>
           </div>
+
+          <LetterTiles query={query} TWCSSClass="letter-tile flex md:hidden" />
 
           <label className="flex gap-1 text-xs">
             Sortera efter poäng
