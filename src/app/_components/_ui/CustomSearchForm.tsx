@@ -17,7 +17,11 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
   const handleViritualKeyboardVisibility = () => {
     if (document.visibilityState === "visible" && inputRef.current) {
       inputRef.current.focus();
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
     }
+    document.body.style.position = "";
+    document.body.style.width = "";
   };
 
   useEffect(() => {
