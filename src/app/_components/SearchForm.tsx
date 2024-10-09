@@ -8,6 +8,7 @@ import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
 import CircleIcon from "./_ui/CircleIcon";
 import CustomSearchForm from "./_ui/CustomSearchForm";
 import LetterTiles from "./_ui/LetterTiles";
+import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
@@ -69,8 +70,17 @@ const SearchForm = ({ query, setQuery }: any) => {
               />
             </div>
           </div>
-
-          <LetterTiles query={query} TWCSSClass="letter-tile flex md:hidden" />
+          {query === "" ? (
+            <LetterTilePlaceholders
+              query={query}
+              TWCSSClass="letter-tile flex md:hidden blur-[1px] gap-[1px]"
+            />
+          ) : (
+            <LetterTiles
+              query={query}
+              TWCSSClass="letter-tile flex md:hidden"
+            />
+          )}
 
           <label className="sorting-label">
             Sortera efter poäng

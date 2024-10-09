@@ -1,11 +1,11 @@
 import { LetterTile } from "../LetterTile";
 
-interface IProps {
+export interface ILetterTileProps {
   query: string;
   TWCSSClass: string;
 }
 
-const LetterTiles: React.FC<IProps> = ({ query, TWCSSClass }) => {
+const LetterTiles: React.FC<ILetterTileProps> = ({ query, TWCSSClass }) => {
   return (
     <>
       <div className={TWCSSClass}>

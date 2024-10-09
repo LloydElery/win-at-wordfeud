@@ -19,6 +19,7 @@ export default {
         gameboardTW: "#6F1515",
         gameboardBG: "rgba(35, 35, 37, 0.50)",
         letterTile: "rgba(249, 246, 240, 0.9)",
+        placeholderLetterTile: "rgba(249, 246, 240, 0.6)",
         modalGrey: "#232325",
         modalGrey80: "rgb(35, 35, 37, 0.8)",
         searchResultsBG: "rgba(217, 217, 217, 0.1)",
