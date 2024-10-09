@@ -8,7 +8,7 @@
 }
 
 .searchform-container {
-  @apply absolute bottom-[11px] left-1/2 z-10 m-0 mb-px translate-x-[-50%] p-0 md:hidden;
+  @apply fixed bottom-[11px] left-1/2 z-10 m-0 mb-px translate-x-[-50%] p-0 md:hidden;
 }
 
 .desktop-searchform {
