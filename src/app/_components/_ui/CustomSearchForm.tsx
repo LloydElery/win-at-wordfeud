@@ -17,6 +17,7 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
   const handleViritualKeyboardVisibility = () => {
     if (document.visibilityState === "visible" && inputRef.current) {
       inputRef.current.focus();
+      inputRef.current.style.display = "hidden";
       document.body.style.position = "fixed";
       document.body.style.width = "100%";
     }
