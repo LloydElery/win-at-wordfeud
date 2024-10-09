@@ -4,10 +4,10 @@ import LetterTiles from "./_ui/LetterTiles";
 
 export function Nav({ query }: { query: string }) {
   return (
-    <nav className="fixed bottom-0 flex w-full items-center justify-between bg-primaryBlue p-4 text-xl font-semibold text-white md:max-w-screen-md">
+    <nav className="navigation">
       <LetterTiles query={query} TWCSSClass="letter-tile md:flex hidden" />
-      <div className="relative flex h-full w-full justify-end">
-        <div className="flex items-center">
+      <div className="nav-content-container">
+        <div className="sign-in-and-profile z-20 flex items-center">
           <SignedOut>
             <SignInButton />
           </SignedOut>
