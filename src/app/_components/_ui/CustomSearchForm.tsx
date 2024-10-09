@@ -1,6 +1,6 @@
 import CircleIcon from "./CircleIcon";
 import { AiOutlineSearch } from "react-icons/ai";
-import { ChangeEventHandler, FormEventHandler } from "react";
+import { ChangeEventHandler, FormEventHandler, useEffect, useRef } from "react";
 
 interface ISearchFormProps {
   query: string;
@@ -12,6 +12,27 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
   handleSubmit,
   handleInputChange,
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleViritualKeyboardVisibility = () => {
+    if (document.visibilityState === "visible" && inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener(
+      "visibilitychange",
+      handleViritualKeyboardVisibility,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "visibilitychange",
+        handleViritualKeyboardVisibility,
+      );
+    };
+  }, []);
   return (
     <>
       <form
@@ -31,6 +52,7 @@ const CustomSearchForm: React.FC<ISearchFormProps> = ({
         <input
           className="rounded-sm border border-gray-500 bg-transparent px-1 text-black"
           type="text"
+          ref={inputRef}
           value={query}
           onChange={handleInputChange}
           placeholder="SÖK ORD"
