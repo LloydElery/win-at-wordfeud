@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useRef } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
@@ -12,6 +12,11 @@ import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
+  const customSearchFormRef = useRef<any>(null);
+
+  const handleFocusInput = () => {
+    if (customSearchFormRef.current) customSearchFormRef.current.focusInput();
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value.toUpperCase());
@@ -55,6 +60,7 @@ const SearchForm = ({ query, setQuery }: any) => {
         <div className="search-container">
           <div className="desktop-searchform">
             <CustomSearchForm
+              ref={customSearchFormRef}
               query={query}
               handleInputChange={handleInputChange}
               handleSubmit={handleSubmit}
@@ -64,6 +70,7 @@ const SearchForm = ({ query, setQuery }: any) => {
           <div className="searchform-container">
             <div className="searchform">
               <CustomSearchForm
+                ref={customSearchFormRef}
                 query={query}
                 handleInputChange={handleInputChange}
                 handleSubmit={handleSubmit}
@@ -72,11 +79,13 @@ const SearchForm = ({ query, setQuery }: any) => {
           </div>
           {query === "" ? (
             <LetterTilePlaceholders
+              onFocusInput={handleFocusInput}
               query={query}
               TWCSSClass="letter-tile flex md:hidden blur-[1px] gap-[1px]"
             />
           ) : (
             <LetterTiles
+              onFocusInput={handleFocusInput}
               query={query}
               TWCSSClass="letter-tile flex md:hidden"
             />

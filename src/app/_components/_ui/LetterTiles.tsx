@@ -3,12 +3,18 @@ import { LetterTile } from "../LetterTile";
 export interface ILetterTileProps {
   query: string;
   TWCSSClass: string;
+  onFocusInput: () => void;
 }
 
-const LetterTiles: React.FC<ILetterTileProps> = ({ query, TWCSSClass }) => {
+const LetterTiles: React.FC<ILetterTileProps> = ({
+  query,
+  TWCSSClass,
+  onFocusInput,
+}) => {
+  const handleClick = () => onFocusInput();
   return (
     <>
-      <div className={TWCSSClass}>
+      <div className={TWCSSClass} onClick={handleClick}>
         {query.split("").map((letter: string, index: number) => (
           <div
             className={
