@@ -11,10 +11,9 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   TWCSSClass,
   onFocusInput,
 }) => {
-  const handleClick = () => onFocusInput!();
   return (
     <>
-      <div className={TWCSSClass} onClick={handleClick}>
+      <div className={TWCSSClass} onClick={onFocusInput!}>
         {query.split("").map((letter: string, index: number) => (
           <div
             className={

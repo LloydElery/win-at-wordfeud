@@ -1,18 +1,11 @@
 import CircleIcon from "./CircleIcon";
 import { AiOutlineSearch } from "react-icons/ai";
-import {
-  ChangeEventHandler,
-  FormEventHandler,
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
 interface ISearchFormProps {
   query: string;
-  handleSubmit: FormEventHandler;
-  handleInputChange: ChangeEventHandler<HTMLInputElement>;
+  handleSubmit: React.FormEventHandler;
+  handleInputChange: React.ChangeEventHandler<HTMLInputElement>;
 }
 const CustomSearchForm = forwardRef(
   ({ query, handleSubmit, handleInputChange }: ISearchFormProps, ref) => {
@@ -21,6 +14,10 @@ const CustomSearchForm = forwardRef(
     useImperativeHandle(ref, () => ({
       focusInput() {
         if (inputRef.current) inputRef.current.focus();
+      },
+      triggerSearch(newQuery: string) {
+        if (inputRef.current) inputRef.current.value = newQuery;
+        handleSubmit({ preventDefault: () => {} } as React.FormEvent);
       },
     }));
 

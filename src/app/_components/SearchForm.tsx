@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
@@ -9,10 +9,11 @@ import CircleIcon from "./_ui/CircleIcon";
 import CustomSearchForm from "./_ui/CustomSearchForm";
 import LetterTiles from "./_ui/LetterTiles";
 import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
-import { AiOutlineEye } from "react-icons/ai";
+import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
+  const [isVisible, setIsVisible] = useState(true);
   const customSearchFormRef = useRef<any>(null);
 
   const handleFocusInput = () => {
@@ -26,6 +27,10 @@ const SearchForm = ({ query, setQuery }: any) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     search(query);
+  };
+
+  const handleSearchBarVisibility = () => {
+    setIsVisible((prev) => !prev);
   };
 
   const handleSortToggle = () => {
@@ -58,22 +63,33 @@ const SearchForm = ({ query, setQuery }: any) => {
   return (
     <>
       <section className="mb-1">
-        <div className="flex flex-wrap">
-          <div className="my-1">
-            <div>
-              <CustomSearchForm
-                ref={customSearchFormRef}
-                query={query}
-                handleInputChange={handleInputChange}
-                handleSubmit={handleSubmit}
-              />
+        <div className="flex w-full flex-wrap justify-start">
+          <div className="relative my-1 flex w-full flex-nowrap justify-between">
+            {isVisible && (
+              <div>
+                <CustomSearchForm
+                  ref={customSearchFormRef}
+                  query={query}
+                  handleInputChange={handleInputChange}
+                  handleSubmit={handleSubmit}
+                />
+              </div>
+            )}
+            <div className="eye-icon-container absolute right-0 h-full content-center">
               <CircleIcon
                 bgColor="none"
-                textColor="text-black"
+                textColor="text-letterTile"
                 borderColor="border-none"
-                content={<AiOutlineEye size={20} />}
-                tooltip=""
-                placement="left"
+                content={
+                  isVisible ? (
+                    <RxEyeOpen size={20} />
+                  ) : (
+                    <RxEyeClosed size={20} />
+                  )
+                }
+                tooltip={isVisible ? "Göm sökfältet" : "Visa Sökfältet"}
+                placement="bottom"
+                onIconClick={handleSearchBarVisibility}
               />
             </div>
           </div>
@@ -82,13 +98,14 @@ const SearchForm = ({ query, setQuery }: any) => {
             <LetterTilePlaceholders
               onFocusInput={handleFocusInput}
               query={query}
-              TWCSSClass="letter-tile flex md:hidden blur-[1px] gap-[1px]"
+              TWCSSClass="letter-tile flex blur-[1px] gap-[1px]"
             />
           ) : (
             <LetterTiles
               onFocusInput={handleFocusInput}
               query={query}
-              TWCSSClass="letter-tile flex md:hidden"
+              TWCSSClass="letter-tile flex 
+              "
             />
           )}
         </div>
@@ -98,15 +115,17 @@ const SearchForm = ({ query, setQuery }: any) => {
           </div>
         </section>
 
-        <div className="result-heading">Resultat:</div>
-        <label className="sorting-label">
-          Sortera efter poäng
-          <input
-            type="checkbox"
-            checked={sortByValue}
-            onChange={handleSortToggle}
-          />
-        </label>
+        <section className="result-section">
+          <div className="result-heading">Resultat:</div>
+          <label className="sorting-label">
+            <input
+              type="checkbox"
+              checked={sortByValue}
+              onChange={handleSortToggle}
+            />
+            Sortera efter poäng
+          </label>
+        </section>
         {loading ? (
           <LoadingScreen queryLength={query.length} />
         ) : (

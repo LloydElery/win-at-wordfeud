@@ -14,7 +14,7 @@ const LetterTilePlaceholders: React.FC<ILetterTileProps> = ({
           <div
             key={index}
             className={`letter-tile bg-placeholderLetterTile inner-border inner-border-black`}
-            onClick={onFocusInput}
+            onClick={onFocusInput!}
           >
             <LetterTile letter={""} />
           </div>
