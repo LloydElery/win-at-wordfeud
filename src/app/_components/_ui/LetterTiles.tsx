@@ -3,7 +3,7 @@ import { LetterTile } from "../LetterTile";
 export interface ILetterTileProps {
   query: string;
   TWCSSClass: string;
-  onFocusInput: () => void;
+  onFocusInput?: () => void;
 }
 
 const LetterTiles: React.FC<ILetterTileProps> = ({
@@ -11,7 +11,7 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   TWCSSClass,
   onFocusInput,
 }) => {
-  const handleClick = () => onFocusInput();
+  const handleClick = () => onFocusInput!();
   return (
     <>
       <div className={TWCSSClass} onClick={handleClick}>

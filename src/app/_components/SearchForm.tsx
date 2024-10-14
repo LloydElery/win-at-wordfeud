@@ -9,6 +9,7 @@ import CircleIcon from "./_ui/CircleIcon";
 import CustomSearchForm from "./_ui/CustomSearchForm";
 import LetterTiles from "./_ui/LetterTiles";
 import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
+import { AiOutlineEye } from "react-icons/ai";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
@@ -57,26 +58,26 @@ const SearchForm = ({ query, setQuery }: any) => {
   return (
     <>
       <section className="mb-1">
-        <div className="search-container">
-          <div className="desktop-searchform">
-            <CustomSearchForm
-              ref={customSearchFormRef}
-              query={query}
-              handleInputChange={handleInputChange}
-              handleSubmit={handleSubmit}
-            />
-          </div>
-
-          <div className="searchform-container">
-            <div className="searchform">
+        <div className="flex flex-wrap">
+          <div className="my-1">
+            <div>
               <CustomSearchForm
                 ref={customSearchFormRef}
                 query={query}
                 handleInputChange={handleInputChange}
                 handleSubmit={handleSubmit}
               />
+              <CircleIcon
+                bgColor="none"
+                textColor="text-black"
+                borderColor="border-none"
+                content={<AiOutlineEye size={20} />}
+                tooltip=""
+                placement="left"
+              />
             </div>
           </div>
+
           {query === "" ? (
             <LetterTilePlaceholders
               onFocusInput={handleFocusInput}
@@ -90,22 +91,22 @@ const SearchForm = ({ query, setQuery }: any) => {
               TWCSSClass="letter-tile flex md:hidden"
             />
           )}
-
-          <label className="sorting-label">
-            Sortera efter poäng
-            <input
-              type="checkbox"
-              checked={sortByValue}
-              onChange={handleSortToggle}
-            />
-          </label>
         </div>
         <section className="admin-section">
           <div className="update-word-values-btn-container">
             <UpdateWordValueButton />
           </div>
         </section>
+
         <div className="result-heading">Resultat:</div>
+        <label className="sorting-label">
+          Sortera efter poäng
+          <input
+            type="checkbox"
+            checked={sortByValue}
+            onChange={handleSortToggle}
+          />
+        </label>
         {loading ? (
           <LoadingScreen queryLength={query.length} />
         ) : (
