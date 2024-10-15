@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { LetterTile } from "../LetterTile";
 import BlinkingCursorTile from "./BlinkingCursorTile";
 
@@ -14,6 +15,8 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   onFocusInput,
   onLetterTileClick,
 }) => {
+  useEffect(() => {}, [query]);
+
   return (
     <>
       <div className={TWCSSClass} onClick={onFocusInput!}>
