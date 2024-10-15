@@ -16,10 +16,6 @@ const SearchForm = ({ query, setQuery }: any) => {
   const [isVisible, setIsVisible] = useState(true);
   const customSearchFormRef = useRef<any>(null);
 
-  const handleFocusInput = () => {
-    if (customSearchFormRef.current) customSearchFormRef.current.focusInput();
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value.toUpperCase());
   };
@@ -27,6 +23,24 @@ const SearchForm = ({ query, setQuery }: any) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     search(query);
+  };
+
+  const handleFocusInput = () => {
+    customSearchFormRef.current?.focusInput();
+  };
+
+  //FIXME Kanske vill ha den här funktionen om det fungerar som tänkt
+  const createLetterCopy = (letter: string) => {
+    const letterCopy = query + letter;
+    setQuery(letterCopy);
+  };
+
+  const handleLetterTileClick = (letter: string) => {
+    if (!query.includes(letter)) {
+      const newQuery = query + letter;
+      setQuery(newQuery);
+      search(newQuery);
+    }
   };
 
   const handleSearchBarVisibility = () => {
@@ -65,16 +79,21 @@ const SearchForm = ({ query, setQuery }: any) => {
       <section className="mb-1">
         <div className="flex w-full flex-wrap justify-start">
           <div className="relative my-1 flex w-full flex-nowrap justify-between">
-            {isVisible && (
-              <div>
-                <CustomSearchForm
-                  ref={customSearchFormRef}
-                  query={query}
-                  handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
-                />
-              </div>
-            )}
+            <div
+              className={
+                !isVisible
+                  ? "pointer-events-none h-0 overflow-hidden opacity-0"
+                  : ""
+              }
+            >
+              <CustomSearchForm
+                ref={customSearchFormRef}
+                query={query}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+              />
+            </div>
+
             <div className="eye-icon-container absolute right-0 h-full content-center">
               <CircleIcon
                 bgColor="none"
@@ -97,12 +116,14 @@ const SearchForm = ({ query, setQuery }: any) => {
           {query === "" ? (
             <LetterTilePlaceholders
               onFocusInput={handleFocusInput}
+              onLetterTileClick={handleLetterTileClick}
               query={query}
               TWCSSClass="letter-tile flex blur-[1px] gap-[1px]"
             />
           ) : (
             <LetterTiles
               onFocusInput={handleFocusInput}
+              onLetterTileClick={handleLetterTileClick}
               query={query}
               TWCSSClass="letter-tile flex 
               "

@@ -4,12 +4,14 @@ export interface ILetterTileProps {
   query: string;
   TWCSSClass: string;
   onFocusInput?: () => void;
+  onLetterTileClick: (letter: string) => void;
 }
 
 const LetterTiles: React.FC<ILetterTileProps> = ({
   query,
   TWCSSClass,
   onFocusInput,
+  onLetterTileClick,
 }) => {
   return (
     <>
@@ -21,6 +23,7 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
                 ? `blank-letter-tile border border-black bg-letterTile`
                 : `letter-tile bg-letterTile inner-border inner-border-black`
             }
+            onClick={() => onLetterTileClick(letter)}
           >
             <LetterTile key={index} letter={letter} />
           </div>
