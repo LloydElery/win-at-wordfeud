@@ -1,10 +1,11 @@
 import { LetterTile } from "../LetterTile";
+import BlinkingCursorTile from "./BlinkingCursorTile";
 
 export interface ILetterTileProps {
-  query: string;
-  TWCSSClass: string;
+  query?: string;
+  TWCSSClass?: string;
   onFocusInput?: () => void;
-  onLetterTileClick: (letter: string) => void;
+  onLetterTileClick?: (letter: string) => void;
 }
 
 const LetterTiles: React.FC<ILetterTileProps> = ({
@@ -16,18 +17,22 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   return (
     <>
       <div className={TWCSSClass} onClick={onFocusInput!}>
-        {query.split("").map((letter: string, index: number) => (
+        {query!.split("").map((letter: string, index: number) => (
           <div
             className={
               letter === " "
                 ? `blank-letter-tile border border-black bg-letterTile`
                 : `letter-tile bg-letterTile inner-border inner-border-black`
             }
-            onClick={() => onLetterTileClick(letter)}
+            onClick={() => onLetterTileClick!(letter)}
           >
             <LetterTile key={index} letter={letter} />
           </div>
         ))}
+        <BlinkingCursorTile
+          onFocusInput={onFocusInput!}
+          TWCSSClass="letter-tile flex blur-[1px] gap-[1px]"
+        />
       </div>
     </>
   );
