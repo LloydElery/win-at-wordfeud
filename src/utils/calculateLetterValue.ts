@@ -1,6 +1,6 @@
 import { normalizeWord } from "~/server/api/wordSearchService";
 
-const letterValues: Record<string, number> = {
+export const letterValues: Record<string, number> = {
   a: 1,
   b: 3,
   c: 8,

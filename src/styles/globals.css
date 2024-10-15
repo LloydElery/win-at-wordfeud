@@ -58,6 +58,10 @@
 .tile-text {
   @apply w-full text-center;
 }
+
+.letter-value {
+  @apply absolute right-[2px] top-0 flex h-[11px] items-center text-[10px] tracking-tighter text-black;
+}
 /* MODAL */
 
 .modal-container {
