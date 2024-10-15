@@ -7,6 +7,7 @@ export interface ILetterTileProps {
   TWCSSClass?: string;
   onFocusInput?: () => void;
   onLetterTileClick?: (letter: string) => void;
+  setQuery?: (newQuery: string) => void;
 }
 
 const LetterTiles: React.FC<ILetterTileProps> = ({
@@ -14,6 +15,7 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   TWCSSClass,
   onFocusInput,
   onLetterTileClick,
+  setQuery,
 }) => {
   useEffect(() => {}, [query]);
 

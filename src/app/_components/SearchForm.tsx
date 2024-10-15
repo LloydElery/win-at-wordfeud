@@ -128,6 +128,7 @@ const SearchForm = ({ query, setQuery }: any) => {
             />
           ) : (
             <LetterTiles
+              setQuery={setQuery}
               onFocusInput={handleFocusInput}
               onLetterTileClick={removeLetterTile}
               query={query}
