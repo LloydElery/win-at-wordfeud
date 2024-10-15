@@ -1,4 +1,5 @@
 import { LetterTile } from "../LetterTile";
+import BlinkingCursorTile from "./BlinkingCursorTile";
 import { ILetterTileProps } from "./LetterTiles";
 
 const LetterTilePlaceholders: React.FC<ILetterTileProps> = ({
@@ -6,15 +7,16 @@ const LetterTilePlaceholders: React.FC<ILetterTileProps> = ({
   TWCSSClass,
   onFocusInput,
 }) => {
-  const letters = 7 - query.length;
+  const letters = 6 - query!.length;
   return (
     <>
       <div className={TWCSSClass}>
+        <BlinkingCursorTile onFocusInput={onFocusInput} />
         {Array.from({ length: letters }).map((_, index) => (
           <div
             key={index}
             className={`letter-tile bg-placeholderLetterTile inner-border inner-border-black`}
-            onClick={onFocusInput}
+            onClick={onFocusInput!}
           >
             <LetterTile letter={""} />
           </div>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
@@ -9,14 +9,13 @@ import CircleIcon from "./_ui/CircleIcon";
 import CustomSearchForm from "./_ui/CustomSearchForm";
 import LetterTiles from "./_ui/LetterTiles";
 import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
+import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
+import BlinkingCursorTile from "./_ui/BlinkingCursorTile";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();
+  const [isVisible, setIsVisible] = useState(true);
   const customSearchFormRef = useRef<any>(null);
-
-  const handleFocusInput = () => {
-    if (customSearchFormRef.current) customSearchFormRef.current.focusInput();
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value.toUpperCase());
@@ -25,6 +24,35 @@ const SearchForm = ({ query, setQuery }: any) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     search(query);
+  };
+
+  const handleFocusInput = () => {
+    customSearchFormRef.current?.focusInput();
+  };
+
+  //FIXME Kanske vill ha den här funktionen om det fungerar som tänkt
+  const removeLetterTile = (letter: string) => {
+    const letterTileToRemove = query.indexOf(letter);
+
+    if (letterTileToRemove !== -1) {
+      const updatedQuery =
+        query.slice(0, letterTileToRemove) +
+        query.slice(letterTileToRemove + 1);
+
+      setQuery(updatedQuery);
+    }
+  };
+
+  const handleLetterTileClick = (letter: string) => {
+    if (!query.includes(letter)) {
+      const newQuery = query + letter;
+      setQuery(newQuery);
+      search(newQuery);
+    }
+  };
+
+  const handleSearchBarVisibility = () => {
+    setIsVisible((prev) => !prev);
   };
 
   const handleSortToggle = () => {
@@ -57,18 +85,15 @@ const SearchForm = ({ query, setQuery }: any) => {
   return (
     <>
       <section className="mb-1">
-        <div className="search-container">
-          <div className="desktop-searchform">
-            <CustomSearchForm
-              ref={customSearchFormRef}
-              query={query}
-              handleInputChange={handleInputChange}
-              handleSubmit={handleSubmit}
-            />
-          </div>
-
-          <div className="searchform-container">
-            <div className="searchform">
+        <div className="flex w-full flex-wrap justify-start">
+          <div className="relative my-1 flex w-full flex-nowrap justify-between">
+            <div
+              className={
+                !isVisible
+                  ? "pointer-events-none h-0 overflow-hidden opacity-0"
+                  : ""
+              }
+            >
               <CustomSearchForm
                 ref={customSearchFormRef}
                 query={query}
@@ -76,36 +101,59 @@ const SearchForm = ({ query, setQuery }: any) => {
                 handleSubmit={handleSubmit}
               />
             </div>
+
+            <div className="eye-icon-container absolute right-0 h-full content-center">
+              <CircleIcon
+                bgColor="none"
+                textColor="text-letterTile"
+                borderColor="border-none"
+                content={
+                  isVisible ? (
+                    <RxEyeOpen size={20} />
+                  ) : (
+                    <RxEyeClosed size={20} />
+                  )
+                }
+                tooltip={isVisible ? "Göm sökfältet" : "Visa Sökfältet"}
+                placement="bottom"
+                onIconClick={handleSearchBarVisibility}
+              />
+            </div>
           </div>
+
           {query === "" ? (
             <LetterTilePlaceholders
               onFocusInput={handleFocusInput}
               query={query}
-              TWCSSClass="letter-tile flex md:hidden blur-[1px] gap-[1px]"
+              TWCSSClass="letter-tile flex blur-[1px] gap-[1px]"
             />
           ) : (
             <LetterTiles
               onFocusInput={handleFocusInput}
+              onLetterTileClick={removeLetterTile}
               query={query}
-              TWCSSClass="letter-tile flex md:hidden"
+              TWCSSClass="letter-tile flex 
+              "
             />
           )}
-
-          <label className="sorting-label">
-            Sortera efter poäng
-            <input
-              type="checkbox"
-              checked={sortByValue}
-              onChange={handleSortToggle}
-            />
-          </label>
         </div>
         <section className="admin-section">
           <div className="update-word-values-btn-container">
             <UpdateWordValueButton />
           </div>
         </section>
-        <div className="result-heading">Resultat:</div>
+
+        <section className="result-section">
+          <div className="result-heading">Resultat:</div>
+          <label className="sorting-label">
+            <input
+              type="checkbox"
+              checked={sortByValue}
+              onChange={handleSortToggle}
+            />
+            Sortera efter poäng
+          </label>
+        </section>
         {loading ? (
           <LoadingScreen queryLength={query.length} />
         ) : (

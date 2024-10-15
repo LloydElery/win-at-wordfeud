@@ -3,21 +3,6 @@
 @tailwind utilities;
 
 /* SEARCH */
-.search-container {
-  @apply flex max-h-11 justify-between gap-1;
-}
-
-.searchform-container {
-  @apply fixed bottom-[11px] left-1/2 z-10 m-0 mb-px translate-x-[-50%] p-0 md:hidden;
-}
-
-.desktop-searchform {
-  @apply hidden md:block;
-}
-
-.searchform {
-  @apply relative flex justify-center;
-}
 
 .search {
   @apply self-center text-center text-black;
@@ -28,7 +13,11 @@
 }
 
 .sorting-label {
-  @apply flex gap-1 text-xs;
+  @apply mx-1 flex items-center gap-1 text-xs;
+}
+
+.result-section {
+  @apply flex flex-nowrap justify-between;
 }
 
 .result-heading {

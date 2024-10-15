@@ -8,6 +8,7 @@ export interface ICircleIcon {
   textColor: string;
   tooltip: string;
   placement: TooltipPlacement;
+  onIconClick?: () => void;
 }
 
 const CircleIcon: React.FC<ICircleIcon> = ({
@@ -17,6 +18,7 @@ const CircleIcon: React.FC<ICircleIcon> = ({
   textColor,
   tooltip,
   placement,
+  onIconClick,
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -32,6 +34,15 @@ const CircleIcon: React.FC<ICircleIcon> = ({
 
   const toggleTooltip = () => {
     setIsOpen((prev) => !prev);
+  };
+
+  const handleIconClick = () => {
+    if (onIconClick) {
+      onIconClick();
+      setTimeout(toggleTooltip, 300);
+    } else {
+      toggleTooltip();
+    }
   };
 
   useEffect(() => {
@@ -50,7 +61,7 @@ const CircleIcon: React.FC<ICircleIcon> = ({
   return (
     <div
       ref={tooltipRef}
-      onClick={toggleTooltip}
+      onClick={handleIconClick}
       className="flex size-fit cursor-pointer self-center p-px"
     >
       <Tooltip
