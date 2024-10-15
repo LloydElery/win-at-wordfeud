@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { LetterTile } from "../LetterTile";
 import BlinkingCursorTile from "./BlinkingCursorTile";
 
@@ -6,6 +7,7 @@ export interface ILetterTileProps {
   TWCSSClass?: string;
   onFocusInput?: () => void;
   onLetterTileClick?: (letter: string) => void;
+  setQuery?: (newQuery: string) => void;
 }
 
 const LetterTiles: React.FC<ILetterTileProps> = ({
@@ -13,7 +15,21 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   TWCSSClass,
   onFocusInput,
   onLetterTileClick,
+  setQuery,
 }) => {
+  const handleBackspaceOnMobileDevices = (event: KeyboardEvent) => {
+    if (event.key === "Backspace" && query!.length > 0) {
+      setQuery!(query!.slice(0, -1));
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleBackspaceOnMobileDevices);
+
+    return () =>
+      document.removeEventListener("keydown", handleBackspaceOnMobileDevices);
+  }, [query, setQuery]);
+
   return (
     <>
       <div className={TWCSSClass} onClick={onFocusInput!}>
