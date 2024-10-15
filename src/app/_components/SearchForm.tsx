@@ -10,7 +10,6 @@ import CustomSearchForm from "./_ui/CustomSearchForm";
 import LetterTiles from "./_ui/LetterTiles";
 import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
-import BlinkingCursorTile from "./_ui/BlinkingCursorTile";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const { results, search, sortByValue, setSortByValue, loading } = useSearch();

@@ -9,7 +9,7 @@ export function ClientSideWrapper() {
   return (
     <div className="client-side-wrapper">
       <SearchForm query={query} setQuery={setQuery} />
-      <Nav query={query} />
+      <Nav />
     </div>
   );
 }
