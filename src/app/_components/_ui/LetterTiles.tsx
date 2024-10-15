@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { LetterTile } from "../LetterTile";
 import BlinkingCursorTile from "./BlinkingCursorTile";
 
@@ -17,18 +17,7 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   onLetterTileClick,
   setQuery,
 }) => {
-  const handleBackspaceOnMobileDevices = (event: KeyboardEvent) => {
-    if (event.key === "Backspace" && query!.length > 0) {
-      setQuery!(query!.slice(0, -1));
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleBackspaceOnMobileDevices);
-
-    return () =>
-      document.removeEventListener("keydown", handleBackspaceOnMobileDevices);
-  }, [query, setQuery]);
+  useEffect(() => {}, [query]);
 
   return (
     <>

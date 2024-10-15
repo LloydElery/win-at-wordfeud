@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { LetterTile } from "../LetterTile";
 import BlinkingCursorTile from "./BlinkingCursorTile";
 import { ILetterTileProps } from "./LetterTiles";
@@ -8,6 +9,9 @@ const LetterTilePlaceholders: React.FC<ILetterTileProps> = ({
   onFocusInput,
 }) => {
   const letters = 6 - query!.length;
+
+  useEffect(() => {}, [query]);
+
   return (
     <>
       <div className={TWCSSClass}>
