@@ -31,9 +31,16 @@ const SearchForm = ({ query, setQuery }: any) => {
   };
 
   //FIXME Kanske vill ha den här funktionen om det fungerar som tänkt
-  const createLetterCopy = (letter: string) => {
-    const letterCopy = query + letter;
-    setQuery(letterCopy);
+  const removeLetterTile = (letter: string) => {
+    const letterTileToRemove = query.indexOf(letter);
+
+    if (letterTileToRemove !== -1) {
+      const updatedQuery =
+        query.slice(0, letterTileToRemove) +
+        query.slice(letterTileToRemove + 1);
+
+      setQuery(updatedQuery);
+    }
   };
 
   const handleLetterTileClick = (letter: string) => {
@@ -117,14 +124,13 @@ const SearchForm = ({ query, setQuery }: any) => {
           {query === "" ? (
             <LetterTilePlaceholders
               onFocusInput={handleFocusInput}
-              onLetterTileClick={handleLetterTileClick}
               query={query}
               TWCSSClass="letter-tile flex blur-[1px] gap-[1px]"
             />
           ) : (
             <LetterTiles
               onFocusInput={handleFocusInput}
-              onLetterTileClick={handleLetterTileClick}
+              onLetterTileClick={removeLetterTile}
               query={query}
               TWCSSClass="letter-tile flex 
               "
