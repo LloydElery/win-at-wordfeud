@@ -17,13 +17,26 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   onLetterTileClick,
   setQuery,
 }) => {
-  useEffect(() => {}, [query]);
+  const handleBakcspaceOnMobileDevices = (e: KeyboardEvent) => {
+    if (e.key === "Backspace") {
+      const newQuery = query?.slice(0, -1);
+      setQuery!(newQuery!);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleBakcspaceOnMobileDevices);
+
+    return () =>
+      document.removeEventListener("keydown", handleBakcspaceOnMobileDevices);
+  }, [query, setQuery]);
 
   return (
     <>
       <div className={TWCSSClass} onClick={onFocusInput!}>
         {query!.split("").map((letter: string, index: number) => (
           <div
+            key={index}
             className={
               letter === " "
                 ? `blank-letter-tile border border-black bg-letterTile`
