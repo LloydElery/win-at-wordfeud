@@ -79,8 +79,8 @@ const SearchForm = ({ query, setQuery }: any) => {
   }, [query]);
 
   const saveQuery = () => {
-    if (!query) localStorage.removeItem("savedQuery");
-    else localStorage.setItem("savedQuery", query);
+    if (query) localStorage.setItem("savedQuery", query);
+    else localStorage.removeItem("savedQuery");
   };
 
   const getSavedQuery = () => {
