@@ -23,22 +23,32 @@ const CustomSearchForm = forwardRef(
 
     const handleVirtualKeyboardVisibility = () => {
       if (document.visibilityState === "visible" && inputRef.current) {
-        inputRef.current.click();
+        setTimeout(() => inputRef.current?.focus(), 50);
       }
     };
 
     useEffect(() => {
-      document.addEventListener(
+      window.addEventListener(
         "visibilitychange",
         handleVirtualKeyboardVisibility,
       );
 
       return () => {
-        document.removeEventListener(
+        window.removeEventListener(
           "visibilitychange",
           handleVirtualKeyboardVisibility,
         );
       };
+    }, []);
+
+    useEffect(() => {
+      const handleTouch = () => {
+        if (inputRef.current) inputRef.current.focus();
+      };
+
+      window.addEventListener("touchstart", handleTouch);
+
+      return () => window.removeEventListener("touchstart", handleTouch);
     }, []);
 
     return (
