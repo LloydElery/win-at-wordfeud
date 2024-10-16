@@ -7,7 +7,6 @@ export interface ILetterTileProps {
   TWCSSClass?: string;
   onFocusInput?: () => void;
   onLetterTileClick?: (letter: string) => void;
-  setQuery?: (newQuery: string) => void;
 }
 
 const LetterTiles: React.FC<ILetterTileProps> = ({
@@ -15,26 +14,7 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   TWCSSClass,
   onFocusInput,
   onLetterTileClick,
-  setQuery,
 }) => {
-  /*   const handleBakcspaceOnMobileDevices = (e: KeyboardEvent) => {
-    console.log("Backspace pressed");
-    if (e.key === "Backspace") {
-      setQuery!(query!.slice(0, -1));
-    }
-  };
-
-  useEffect(() => {
-    console.log("Adding event listener");
-    document.addEventListener("keydown", handleBakcspaceOnMobileDevices);
-
-    return () => {
-      console.log("Removing event listener");
-      document.removeEventListener("keydown", handleBakcspaceOnMobileDevices);
-    };
-  }, [query, setQuery]);
- */
-
   return (
     <>
       <div className={TWCSSClass} onClick={onFocusInput!}>

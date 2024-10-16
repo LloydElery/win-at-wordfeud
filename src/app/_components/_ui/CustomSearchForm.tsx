@@ -28,13 +28,13 @@ const CustomSearchForm = forwardRef(
     };
 
     useEffect(() => {
-      document.addEventListener(
+      window.addEventListener(
         "visibilitychange",
         handleVirtualKeyboardVisibility,
       );
 
       return () => {
-        document.removeEventListener(
+        window.removeEventListener(
           "visibilitychange",
           handleVirtualKeyboardVisibility,
         );

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 import DeleteWordButton from "./_ui/deleteWordBTN";
@@ -70,6 +70,24 @@ const SearchForm = ({ query, setQuery }: any) => {
     }
   };
 
+  useEffect(() => {
+    getSavedQuery();
+  }, []);
+
+  useEffect(() => {
+    saveQuery();
+  }, [query]);
+
+  const saveQuery = () => {
+    if (!query) localStorage.removeItem("savedQuery");
+    else localStorage.setItem("savedQuery", query);
+  };
+
+  const getSavedQuery = () => {
+    const savedQuery = localStorage.getItem("savedQuery");
+    if (savedQuery) setQuery(savedQuery);
+  };
+
   // Keeps track of headings for word by letter count.
   const displayedWordH2ByLength = new Set();
 
@@ -120,7 +138,6 @@ const SearchForm = ({ query, setQuery }: any) => {
             />
           ) : (
             <LetterTiles
-              setQuery={setQuery}
               onFocusInput={handleFocusInput}
               onLetterTileClick={removeLetterTile}
               query={query}
