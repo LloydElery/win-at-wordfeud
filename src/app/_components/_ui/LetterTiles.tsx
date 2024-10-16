@@ -4,6 +4,7 @@ import BlinkingCursorTile from "./BlinkingCursorTile";
 
 export interface ILetterTileProps {
   query?: string;
+  setQuery?: any;
   TWCSSClass?: string;
   onFocusInput?: () => void;
   onLetterTileClick?: (letter: string) => void;
@@ -11,13 +12,24 @@ export interface ILetterTileProps {
 
 const LetterTiles: React.FC<ILetterTileProps> = ({
   query,
+  setQuery,
   TWCSSClass,
   onFocusInput,
   onLetterTileClick,
 }) => {
-  useEffect(() => {
+  const updateQuery = () => {
     console.log("query: ", query);
+    const letter = query?.split("");
+    console.log("letter: ", letter);
+    const updatedQuery = letter!.join("");
+    console.log("updatedQuery: ", updatedQuery);
+    if (updatedQuery !== query) setQuery(updatedQuery);
+  };
+
+  useEffect(() => {
+    updateQuery();
   }, [query]);
+
   return (
     <>
       <div className={TWCSSClass} onClick={onFocusInput!}>
