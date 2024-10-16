@@ -28,11 +28,14 @@ const CustomSearchForm = forwardRef(
     };
 
     useEffect(() => {
-      window.addEventListener("beforeunload", handleVirtualKeyboardVisibility);
+      document.addEventListener(
+        "visibilitychange",
+        handleVirtualKeyboardVisibility,
+      );
 
       return () => {
-        window.removeEventListener(
-          "beforeunload",
+        document.removeEventListener(
+          "visibilitychange",
           handleVirtualKeyboardVisibility,
         );
       };
