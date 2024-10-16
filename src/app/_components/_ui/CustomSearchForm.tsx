@@ -23,19 +23,16 @@ const CustomSearchForm = forwardRef(
 
     const handleVirtualKeyboardVisibility = () => {
       if (document.visibilityState === "visible" && inputRef.current) {
-        window.requestAnimationFrame(() => inputRef.current!.focus());
+        inputRef.current.focus();
       }
     };
 
     useEffect(() => {
-      window.addEventListener(
-        "visibilitychange",
-        handleVirtualKeyboardVisibility,
-      );
+      window.addEventListener("beforeunload", handleVirtualKeyboardVisibility);
 
       return () => {
         window.removeEventListener(
-          "visibilitychange",
+          "beforeunload",
           handleVirtualKeyboardVisibility,
         );
       };
