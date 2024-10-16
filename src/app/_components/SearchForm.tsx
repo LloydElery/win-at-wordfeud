@@ -141,6 +141,7 @@ const SearchForm = ({ query, setQuery }: any) => {
               onFocusInput={handleFocusInput}
               onLetterTileClick={removeLetterTile}
               query={query}
+              setQuery={setQuery}
               TWCSSClass="letter-tile flex"
             />
           )}
