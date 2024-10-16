@@ -15,6 +15,9 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   onFocusInput,
   onLetterTileClick,
 }) => {
+  useEffect(() => {
+    console.log("query: ", query);
+  }, [query]);
   return (
     <>
       <div className={TWCSSClass} onClick={onFocusInput!}>
@@ -31,10 +34,10 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
             <LetterTile key={index} letter={letter} />
           </div>
         ))}
-        {/*       <BlinkingCursorTile
+        <BlinkingCursorTile
           onFocusInput={onFocusInput!}
           TWCSSClass="letter-tile flex blur-[1px] gap-[1px]"
-        /> */}
+        />
       </div>
     </>
   );
