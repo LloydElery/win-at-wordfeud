@@ -42,14 +42,6 @@ const SearchForm = ({ query, setQuery }: any) => {
     }
   };
 
-  const handleLetterTileClick = (letter: string) => {
-    if (!query.includes(letter)) {
-      const newQuery = query + letter;
-      setQuery(newQuery);
-      search(newQuery);
-    }
-  };
-
   const handleSearchBarVisibility = () => {
     setIsVisible((prev) => !prev);
   };

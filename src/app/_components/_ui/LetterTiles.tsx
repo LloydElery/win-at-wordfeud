@@ -17,19 +17,23 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   onLetterTileClick,
   setQuery,
 }) => {
-  const handleBakcspaceOnMobileDevices = (e: KeyboardEvent) => {
+  /*   const handleBakcspaceOnMobileDevices = (e: KeyboardEvent) => {
+    console.log("Backspace pressed");
     if (e.key === "Backspace") {
-      const newQuery = query?.slice(0, -1);
-      setQuery!(newQuery!);
+      setQuery!(query!.slice(0, -1));
     }
   };
 
   useEffect(() => {
+    console.log("Adding event listener");
     document.addEventListener("keydown", handleBakcspaceOnMobileDevices);
 
-    return () =>
+    return () => {
+      console.log("Removing event listener");
       document.removeEventListener("keydown", handleBakcspaceOnMobileDevices);
+    };
   }, [query, setQuery]);
+ */
 
   return (
     <>
