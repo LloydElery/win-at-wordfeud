@@ -31,10 +31,10 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
             <LetterTile key={index} letter={letter} />
           </div>
         ))}
-        <BlinkingCursorTile
+        {/*       <BlinkingCursorTile
           onFocusInput={onFocusInput!}
           TWCSSClass="letter-tile flex blur-[1px] gap-[1px]"
-        />
+        /> */}
       </div>
     </>
   );
