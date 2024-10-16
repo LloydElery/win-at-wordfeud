@@ -23,7 +23,9 @@ const CustomSearchForm = forwardRef(
 
     const handleVirtualKeyboardVisibility = () => {
       if (document.visibilityState === "visible" && inputRef.current) {
-        inputRef.current.focus();
+        setTimeout(() => {
+          inputRef.current!.focus();
+        }, 300);
 
         const touchEvent = new Event("touchstart", { bubbles: true });
         inputRef.current.dispatchEvent(touchEvent);
