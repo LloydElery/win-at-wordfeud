@@ -1,23 +1,19 @@
 "use client";
-import { AiFillSetting, AiOutlineUser } from "react-icons/ai";
-import ToggleModal from "../utils/ToggleModal";
-import CustomSignIn from "../_components/_ui/CustomSignIn";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import TextButton from "./_ui/TextButton";
 import { useState } from "react";
-import CommunityWords from "./userPage/CommunityWords";
-import Reports from "./userPage/Reports";
+import { AiFillSetting, AiOutlineUser } from "react-icons/ai";
+import CommunityWords from "./CommunityWords";
+import Reports from "./Reports";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import ToggleModal from "~/app/utils/ToggleModal";
+import CustomSignIn from "../_ui/CustomSignIn";
+import TextButton from "../_ui/TextButton";
 
-const Settings: React.FC = () => {
+const UserPage: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<string>("Rapporterade ord");
 
   const componentMap: { [key: string]: React.FC } = {
     "Community ord": CommunityWords,
     "Rapporterade ord": Reports,
-  };
-
-  const handleSelectPage = (pageName: string) => {
-    setSelectedPage(pageName);
   };
 
   const renderComponent = () => {
@@ -45,4 +41,4 @@ const Settings: React.FC = () => {
   );
 };
 
-export default Settings;
+export default UserPage;
