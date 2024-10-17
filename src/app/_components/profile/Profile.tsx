@@ -1,13 +1,12 @@
-import Contributions from "./Contributions";
+import { ITextButton } from "../_ui/TextButton";
+import CommunityWords from "./CommunityWords";
 import Reports from "./Reports";
 
-const Profile = () => {
-  // Logic & functionality
-
+const Profile: React.FC<ITextButton> = ({ selectedPage }) => {
   return (
     <>
-      <Contributions />
-      <Reports />
+      {selectedPage === "Community ord" && <CommunityWords />}
+      {selectedPage === "Rapporterade ord" && <Reports />}
     </>
   );
 };

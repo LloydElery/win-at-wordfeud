@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 interface IToggleModal {
   IconComponent: React.FC<{ onClick: () => void; size: number }>;
   ContentComponent: React.FC;
-  title: string;
+  title: any;
 }
 
 const ToggleModal: React.FC<IToggleModal> = ({
@@ -52,7 +52,11 @@ const ToggleModal: React.FC<IToggleModal> = ({
           <div className="modal-container">
             <div ref={modalRef} className="modal-panel bg-modalGrey80">
               <div className="modal-header bg-modalGrey p-1">
-                <h2 className="font-light">{title}</h2>
+                {typeof title === "string" ? (
+                  <h2 className="font-light">{title}</h2>
+                ) : (
+                  <div className="h-full w-full">{title}</div>
+                )}
 
                 <button
                   onClick={toggleModal}
