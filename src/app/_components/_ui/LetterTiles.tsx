@@ -18,11 +18,8 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   onLetterTileClick,
 }) => {
   const updateQuery = () => {
-    console.log("query: ", query);
     const letter = query?.split("");
-    console.log("letter: ", letter);
     const updatedQuery = letter!.join("");
-    console.log("updatedQuery: ", updatedQuery);
     if (updatedQuery !== query) setQuery(updatedQuery);
   };
 

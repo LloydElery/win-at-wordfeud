@@ -41,16 +41,6 @@ const CustomSearchForm = forwardRef(
       };
     }, []);
 
-    useEffect(() => {
-      const handleTouch = () => {
-        if (inputRef.current) inputRef.current.focus();
-      };
-
-      window.addEventListener("touchstart", handleTouch);
-
-      return () => window.removeEventListener("touchstart", handleTouch);
-    }, []);
-
     return (
       <>
         <form
