@@ -73,7 +73,7 @@
 }
 
 .modal-header {
-  @apply flex w-full justify-between gap-3 border-b text-sm;
+  @apply relative flex w-full justify-between gap-3 border-b text-sm;
 }
 
 .modal-content {
