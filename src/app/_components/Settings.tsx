@@ -3,7 +3,6 @@ import { AiFillSetting, AiOutlineUser } from "react-icons/ai";
 import ToggleModal from "../utils/ToggleModal";
 import CustomSignIn from "../_components/_ui/CustomSignIn";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import AddWord from "./AddWord";
 import Profile from "./profile/Profile";
 
 const Settings = () => {

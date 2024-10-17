@@ -1,4 +1,4 @@
-import Contributions from "./Contributions";
+import CommunityWords from "./CommunityWords";
 import Reports from "./Reports";
 
 const Profile = () => {
@@ -6,7 +6,7 @@ const Profile = () => {
 
   return (
     <>
-      <Contributions />
+      <CommunityWords />
       <Reports />
     </>
   );
