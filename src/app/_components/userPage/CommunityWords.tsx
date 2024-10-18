@@ -18,9 +18,7 @@ export interface ICommunityWords {
 
 const CommunityWords: React.FC = () => {
   const { user } = useUser();
-  const [wordContributions, setWordContributions] = useState<ICommunityWords[]>(
-    [],
-  );
+  const [communityWords, setCommunityWords] = useState<ICommunityWords[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const handleVote = async (
@@ -43,7 +41,7 @@ const CommunityWords: React.FC = () => {
 
       const updatedWord = await response.json();
 
-      setWordContributions((prevWords) =>
+      setCommunityWords((prevWords) =>
         prevWords.map((word) =>
           word.id === wordId ? { ...word, ...updatedWord } : word,
         ),
@@ -63,8 +61,7 @@ const CommunityWords: React.FC = () => {
         if (!response.ok) throw new Error("Failed to fetch community words");
 
         const data = await response.json();
-        console.log(data.communityWords);
-        setWordContributions(data.communityWords);
+        setCommunityWords(data.communityWords);
       } catch (error) {
         console.error("Error fetching community words", error);
       } finally {
@@ -72,7 +69,26 @@ const CommunityWords: React.FC = () => {
       }
     };
     fetchCommunityWords();
+    getSavedCommunityWords();
   }, [user]);
+
+  useEffect(() => {
+    saveCommunityWords();
+  }, [communityWords]);
+
+  const saveCommunityWords = () => {
+    if (communityWords)
+      localStorage.setItem(
+        "savedCommunityWords",
+        JSON.stringify(communityWords),
+      );
+    else localStorage.removeItem("savedCommunityWords");
+  };
+
+  const getSavedCommunityWords = () => {
+    const savedCommunityWords = localStorage.getItem("savedCommunityWords");
+    if (savedCommunityWords) setCommunityWords(JSON.parse(savedCommunityWords));
+  };
 
   if (loading) return <p>Laddar ord...</p>;
 
@@ -81,9 +97,9 @@ const CommunityWords: React.FC = () => {
       <div className="community-words-wrapper w-full border border-letterTile">
         <h2 className="community-words-h2">Community Ord:</h2>
         <div className="community-words-container text-s max-h-[310px] w-full overflow-auto border-t font-thin">
-          {wordContributions.length > 0 ? (
+          {communityWords.length > 0 ? (
             <ul>
-              {wordContributions.map((words, index) => (
+              {communityWords.map((words, index) => (
                 <li
                   className="community-words-list-item relative mx-1 flex flex-nowrap items-center justify-between"
                   key={index}

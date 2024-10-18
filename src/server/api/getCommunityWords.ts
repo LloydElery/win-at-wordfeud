@@ -3,7 +3,6 @@ import { communityWords } from "../db/schema";
 
 export async function getCommunityWords() {
   const wordContributions = await db.select().from(communityWords);
-  console.log("wordContributions: ", wordContributions);
   return wordContributions;
 }
 

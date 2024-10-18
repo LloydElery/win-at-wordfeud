@@ -21,6 +21,8 @@ const UserPage: React.FC = () => {
     return Component ? <Component /> : null;
   };
 
+  //TODO Move to bottom right
+
   return (
     <>
       <SignedOut>
