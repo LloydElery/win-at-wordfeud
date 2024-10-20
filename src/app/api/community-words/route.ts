@@ -3,8 +3,13 @@ import { getCommunityWords } from "~/server/api/getCommunityWords";
 import { updateScore } from "~/server/api/updateCommunityWordsScore";
 
 export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "20");
+  const offset = (page - 1) * limit;
+
   try {
-    const communityWords = await getCommunityWords();
+    const communityWords = await getCommunityWords(limit, offset);
     return NextResponse.json({ communityWords }, { status: 200 });
   } catch (error) {
     console.error(error);
