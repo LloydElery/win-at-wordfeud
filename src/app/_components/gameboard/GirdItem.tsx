@@ -18,7 +18,6 @@ const GridItem = ({
       setLetter(userLetter.toUpperCase());
       onInputLetter(id, userLetter.toUpperCase());
     }
-    console.log("Klicked");
   };
 
   return (

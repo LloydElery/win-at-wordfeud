@@ -1,15 +1,14 @@
 "use client";
-import { AiFillSetting, AiOutlineUser } from "react-icons/ai";
-import ToggleModal from "../utils/ToggleModal";
-import CustomSignIn from "../_components/_ui/CustomSignIn";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
-import Profile from "./profile/Profile";
-import TextButton from "./_ui/TextButton";
 import { useState } from "react";
-import CommunityWords from "./profile/CommunityWords";
-import Reports from "./profile/Reports";
+import { AiFillSetting, AiOutlineUser } from "react-icons/ai";
+import CommunityWords from "./CommunityWords";
+import Reports from "./Reports";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import ToggleModal from "~/app/utils/ToggleModal";
+import CustomSignIn from "../_ui/CustomSignIn";
+import TextButton from "../_ui/TextButton";
 
-const Settings: React.FC = () => {
+const UserPage: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<string>("Rapporterade ord");
 
   const componentMap: { [key: string]: React.FC } = {
@@ -17,14 +16,12 @@ const Settings: React.FC = () => {
     "Rapporterade ord": Reports,
   };
 
-  const handleSelectPage = (pageName: string) => {
-    setSelectedPage(pageName);
-  };
-
   const renderComponent = () => {
     const Component = componentMap[selectedPage];
     return Component ? <Component /> : null;
   };
+
+  //TODO Move to bottom right
 
   return (
     <>
@@ -46,4 +43,4 @@ const Settings: React.FC = () => {
   );
 };
 
-export default Settings;
+export default UserPage;

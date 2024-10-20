@@ -5,7 +5,6 @@ import { useAuth } from "@clerk/nextjs";
 
 const WordContributionForm: React.FC = () => {
   const { isLoaded, isSignedIn } = useAuth();
-  console.log("isLoaded: ", isLoaded, "isSignedIn: ", isSignedIn);
 
   const [word, setWord] = useState("");
   const [message, setMessage] = useState<string | null>(null);

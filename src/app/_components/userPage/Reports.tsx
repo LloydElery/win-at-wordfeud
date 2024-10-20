@@ -44,24 +44,26 @@ const Reports: React.FC = () => {
 
   return (
     <>
-      <div>
+      <div className="w-full border border-letterTile">
         <h2>Rapporterade Ord:</h2>
-        {reportedWords.length > 0 ? (
-          <ul>
-            {reportedWords.map((words, index) => (
-              <li key={index}>
-                {words.word}
-                <DeleteButton
-                  itemToDelete={words.word}
-                  apiUrl="/api/report"
-                  deleteHandler={() => handleUIAfterDelete(words.word)}
-                />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>Inga rapporterade ord.</p>
-        )}
+        <div className="text-s max-h-[310px] w-full overflow-auto border-t font-thin">
+          {reportedWords.length > 0 ? (
+            <ul>
+              {reportedWords.map((words, index) => (
+                <li key={index}>
+                  {words.word}
+                  <DeleteButton
+                    itemToDelete={words.word}
+                    apiUrl="/api/report"
+                    deleteHandler={() => handleUIAfterDelete(words.word)}
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Inga rapporterade ord.</p>
+          )}
+        </div>
       </div>
     </>
   );
