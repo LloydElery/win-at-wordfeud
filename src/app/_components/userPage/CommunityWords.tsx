@@ -3,11 +3,12 @@ import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import CircleIcon from "../_ui/CircleIcon";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
-import { capitalizeFirstLetter } from "~/app/utils/capitalizeFirstLetter";
 import { format } from "date-fns";
 
 export interface ICommunityWords {
   id?: number;
+  up_votes: number;
+  down_votes: number;
   score: number;
   word: string;
   created_at: Date;
@@ -136,7 +137,6 @@ const CommunityWords: React.FC = () => {
   };
 
  
-
   useEffect(() => {
     fetchCommunityWords(page);
   }, [page]);
@@ -190,10 +190,6 @@ const CommunityWords: React.FC = () => {
  */
   if (loading) return <p>Laddar ord...</p>;
 
-  const applySortByIndicator = (style: string, text: string) => {
-    return <p className={style}>{text}</p>;
-  };
-
   return (
     <>
       <div className="community-words-wrapper w-full border border-letterTile">
@@ -223,7 +219,7 @@ const CommunityWords: React.FC = () => {
             <ul>
               {sortedResults.map((word) => (
                 <li
-                  className="community-words-list-item relative mx-1 flex flex-nowrap items-center justify-between text-sm font-thin"
+                  className="community-words-list-item relative m-1 flex flex-nowrap items-center justify-between text-sm font-thin"
                   key={word.id}
                 >
                   {word.word.toUpperCase()}
@@ -256,10 +252,20 @@ const CommunityWords: React.FC = () => {
                   <div className="word-score absolute right-[90px]">
                     {word.score}
                   </div>
+                  <div className="absolute right-[60px]">
+                    <CircleIcon
+                      content={"?"}
+                      bgColor="bg-none"
+                      textColor=""
+                      borderColor=""
+                      tooltip={`"Score" är summan av "up-votes"(${word.up_votes}) - (${word.down_votes})"down-votes" `}
+                      placement="right"
+                    />
+                  </div>
                   <div className="word-status absolute right-[12px]">
                     <CircleIcon
                       bgColor=""
-                      content={format(word.created_at, "dd/mm")}
+                      content={format(word.created_at, "dd/MM")}
                       textColor=""
                       borderColor="border-none"
                       tooltip={format(word.created_at, "do/MMMM/yyy")}
