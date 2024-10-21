@@ -1,12 +1,18 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CircleIcon from "../_ui/CircleIcon";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { format } from "date-fns";
-import { Span } from "next/dist/trace";
+import { Table } from "drizzle-orm";
+import { communityWords } from "~/server/db/schema";
+import { AdminDeleteWordButton } from "../_ui/AdminDeleteWordButton";
 
 export const dynamic = "force-dynamic";
+
+export const tableMapping: Record<string, Table> = {
+  community_words: communityWords,
+};
 
 export interface ICommunityWords {
   id?: number;
@@ -138,6 +144,12 @@ const CommunityWords: React.FC = () => {
     return "pending";
   };
 
+  const handleWordDeletion = (wordId: number) => {
+    setCommunityWords((prevWords) =>
+      prevWords.filter((word) => word.id !== wordId),
+    );
+  };
+
   return (
     <>
       <div className="community-words-wrapper w-full border border-letterTile">
@@ -218,6 +230,14 @@ const CommunityWords: React.FC = () => {
                         </span>
                       }
                       placement="left"
+                    />
+                  </div>
+                  <div className="admin-delete-button absolute right-[50px]">
+                    <AdminDeleteWordButton
+                      wordId={word.id!}
+                      word={word.word}
+                      table="community_words"
+                      onWordDeleted={handleWordDeletion}
                     />
                   </div>
                   <div className="word-added-date absolute right-[15px]">

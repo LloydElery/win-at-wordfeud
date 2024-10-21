@@ -2,6 +2,7 @@ import { db, words } from "../db";
 import { AnyColumn, lte, sql } from "drizzle-orm";
 
 export interface ISearchResult {
+  id: number;
   word: string;
   value: number;
 }
@@ -74,6 +75,7 @@ export async function displaySearchResults(normalizedLetters: string) {
 
   const searchResults = await db
     .selectDistinct({
+      id: words.id,
       word: sql<string>`lower(${words.word})`,
       value: words.word_value,
     })
@@ -90,6 +92,7 @@ export async function displayWildcardSearchResults(normalizedLetters: string) {
 
   const wildcardResults = await db
     .selectDistinct({
+      id: words.id,
       word: sql<string>`lower(${words.word})`,
       value: words.word_value,
     })

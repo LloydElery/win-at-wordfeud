@@ -10,9 +10,12 @@ import CustomSearchForm from "./_ui/CustomSearchForm";
 import LetterTiles from "./_ui/LetterTiles";
 import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
+import { AdminDeleteWordButton } from "./_ui/AdminDeleteWordButton";
+import { Word } from "../utils/WordInterface";
 
 const SearchForm = ({ query, setQuery }: any) => {
-  const { results, search, sortByValue, setSortByValue, loading } = useSearch();
+  const { results, setResults, search, sortByValue, setSortByValue, loading } =
+    useSearch();
   const [isVisible, setIsVisible] = useState(true);
   const customSearchFormRef = useRef<any>(null);
 
@@ -70,6 +73,12 @@ const SearchForm = ({ query, setQuery }: any) => {
     }
   };
 
+  const handleWordDeletion = (wordId: number) => {
+    setResults((prevResults: Word[]) =>
+      prevResults.filter((word) => word.id !== wordId),
+    );
+  };
+
   useEffect(() => {
     getSavedQuery();
   }, []);
@@ -91,6 +100,7 @@ const SearchForm = ({ query, setQuery }: any) => {
   // Keeps track of headings for word by letter count.
   const displayedWordH2ByLength = new Set();
 
+  const result = results.map((result) => {});
   return (
     <>
       <section className="mb-1">
@@ -243,7 +253,14 @@ const SearchForm = ({ query, setQuery }: any) => {
                           placement="left"
                         />
                       </SignedOut>{" "}
-                      <DeleteWordButton {...word} />
+                      <div className="admin-delete-btn">
+                        <AdminDeleteWordButton
+                          wordId={word.id}
+                          word={word.word}
+                          table="words"
+                          onWordDeleted={handleWordDeletion}
+                        />
+                      </div>
                     </li>
                   </React.Fragment>
                 );

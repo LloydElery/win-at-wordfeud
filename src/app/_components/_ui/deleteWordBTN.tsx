@@ -3,9 +3,7 @@ import { Word } from "~/app/utils/WordInterface";
 
 export default function DeleteWordButton(word: Word) {
   const { user } = useUser();
-  const admin = "user_2lpJ2Swoyz7ncmq7o2fZemvG2Gw";
-  //TODO Hide admin id
-  //FIXME process.env.ADMIN does not fetch the id in an async maner.
+  const admin = process.env.NEXT_PUBLIC_ADMIN;
 
   const handleWordDeletion = async (word: string) => {
     try {
