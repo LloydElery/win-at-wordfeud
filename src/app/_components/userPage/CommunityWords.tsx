@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import CircleIcon from "../_ui/CircleIcon";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { format } from "date-fns";
+import { Span } from "next/dist/trace";
 
 export const dynamic = "force-dynamic";
 
@@ -14,8 +15,12 @@ export interface ICommunityWords {
   score: number;
   word: string;
   created_at: Date;
-  status?: string;
+  status: string;
 }
+
+export const calculateScore = (up_votes: number, down_votes: number) => {
+  return up_votes - down_votes;
+};
 
 const CommunityWords: React.FC = () => {
   const { user } = useUser();
@@ -33,7 +38,6 @@ const CommunityWords: React.FC = () => {
       if (!response.ok) throw new Error("Failed to fetch community words");
 
       const data = await response.json();
-      console.log("data: ", data);
 
       setCommunityWords((prev) => {
         const uniqueWords = data.communityWords.filter(
@@ -80,13 +84,16 @@ const CommunityWords: React.FC = () => {
       setCommunityWords((prevWords) =>
         prevWords.map((word) => {
           if (word.id === wordId) {
+            const updatedUpVotes =
+              voteType === "upVote" ? word.up_votes + 1 : word.up_votes;
+            const updatedDownVotes =
+              voteType === "downVote" ? word.down_votes + 1 : word.down_votes;
+
             return {
               ...word,
-              up_votes:
-                voteType === "upVote" ? word.up_votes + 1 : word.up_votes,
-              down_votes:
-                voteType === "downVote" ? word.down_votes + 1 : word.down_votes,
-              score: word.up_votes - word.down_votes,
+              up_votes: updatedUpVotes,
+              down_votes: updatedDownVotes,
+              score: calculateScore(updatedUpVotes, updatedDownVotes),
             };
           }
           return word;
@@ -114,7 +121,7 @@ const CommunityWords: React.FC = () => {
           word.id === wordId ? { ...word, ...updatedWord } : word,
         ),
       );
-      fetchCommunityWords();
+      await fetchCommunityWords();
     } catch (error) {
       console.error("Error voting", error);
     } finally {
@@ -123,6 +130,13 @@ const CommunityWords: React.FC = () => {
   };
 
   if (loading) return <p>Laddar ord...</p>;
+
+  const setStatus = (upVotes: number, downVotes: number) => {
+    const status = upVotes - downVotes;
+    if (status >= 10) return "approved";
+    else if (status < 0) return "rejected";
+    return "pending";
+  };
 
   return (
     <>
@@ -156,7 +170,9 @@ const CommunityWords: React.FC = () => {
                   className="community-words-list-item relative m-1 flex flex-nowrap items-center justify-between text-sm font-thin"
                   key={word.id}
                 >
-                  {word.word.toUpperCase()}
+                  <p className={setStatus(word.up_votes, word.down_votes)}>
+                    {word.word.toUpperCase()}
+                  </p>
                   <div
                     className="up-vote-container absolute right-[170px]"
                     onClick={() => handleVote(word.id!, "upVote")}
@@ -192,8 +208,16 @@ const CommunityWords: React.FC = () => {
                       bgColor="bg-none"
                       textColor=""
                       borderColor=""
-                      tooltip={`"Score" är summan av "up-votes"(${word.up_votes}) - (${word.down_votes})"down-votes" `}
-                      placement="right"
+                      tooltip={
+                        <span className="inline-flex items-center space-x-1">
+                          "Score" = <AiOutlineArrowUp color="green" size={15} />
+                          <span>{word.up_votes} </span>
+                          <span>-</span>
+                          <span>{word.down_votes}</span>
+                          <AiOutlineArrowDown color="red" size={15} />
+                        </span>
+                      }
+                      placement="left"
                     />
                   </div>
                   <div className="word-added-date absolute right-[15px]">

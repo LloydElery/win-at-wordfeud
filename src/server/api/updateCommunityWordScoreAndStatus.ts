@@ -3,7 +3,7 @@ import { db } from "../db";
 import { communityWords } from "../db/schema";
 import { NextResponse } from "next/server";
 
-export async function updateScore(wordId: number, voteType: string) {
+export async function updateCWScoreAndStatus(wordId: number, voteType: string) {
   let updatedWord;
 
   const word = await db
@@ -27,5 +27,28 @@ export async function updateScore(wordId: number, voteType: string) {
       .where(eq(communityWords.id, wordId))
       .returning();
   }
+
+  const newScore = updatedWord![0]?.score;
+
+  if (newScore! >= 10) {
+    updatedWord = await db
+      .update(communityWords)
+      .set({ status: "approved" })
+      .where(eq(communityWords.id, wordId))
+      .returning();
+  } else if (newScore! < 0) {
+    updatedWord = await db
+      .update(communityWords)
+      .set({ status: "rejected" })
+      .where(eq(communityWords.id, wordId))
+      .returning();
+  } else {
+    updatedWord = await db
+      .update(communityWords)
+      .set({ status: "pending" })
+      .where(eq(communityWords.id, wordId))
+      .returning();
+  }
+
   return updatedWord;
 }
