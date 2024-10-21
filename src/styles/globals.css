@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* SEARCH */
+/* ----- SEARCH ------ */
 
 .search {
   @apply self-center text-center text-black;
@@ -30,7 +30,9 @@
 .update-word-values-btn-container {
   @apply m-[7px] justify-self-center;
 }
-/* GRID */
+
+/* ----- GRID ----- */
+
 .grid-container {
   @apply grid w-full grid-cols-15 grid-rows-15;
 }
@@ -62,7 +64,7 @@
 .letter-value {
   @apply absolute right-[2px] top-0 flex h-[11px] items-center text-[10px] tracking-tighter text-black;
 }
-/* MODAL */
+/* ----- MODAL ----- */
 
 .modal-container {
   @apply absolute left-0 right-0 top-20 z-10 w-full justify-self-center p-2 shadow-md sm:top-[10%] md:max-w-screen-md;
@@ -80,7 +82,8 @@
   @apply flex flex-col items-center;
 }
 
-/* LOGIN & REGISTER */
+/* ----- LOGIN & REGISTER ----- */
+
 .login-panel {
   @apply z-10 flex h-[21rem] flex-col;
 }
@@ -89,7 +92,8 @@
   @apply flex items-center justify-center text-sm font-light text-white;
 }
 
-/* NAV */
+/* ----- NAV ----- */
+
 .navigation {
   @apply fixed bottom-0 flex w-full items-center justify-between bg-primaryBlue p-4 text-xl font-semibold text-white md:max-w-screen-md;
 }
@@ -97,7 +101,9 @@
 .nav-content-container {
   @apply relative flex h-full w-full justify-end;
 }
-/* UTILS */
+
+/* ----- UTILS ----- */
+
 .text-shadow-black.sm {
   @apply [text-shadow:_0_2px_4px_#000000];
 }
@@ -106,7 +112,7 @@
   @apply animate-pulse blur-sm;
 }
 
-/* GAMEBOARD LANGUAGE */
+/* ----- GAMEBOARD LANGUAGE ----- */
 
 .gameboard-language-container {
   @apply absolute bottom-2 m-2 rounded border border-letterTile bg-primaryBlue;
@@ -121,4 +127,17 @@
 
 .gameboard-language-flag {
   @apply size-7 content-center place-self-center justify-self-center;
+}
+
+/* ----- COMMUNITY WORDS ------ */
+.pending {
+  @apply text-yellow-700;
+}
+
+.approved {
+  @apply text-green-700;
+}
+
+.rejected {
+  @apply text-red-700;
 }

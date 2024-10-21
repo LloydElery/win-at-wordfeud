@@ -6,7 +6,7 @@ export interface ICircleIcon {
   bgColor: string;
   borderColor: string;
   textColor: string;
-  tooltip: string;
+  tooltip: React.ReactNode;
   placement: TooltipPlacement;
   onIconClick?: () => void;
 }
@@ -55,8 +55,6 @@ const CircleIcon: React.FC<ICircleIcon> = ({
       document.removeEventListener("mousedown", handleClickOutsideTooltip);
     };
   }, [isOpen]);
-
-  //TODO Make the clickevent to close tooltip and modal a reusable function if possible
 
   return (
     <div

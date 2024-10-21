@@ -1,12 +1,8 @@
 import { db } from "../db";
 import { communityWords } from "../db/schema";
 
-export async function getCommunityWords(limit: number, offset: number) {
-  const wordContributions = await db
-    .select()
-    .from(communityWords)
-    .limit(limit)
-    .offset(offset);
+export async function getCommunityWords() {
+  const wordContributions = await db.select().from(communityWords);
   return wordContributions;
 }
 
