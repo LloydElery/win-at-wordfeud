@@ -253,14 +253,14 @@ const SearchForm = ({ query, setQuery }: any) => {
                           placement="left"
                         />
                       </SignedOut>{" "}
-                      {/* <DeleteWordButton {...word} /> */}
-                      <div className="text-pink-600">{word.id}</div>
-                      <AdminDeleteWordButton
-                        wordId={word.id}
-                        word={word.word}
-                        table="words"
-                        onWordDeleted={handleWordDeletion}
-                      />
+                      <div className="admin-delete-btn">
+                        <AdminDeleteWordButton
+                          wordId={word.id}
+                          word={word.word}
+                          table="words"
+                          onWordDeleted={handleWordDeletion}
+                        />
+                      </div>
                     </li>
                   </React.Fragment>
                 );
