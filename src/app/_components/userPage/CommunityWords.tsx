@@ -5,6 +5,8 @@ import CircleIcon from "../_ui/CircleIcon";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { format } from "date-fns";
 
+export const dynamic = "force-dynamic";
+
 export interface ICommunityWords {
   id?: number;
   up_votes: number;
@@ -18,24 +20,21 @@ export interface ICommunityWords {
 const CommunityWords: React.FC = () => {
   const { user } = useUser();
   const [communityWords, setCommunityWords] = useState<ICommunityWords[]>([]);
-  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
   const [sortMethod, setSortMethod] = useState<"score" | "date">("date");
 
-  const observeRef = useRef<HTMLDivElement | null>(null);
-
-  const fetchCommunityWords = async (page: number) => {
+  const fetchCommunityWords = async () => {
     try {
       setLoadingMessage("Hämtar ord och röster från databasen...");
 
-      const response = await fetch(
-        `/api/community-words?page=${page}&limit=20`,
-      );
+      const response = await fetch(`/api/community-words`);
 
       if (!response.ok) throw new Error("Failed to fetch community words");
 
       const data = await response.json();
+      console.log("data: ", data);
+
       setCommunityWords((prev) => {
         const uniqueWords = data.communityWords.filter(
           (newWord: { id: number | undefined }) =>
@@ -61,8 +60,8 @@ const CommunityWords: React.FC = () => {
   useEffect(() => {
     if (!user) return;
 
-    fetchCommunityWords(page);
-  }, [user, page]);
+    fetchCommunityWords();
+  }, [user]);
 
   const sortedResults = [...communityWords].sort((a, b) => {
     let sorted =
@@ -78,6 +77,22 @@ const CommunityWords: React.FC = () => {
   ) => {
     try {
       setLoadingMessage("Lägger till din röst...");
+      setCommunityWords((prevWords) =>
+        prevWords.map((word) => {
+          if (word.id === wordId) {
+            return {
+              ...word,
+              up_votes:
+                voteType === "upVote" ? word.up_votes + 1 : word.up_votes,
+              down_votes:
+                voteType === "downVote" ? word.down_votes + 1 : word.down_votes,
+              score: word.up_votes - word.down_votes,
+            };
+          }
+          return word;
+        }),
+      );
+
       const response = await fetch("/api/community-words", {
         method: "POST",
         headers: {
@@ -99,95 +114,14 @@ const CommunityWords: React.FC = () => {
           word.id === wordId ? { ...word, ...updatedWord } : word,
         ),
       );
-
-      fetchCommunityWords(page);
+      fetchCommunityWords();
     } catch (error) {
       console.error("Error voting", error);
+    } finally {
       setLoadingMessage(null);
     }
   };
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0]?.isIntersecting) {
-        setPage((prev) => prev + 1);
-      }
-    },
-    { threshold: 1.0 },
-  );
-
-  useEffect(() => {
-    if (observeRef.current) observer.unobserve(observeRef.current);
-    return () => {
-      if (observeRef.current) observer.unobserve(observeRef.current);
-    };
-  }, []);
-
-  /*   const updateScoreOnVote = (wordId: number, voteType: string) => {
-    setCommunityWords((prev) =>
-      prev.map((word) =>
-        word.id === wordId
-          ? {
-              ...word,
-              score: voteType === "upVote" ? word.score + 1 : word.score - 1,
-            }
-          : word,
-      ),
-    );
-  };
-
- 
-  useEffect(() => {
-    fetchCommunityWords(page);
-  }, [page]);
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 1 &&
-      hasMore
-    ) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    handleScroll();
-
-    window.addEventListener("scroll", handleScroll);
-
-    return window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
-
-  const saveCommunityWords = () => {
-    if (communityWords.length > 0) {
-      console.log("Sparar community-ord till localStorage: ", communityWords);
-      localStorage.setItem(
-        "savedCommunityWords",
-        JSON.stringify(communityWords),
-      );
-    } else {
-      console.log("Inga community-ord att spara.");
-      localStorage.removeItem("savedCommunityWords");
-    }
-  };
-
-  useEffect(() => {
-    const getSavedCommunityWords = () => {
-      const savedCommunityWords = localStorage.getItem("savedCommunityWords");
-      if (savedCommunityWords) {
-        console.log("Hämtar community-ord från localStorage");
-        setCommunityWords(JSON.parse(savedCommunityWords));
-      }
-    };
-
-    getSavedCommunityWords();
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("communityWords", JSON.stringify(communityWords));
-  }, [communityWords]);
- */
   if (loading) return <p>Laddar ord...</p>;
 
   return (
@@ -200,9 +134,9 @@ const CommunityWords: React.FC = () => {
             onClick={() =>
               setSortMethod(sortMethod === "score" ? "date" : "score")
             }
-            className={`absolute right-[85px] px-1 ${sortMethod === "score" ? "rounded-sm bg-letterTile text-center text-black" : ""}`}
+            className={`absolute right-[100px] px-1 ${sortMethod === "score" ? "rounded-sm bg-letterTile text-center text-black" : ""}`}
           >
-            Antal röster
+            Score
           </p>
           <p
             onClick={() =>
@@ -224,7 +158,7 @@ const CommunityWords: React.FC = () => {
                 >
                   {word.word.toUpperCase()}
                   <div
-                    className="up-vote-container absolute right-[130px]"
+                    className="up-vote-container absolute right-[170px]"
                     onClick={() => handleVote(word.id!, "upVote")}
                   >
                     <CircleIcon
@@ -237,7 +171,7 @@ const CommunityWords: React.FC = () => {
                     />
                   </div>
                   <div
-                    className="down-vote-container absolute right-[110px]"
+                    className="down-vote-container absolute right-[150px]"
                     onClick={() => handleVote(word.id!, "downVote")}
                   >
                     <CircleIcon
@@ -249,10 +183,10 @@ const CommunityWords: React.FC = () => {
                       placement="bottom"
                     />
                   </div>
-                  <div className="word-score absolute right-[90px]">
-                    {word.score}
+                  <div className="word-score absolute right-[125px]">
+                    {word.up_votes - word.down_votes}
                   </div>
-                  <div className="absolute right-[60px]">
+                  <div className="absolute right-[95px]">
                     <CircleIcon
                       content={"?"}
                       bgColor="bg-none"
@@ -262,7 +196,7 @@ const CommunityWords: React.FC = () => {
                       placement="right"
                     />
                   </div>
-                  <div className="word-status absolute right-[12px]">
+                  <div className="word-added-date absolute right-[15px]">
                     <CircleIcon
                       bgColor=""
                       content={format(word.created_at, "dd/MM")}
@@ -280,8 +214,6 @@ const CommunityWords: React.FC = () => {
           )}
         </div>
       </div>
-
-      <div ref={observeRef} className="h-[50px]" />
     </>
   );
 };

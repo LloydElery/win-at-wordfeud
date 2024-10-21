@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCommunityWords } from "~/server/api/getCommunityWords";
 import { updateScore } from "~/server/api/updateCommunityWordsScore";
+import { updateStatus } from "~/server/api/updateCommunityWordStatus";
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "20");
-  const offset = (page - 1) * limit;
-
   try {
-    const communityWords = await getCommunityWords(limit, offset);
+    const communityWords = await getCommunityWords();
     return NextResponse.json({ communityWords }, { status: 200 });
   } catch (error) {
     console.error(error);
@@ -24,8 +20,9 @@ export async function POST(req: NextRequest) {
   const { wordId, voteType } = await req.json();
   try {
     updateScore(wordId, voteType);
+    updateStatus(wordId);
     return NextResponse.json(
-      { message: "Vote has been added" },
+      { message: `+1 ${voteType} has been added` },
       { status: 200 },
     );
   } catch (error) {
