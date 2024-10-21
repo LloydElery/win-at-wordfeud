@@ -9,7 +9,7 @@ import { CommunityWordsTable, WordsTable } from "~/app/api/admin/route";
  * @returns The deleted word if deletion was successful, else null.
  */
 export async function deleteWordFromDatabase(
-  wordId: number,
+  wordId: any,
   table: CommunityWordsTable | WordsTable,
 ) {
   try {

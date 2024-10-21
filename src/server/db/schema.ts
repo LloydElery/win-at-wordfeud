@@ -48,7 +48,7 @@ export const userReports = createTable(
     userId: text("user_id").notNull(), // Clerk user_id
     wordId: integer("word_id")
       .notNull()
-      .references(() => words.id),
+      .references(() => words.id, { onDelete: "cascade" }),
     reportedAt: timestamp("reported_at").defaultNow().notNull(),
   },
   (userReports) => ({

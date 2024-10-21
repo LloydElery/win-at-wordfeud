@@ -1,5 +1,11 @@
 import { useMemo, useState } from "react";
-import { Word } from "../utils/WordInterface";
+
+export interface Word {
+  id: number;
+  word: string;
+  value: number;
+  reports: number;
+}
 
 export function sortByValueDesc(results: Word[]): Word[] {
   return [...results].sort((a, b) => {
@@ -36,6 +42,7 @@ export const useSearch = () => {
 
   return {
     results: sortedResults,
+    setResults,
     loading,
     search,
     sortByValue,

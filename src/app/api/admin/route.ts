@@ -1,5 +1,5 @@
 import { getAuth } from "@clerk/nextjs/server";
-import { Column, eq, Table } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { communityWords, words } from "~/server/db/schema";
@@ -10,7 +10,7 @@ export type WordsTable = typeof words;
 
 export const tableMapping: Record<string, CommunityWordsTable | WordsTable> = {
   community_words: communityWords,
-  word: words,
+  words: words,
 };
 
 /*
@@ -31,16 +31,16 @@ export async function DELETE(req: NextRequest) {
     );
 
   const { searchParams } = new URL(req.url);
-  const tableName = searchParams.get("table");
+  console.log("searchParams: ", searchParams);
 
+  const tableName = searchParams.get("table");
+  console.log("tableName: ", tableName);
   if (!tableName || !tableMapping[tableName])
     return NextResponse.json(
       { error: "Invalid table specified" },
       { status: 400 },
     );
-
   const { wordId } = await req.json();
-  console.log("wordId: ", wordId);
 
   if (!wordId)
     return NextResponse.json(
@@ -61,7 +61,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Word not found" }, { status: 404 });
     }
 
-    const result = await deleteWordFromDatabase(wordId!, table);
+    const result = await deleteWordFromDatabase(wordId, table);
 
     if (!result) {
       return NextResponse.json(
