@@ -1,3 +1,4 @@
+import { getAuth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { db, words } from "~/server/db";
@@ -5,14 +6,22 @@ import { deleteWordFromDatabase } from "~/server/queries";
 
 export async function DELETE(req: NextRequest) {
   try {
+    const { userId } = getAuth(req);
+    const admin = process.env.ADMIN;
+
+    if (userId !== admin)
+      return NextResponse.json(
+        { error: "Unauthorized. Only admins can delete words" },
+        { status: 403 },
+      );
+
     const { word } = await req.json();
 
-    if (!word) {
+    if (!word)
       return NextResponse.json(
         { error: `Missing word in request` },
         { status: 400 },
       );
-    }
 
     const wordRecord = await db
       .select({ id: words.id })
@@ -24,7 +33,6 @@ export async function DELETE(req: NextRequest) {
     }
 
     const wordId = wordRecord[0]?.id;
-
     const result = await deleteWordFromDatabase(wordId!);
 
     if (!result) {
