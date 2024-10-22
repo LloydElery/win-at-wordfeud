@@ -25,7 +25,7 @@ export async function addOrUpdateVote({
       await db
         .update(userVotes)
         .set({
-          vote_value: (voteValue = currentVoteValue ? 0 : voteValue),
+          vote_value: currentVoteValue === voteValue ? 0 : voteValue,
           voted_at: new Date(),
         })
         .where(
