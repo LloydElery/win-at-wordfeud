@@ -35,9 +35,9 @@ export const AdminDeleteWordButton: React.FC<IAdminDeleteWordButtonProps> = ({
     } catch (error) {
       console.error("Failed to delete word:", error);
     }
-
-    if (user?.id! == admin) return null;
   };
+
+  if (user?.id !== admin) return null;
 
   return (
     <>
