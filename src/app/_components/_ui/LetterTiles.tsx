@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { LetterTile } from "../LetterTile";
 import BlinkingCursorTile from "./BlinkingCursorTile";
+import ClearQueryTile from "./ClearQueryTile";
 
 export interface ILetterTileProps {
   query?: string;
@@ -30,6 +31,10 @@ const LetterTiles: React.FC<ILetterTileProps> = ({
   return (
     <>
       <div className={TWCSSClass} onClick={onFocusInput!}>
+        <ClearQueryTile
+          setQuery={setQuery}
+          TWCSSClass="letter-tile flex  gap-[1px]"
+        />
         {query!.split("").map((letter: string, index: number) => (
           <div
             key={index}
