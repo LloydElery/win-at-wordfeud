@@ -10,7 +10,6 @@ import {
   fetchCurrentVoteValueFromDatabase,
   submitVote,
 } from "./services";
-import { AdminProvider } from "~/app/context/AdminContext";
 
 export const dynamic = "force-dynamic";
 export interface ICommunityWords {

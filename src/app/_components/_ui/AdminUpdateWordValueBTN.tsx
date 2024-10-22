@@ -1,10 +1,7 @@
-import { useUser } from "@clerk/nextjs";
+import { useAdmin } from "~/app/context/AdminContext";
 
 export default function UpdateWordValueButton() {
-  const { user } = useUser();
-  const admin = "user_2lpJ2Swoyz7ncmq7o2fZemvG2Gw";
-  //TODO Hide admin id
-  //FIXME process.env.ADMIN does not fetch the id in an async maner.
+  const isAdmin = useAdmin();
 
   const handleUpdate = async () => {
     try {
@@ -28,7 +25,8 @@ export default function UpdateWordValueButton() {
     }
   };
 
-  if (user?.id !== admin!) return null;
+  if (!isAdmin) return null;
+  if (isAdmin === undefined) return null;
 
   return (
     <>

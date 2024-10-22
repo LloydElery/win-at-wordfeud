@@ -31,7 +31,6 @@ const SearchForm = ({ query, setQuery }: any) => {
     customSearchFormRef.current?.focusInput();
   };
 
-  //FIXME Kanske vill ha den här funktionen om det fungerar som tänkt
   const removeLetterTile = (letter: string) => {
     const letterTileToRemove = query.indexOf(letter);
 
@@ -195,7 +194,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                           </h2>
                         )}
                     <li
-                      className="my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight"
+                      className="relative my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight"
                       key={index}
                     >
                       <p>{word.word.toUpperCase()}</p>
@@ -252,7 +251,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                           placement="left"
                         />
                       </SignedOut>{" "}
-                      <div className="admin-delete-btn">
+                      <div className="admin-delete-btn absolute right-0 rounded-full">
                         <AdminDeleteWordButton
                           wordId={word.id}
                           word={word.word}

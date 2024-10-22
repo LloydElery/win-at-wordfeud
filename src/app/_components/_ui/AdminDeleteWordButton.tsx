@@ -42,7 +42,7 @@ export const AdminDeleteWordButton: React.FC<IAdminDeleteWordButtonProps> = ({
   return (
     <>
       <button
-        className="h-5 w-5 rounded-full bg-red-600"
+        className="h-5 w-5 rounded-full bg-red-600 inner-border inner-border-black"
         onClick={() => {
           handleWordDeletion();
           alert(`${word.toUpperCase()} är nu borttaget från ${table} `);
