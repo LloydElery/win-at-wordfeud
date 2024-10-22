@@ -254,12 +254,12 @@ const SearchForm = ({ query, setQuery }: any) => {
                         />
                       </SignedOut>{" "}
                       <div className="admin-delete-btn">
-                        <AdminDeleteWordButton
+                        {/*   <AdminDeleteWordButton
                           wordId={word.id}
                           word={word.word}
                           table="words"
                           onWordDeleted={handleWordDeletion}
-                        />
+                        /> */}
                       </div>
                     </li>
                   </React.Fragment>
