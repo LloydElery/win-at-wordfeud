@@ -18,18 +18,3 @@ export async function POST(req: NextRequest) {
     { status: 200 },
   );
 }
-
-//TODO Add a GET function
-/* export async function GET(res: NextResponse) {
-  const { word } = await res.json();
-
-  if (!word) {
-    return NextResponse.json(
-      { error: "This word is not in the database" },
-      { status: 400 },
-    );
-  }
-
-  await 
-}
- */

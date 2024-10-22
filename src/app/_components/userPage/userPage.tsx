@@ -7,6 +7,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import ToggleModal from "~/app/utils/ToggleModal";
 import CustomSignIn from "../_ui/CustomSignIn";
 import TextButton from "../_ui/TextButton";
+import { AdminProvider } from "~/app/context/AdminContext";
 
 const UserPage: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<string>("Rapporterade ord");
@@ -33,11 +34,13 @@ const UserPage: React.FC = () => {
         />
       </SignedOut>
       <SignedIn>
-        <ToggleModal
-          IconComponent={AiOutlineUser}
-          ContentComponent={renderComponent}
-          title={<TextButton onSelectPage={setSelectedPage} />}
-        />
+        <AdminProvider>
+          <ToggleModal
+            IconComponent={AiOutlineUser}
+            ContentComponent={renderComponent}
+            title={<TextButton onSelectPage={setSelectedPage} />}
+          />
+        </AdminProvider>
       </SignedIn>
     </>
   );
