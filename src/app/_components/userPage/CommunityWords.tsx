@@ -5,6 +5,7 @@ import CircleIcon from "../_ui/CircleIcon";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { format } from "date-fns";
 import { AdminDeleteWordButton } from "../_ui/AdminDeleteWordButton";
+import { submitVote } from "./services";
 
 export const dynamic = "force-dynamic";
 export interface ICommunityWords {
@@ -29,28 +30,12 @@ export const calculateScore = (up_votes: number, down_votes: number) => {
   return up_votes - down_votes;
 };
 
-const CommunityWords: React.FC<IWordVote> = ({
-  wordId,
-  initialUpVotes,
-  initialDownVotes,
-  userHasVoted,
-  currentUserId,
-}) => {
+const CommunityWords: React.FC = () => {
   const { user } = useUser();
   const [communityWords, setCommunityWords] = useState<ICommunityWords[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
   const [sortMethod, setSortMethod] = useState<"score" | "date">("date");
-  const [upVotes, setUpVotes] = useState(initialUpVotes);
-  const [downVotes, setDownVotes] = useState(initialDownVotes);
-  const [hasVoted, setHasVoted] = useState(userHasVoted);
-  const [voteError, setVoteError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setUpVotes(initialUpVotes);
-    setDownVotes(initialDownVotes);
-    setHasVoted(userHasVoted);
-  }, [initialUpVotes, initialDownVotes, userHasVoted]);
 
   const fetchCommunityWords = async () => {
     try {
@@ -102,9 +87,6 @@ const CommunityWords: React.FC<IWordVote> = ({
     wordId: number,
     voteType: "upVote" | "downVote",
   ) => {
-    if (!currentUserId) return setVoteError("You must be logged in to vote");
-    if (hasVoted) return setVoteError("You have already voted on this word.");
-
     try {
       setLoadingMessage("Lägger till din röst...");
       setCommunityWords((prevWords) =>
@@ -137,12 +119,6 @@ const CommunityWords: React.FC<IWordVote> = ({
         }),
       });
 
-      if (voteType === "upVote") setUpVotes((prev) => prev + 1);
-      else setDownVotes((prev) => prev + 1);
-
-      setHasVoted(true);
-      setVoteError(null);
-
       if (!response.ok) throw new Error("Failed to update vote");
 
       const updatedWord = await response.json();
@@ -153,6 +129,8 @@ const CommunityWords: React.FC<IWordVote> = ({
           word.id === wordId ? { ...word, ...updatedWord } : word,
         ),
       );
+
+      submitVote(user?.id, wordId, voteType);
       await fetchCommunityWords();
     } catch (error) {
       console.error("Error voting", error);
@@ -212,11 +190,7 @@ const CommunityWords: React.FC<IWordVote> = ({
                     {word.word.toUpperCase()}
                   </p>
                   <div
-                    className={
-                      hasVoted
-                        ? "up-vote-container absolute right-[170px]"
-                        : "hidden"
-                    }
+                    className={"up-vote-container absolute right-[170px]"}
                     onClick={() => handleVote(word.id!, "upVote")}
                   >
                     <CircleIcon
@@ -229,11 +203,7 @@ const CommunityWords: React.FC<IWordVote> = ({
                     />
                   </div>
                   <div
-                    className={
-                      hasVoted
-                        ? "down-vote-container absolute right-[150px]"
-                        : "hidden"
-                    }
+                    className={"down-vote-container absolute right-[150px]"}
                     onClick={() => handleVote(word.id!, "downVote")}
                   >
                     <CircleIcon

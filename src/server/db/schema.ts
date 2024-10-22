@@ -79,25 +79,25 @@ export const userVotes = createTable(
   "user_votes",
   {
     id: serial("id").primaryKey(),
-    userId: text("user_id").notNull(), // Clerk user_id
-    wordId: integer("word_id")
+    user_id: text("user_id").notNull(), // Clerk user_id
+    word_id: integer("word_id")
       .notNull()
       .references(() => communityWords.id, { onDelete: "cascade" }),
-    voteValue: integer("vote_value").notNull(),
-    votedAt: timestamp("voted_at").defaultNow().notNull(),
+    vote_value: integer("vote_value").notNull(),
+    voted_at: timestamp("voted_at").defaultNow().notNull(),
   },
   (userVotes) => ({
     // Constrain users to allow 1 vote per user
     uniqueUserVote: uniqueIndex("unique_user_vote").on(
-      userVotes.userId,
-      userVotes.wordId,
+      userVotes.user_id,
+      userVotes.word_id,
     ),
   }),
 );
 
 export const userVotesRelations = relations(userVotes, ({ one }) => ({
   word: one(communityWords, {
-    fields: [userVotes.wordId],
+    fields: [userVotes.word_id],
     references: [communityWords.id],
   }),
 }));
