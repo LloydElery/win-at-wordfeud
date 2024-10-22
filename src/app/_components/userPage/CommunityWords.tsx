@@ -4,16 +4,14 @@ import React, { useEffect, useState } from "react";
 import CircleIcon from "../_ui/CircleIcon";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { format } from "date-fns";
-import { Table } from "drizzle-orm";
-import { communityWords } from "~/server/db/schema";
 import { AdminDeleteWordButton } from "../_ui/AdminDeleteWordButton";
+import {
+  fetchCommunityWordsFromDatabase,
+  fetchCurrentVoteValueFromDatabase,
+  submitVote,
+} from "./services";
 
 export const dynamic = "force-dynamic";
-
-export const tableMapping: Record<string, Table> = {
-  community_words: communityWords,
-};
-
 export interface ICommunityWords {
   id?: number;
   up_votes: number;
@@ -22,6 +20,14 @@ export interface ICommunityWords {
   word: string;
   created_at: Date;
   status: string;
+}
+
+export interface IWordVote {
+  wordId: number;
+  initialUpVotes: number;
+  initialDownVotes: number;
+  userHasVoted: boolean;
+  currentUserId: string | null;
 }
 
 export const calculateScore = (up_votes: number, down_votes: number) => {
@@ -39,14 +45,11 @@ const CommunityWords: React.FC = () => {
     try {
       setLoadingMessage("Hämtar ord och röster från databasen...");
 
-      const response = await fetch(`/api/community-words`);
-
-      if (!response.ok) throw new Error("Failed to fetch community words");
-
-      const data = await response.json();
+      const communityWordsArray = (await fetchCommunityWordsFromDatabase())
+        .communityWords;
 
       setCommunityWords((prev) => {
-        const uniqueWords = data.communityWords.filter(
+        const uniqueWords = communityWordsArray.filter(
           (newWord: { id: number | undefined }) =>
             !prev.some((word) => word.id === newWord.id),
         );
@@ -57,11 +60,9 @@ const CommunityWords: React.FC = () => {
           ? updatedCommunityWords
           : prev;
       });
-
       setLoadingMessage(null);
     } catch (error) {
       console.error("Error fetching community words", error);
-      setLoadingMessage(null);
     } finally {
       setLoading(false);
     }
@@ -87,52 +88,53 @@ const CommunityWords: React.FC = () => {
   ) => {
     try {
       setLoadingMessage("Lägger till din röst...");
-      setCommunityWords((prevWords) =>
-        prevWords.map((word) => {
-          if (word.id === wordId) {
-            const updatedUpVotes =
-              voteType === "upVote" ? word.up_votes + 1 : word.up_votes;
-            const updatedDownVotes =
-              voteType === "downVote" ? word.down_votes + 1 : word.down_votes;
 
-            return {
-              ...word,
-              up_votes: updatedUpVotes,
-              down_votes: updatedDownVotes,
-              score: calculateScore(updatedUpVotes, updatedDownVotes),
-            };
-          }
-          return word;
-        }),
-      );
+      const voteValue = voteType === "upVote" ? 1 : -1;
 
-      const response = await fetch("/api/community-words", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          wordId,
-          voteType,
-        }),
-      });
+      const currentVoteValue = (
+        await fetchCurrentVoteValueFromDatabase(wordId, user?.id!)
+      ).currentVoteValue;
 
-      if (!response.ok) throw new Error("Failed to update vote");
+      // Check to see if user already have an active vote that is equal to voteType
+      if (currentVoteValue === voteValue) {
+        setLoadingMessage(
+          `${user?.firstName}, du har redan röstat ${voteType === "upVote" ? "up" : "ner"} det här ordet`,
+        );
+        return;
+      }
 
-      const updatedWord = await response.json();
-      console.log("Uppdaterad orddata efter röstning: ", updatedWord);
+      await submitVote(user?.id, wordId, voteValue);
 
-      setCommunityWords((prevWords) =>
-        prevWords.map((word) =>
-          word.id === wordId ? { ...word, ...updatedWord } : word,
-        ),
-      );
+      updateCommunityWordScoreUI(wordId, voteType);
+
+      setLoadingMessage("Tack för att du röstade!");
       await fetchCommunityWords();
     } catch (error) {
       console.error("Error voting", error);
     } finally {
-      setLoadingMessage(null);
     }
+  };
+
+  const updateCommunityWordScoreUI = (wordId: number, voteType: string) => {
+    // Update "score" UI (+1 / -1)
+    setCommunityWords((prevWords) =>
+      prevWords.map((word) => {
+        if (word.id === wordId) {
+          const updatedUpVotes =
+            voteType === "upVote" ? word.up_votes + 1 : word.up_votes;
+          const updatedDownVotes =
+            voteType === "downVote" ? word.down_votes + 1 : word.down_votes;
+
+          return {
+            ...word,
+            up_votes: updatedUpVotes,
+            down_votes: updatedDownVotes,
+            score: calculateScore(updatedUpVotes, updatedDownVotes),
+          };
+        }
+        return word;
+      }),
+    );
   };
 
   if (loading) return <p>Laddar ord...</p>;
@@ -153,7 +155,18 @@ const CommunityWords: React.FC = () => {
   return (
     <>
       <div className="community-words-wrapper w-full border border-letterTile">
-        <h2 className="community-words-h2">Community Ord:</h2>
+        <h2 className={!loadingMessage ? "community-words-h2" : "hidden"}>
+          Community Ord:
+        </h2>
+        <p
+          className={
+            loadingMessage
+              ? "left-[25px] top-[70px] z-10 h-fit min-h-[28px] w-full text-sm font-thin"
+              : "hidden"
+          }
+        >
+          {loadingMessage}
+        </p>
         <div className="sorting-button-container relative flex flex-nowrap items-center justify-between text-xs font-thin">
           <strong className="font-bold">Sortera:</strong>{" "}
           <p
@@ -186,7 +199,7 @@ const CommunityWords: React.FC = () => {
                     {word.word.toUpperCase()}
                   </p>
                   <div
-                    className="up-vote-container absolute right-[170px]"
+                    className={"up-vote-container absolute right-[170px]"}
                     onClick={() => handleVote(word.id!, "upVote")}
                   >
                     <CircleIcon
@@ -199,7 +212,7 @@ const CommunityWords: React.FC = () => {
                     />
                   </div>
                   <div
-                    className="down-vote-container absolute right-[150px]"
+                    className={"down-vote-container absolute right-[150px]"}
                     onClick={() => handleVote(word.id!, "downVote")}
                   >
                     <CircleIcon

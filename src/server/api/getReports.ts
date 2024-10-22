@@ -11,6 +11,5 @@ export async function getReportedWordsByUserId(userId: any) {
     .innerJoin(words, eq(userReports.wordId, words.id))
     .where(eq(userReports.userId, userId));
 
-  console.log("reportedWords: ", reportedWords);
   return reportedWords;
 }
