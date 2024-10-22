@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
-import DeleteWordButton from "./_ui/deleteWordBTN";
 import { LoadingScreen } from "./_ui/LoadingScreen";
 import UpdateWordValueButton from "./_ui/AdminUpdateWordValueBTN";
 import CircleIcon from "./_ui/CircleIcon";

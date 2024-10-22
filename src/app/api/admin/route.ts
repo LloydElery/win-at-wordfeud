@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/nextjs";
 import { getAuth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,6 +14,17 @@ export const tableMapping: Record<string, CommunityWordsTable | WordsTable> = {
   words: words,
 };
 
+export async function POST(req: NextRequest) {
+  const { userId } = await req.json();
+
+  const adminId = process.env.ADMIN;
+
+  if (userId === adminId) {
+    return NextResponse.json({ isAdmin: true }, { status: 200 });
+  } else {
+    return NextResponse.json({ isAdmin: false }, { status: 403 });
+  }
+}
 /*
  * Deletes a word from a specified data-table
  * @param req
@@ -22,7 +34,7 @@ export const tableMapping: Record<string, CommunityWordsTable | WordsTable> = {
 
 export async function DELETE(req: NextRequest) {
   const { userId } = getAuth(req);
-  const admin = process.env.NEXT_PUBLIC_ADMIN;
+  const admin = process.env.ADMIN;
 
   if (userId !== admin)
     return NextResponse.json(

@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/nextjs";
+import { useAdmin } from "~/app/context/AdminContext";
 
 interface IAdminDeleteWordButtonProps {
   wordId: number;
@@ -13,8 +13,7 @@ export const AdminDeleteWordButton: React.FC<IAdminDeleteWordButtonProps> = ({
   table,
   onWordDeleted,
 }) => {
-  const { user } = useUser();
-  const admin = process.env.NEXT_PUBLIC_ADMIN;
+  const isAdmin = useAdmin();
 
   const handleWordDeletion = async () => {
     try {
@@ -37,7 +36,8 @@ export const AdminDeleteWordButton: React.FC<IAdminDeleteWordButtonProps> = ({
     }
   };
 
-  if (user?.id !== admin) return null;
+  if (isAdmin === undefined) return null;
+  if (!isAdmin) return null;
 
   return (
     <>
