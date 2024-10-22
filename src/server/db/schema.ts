@@ -1,8 +1,8 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
-import { varchar } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
+import { uniqueIndex, varchar } from "drizzle-orm/pg-core";
 import {
   index,
   text,
@@ -74,3 +74,30 @@ export const communityWords = createTable(
     uniqueWordCombination: sql`CONSTRAINT unique_word_combination UNIQUE (${example.word}, ${example.normalized_word})`,
   }),
 );
+
+export const userVotes = createTable(
+  "user_votes",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id").notNull(), // Clerk user_id
+    wordId: integer("word_id")
+      .notNull()
+      .references(() => communityWords.id, { onDelete: "cascade" }),
+    voteValue: integer("vote_value").notNull(),
+    votedAt: timestamp("voted_at").defaultNow().notNull(),
+  },
+  (userVotes) => ({
+    // Constrain users to allow 1 vote per user
+    uniqueUserVote: uniqueIndex("unique_user_vote").on(
+      userVotes.userId,
+      userVotes.wordId,
+    ),
+  }),
+);
+
+export const userVotesRelations = relations(userVotes, ({ one }) => ({
+  word: one(communityWords, {
+    fields: [userVotes.wordId],
+    references: [communityWords.id],
+  }),
+}));
