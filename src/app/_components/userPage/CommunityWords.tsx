@@ -233,12 +233,12 @@ const CommunityWords: React.FC = () => {
                     />
                   </div>
                   <div className="admin-delete-button absolute right-[50px]">
-                    {/*      <AdminDeleteWordButton
+                    <AdminDeleteWordButton
                       wordId={word.id!}
                       word={word.word}
                       table="community_words"
                       onWordDeleted={handleWordDeletion}
-                    /> */}
+                    />
                   </div>
                   <div className="word-added-date absolute right-[15px]">
                     <CircleIcon
