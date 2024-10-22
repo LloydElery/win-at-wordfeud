@@ -5,7 +5,11 @@ import CircleIcon from "../_ui/CircleIcon";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { format } from "date-fns";
 import { AdminDeleteWordButton } from "../_ui/AdminDeleteWordButton";
-import { submitVote } from "./services";
+import {
+  fetchCommunityWordsFromDatabase,
+  fetchCurrentVoteValueFromDatabase,
+  submitVote,
+} from "./services";
 
 export const dynamic = "force-dynamic";
 export interface ICommunityWords {
@@ -41,14 +45,11 @@ const CommunityWords: React.FC = () => {
     try {
       setLoadingMessage("Hämtar ord och röster från databasen...");
 
-      const response = await fetch(`/api/community-words`);
-
-      if (!response.ok) throw new Error("Failed to fetch community words");
-
-      const data = await response.json();
+      const communityWordsArray = (await fetchCommunityWordsFromDatabase())
+        .communityWords;
 
       setCommunityWords((prev) => {
-        const uniqueWords = data.communityWords.filter(
+        const uniqueWords = communityWordsArray.filter(
           (newWord: { id: number | undefined }) =>
             !prev.some((word) => word.id === newWord.id),
         );
@@ -88,63 +89,23 @@ const CommunityWords: React.FC = () => {
     try {
       setLoadingMessage("Lägger till din röst...");
 
-      const voteResponse = await fetch(
-        `/api/user-votes?wordId=${wordId}&userId=${user?.id}`,
-      );
-      const { currentVoteValue } = await voteResponse.json();
-      console.log("CurrentVoteValue: ", currentVoteValue);
-
       const voteValue = voteType === "upVote" ? 1 : -1;
-      console.log("voteValue: ", voteValue);
 
+      const currentVoteValue = (
+        await fetchCurrentVoteValueFromDatabase(wordId, user?.id!)
+      ).currentVoteValue;
+
+      // Check to see if user already have an active vote that is equal to voteType
       if (currentVoteValue === voteValue) {
-        console.log("Användaren har redan röstat: ", voteType);
+        setLoadingMessage(
+          `${user?.firstName}, du har redan röstat ${voteType === "upVote" ? "up" : "ner"} det här ordet`,
+        );
         return;
       }
 
       await submitVote(user?.id, wordId, voteValue);
 
-      setCommunityWords((prevWords) =>
-        prevWords.map((word) => {
-          if (word.id === wordId) {
-            const updatedUpVotes =
-              voteType === "upVote" ? word.up_votes + 1 : word.up_votes;
-            const updatedDownVotes =
-              voteType === "downVote" ? word.down_votes + 1 : word.down_votes;
-
-            return {
-              ...word,
-              up_votes: updatedUpVotes,
-              down_votes: updatedDownVotes,
-              score: calculateScore(updatedUpVotes, updatedDownVotes),
-            };
-          }
-          return word;
-        }),
-      );
-
-      const response = await fetch("/api/community-words", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          wordId,
-          voteType,
-          userId: user?.id,
-        }),
-      });
-
-      if (!response.ok) throw new Error("Failed to update vote");
-
-      const updatedWord = await response.json();
-      console.log("Uppdaterad orddata efter röstning: ", updatedWord);
-
-      setCommunityWords((prevWords) =>
-        prevWords.map((word) =>
-          word.id === wordId ? { ...word, ...updatedWord } : word,
-        ),
-      );
+      updateCommunityWordScoreUI(wordId, voteType);
 
       setLoadingMessage("Tack för att du röstade!");
       await fetchCommunityWords();
@@ -152,6 +113,28 @@ const CommunityWords: React.FC = () => {
       console.error("Error voting", error);
     } finally {
     }
+  };
+
+  const updateCommunityWordScoreUI = (wordId: number, voteType: string) => {
+    // Update "score" UI (+1 / -1)
+    setCommunityWords((prevWords) =>
+      prevWords.map((word) => {
+        if (word.id === wordId) {
+          const updatedUpVotes =
+            voteType === "upVote" ? word.up_votes + 1 : word.up_votes;
+          const updatedDownVotes =
+            voteType === "downVote" ? word.down_votes + 1 : word.down_votes;
+
+          return {
+            ...word,
+            up_votes: updatedUpVotes,
+            down_votes: updatedDownVotes,
+            score: calculateScore(updatedUpVotes, updatedDownVotes),
+          };
+        }
+        return word;
+      }),
+    );
   };
 
   if (loading) return <p>Laddar ord...</p>;
