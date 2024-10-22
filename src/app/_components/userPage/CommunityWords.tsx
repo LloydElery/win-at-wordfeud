@@ -59,11 +59,9 @@ const CommunityWords: React.FC = () => {
           ? updatedCommunityWords
           : prev;
       });
-
       setLoadingMessage(null);
     } catch (error) {
       console.error("Error fetching community words", error);
-      setLoadingMessage(null);
     } finally {
       setLoading(false);
     }
@@ -89,6 +87,23 @@ const CommunityWords: React.FC = () => {
   ) => {
     try {
       setLoadingMessage("Lägger till din röst...");
+
+      const voteResponse = await fetch(
+        `/api/user-votes?wordId=${wordId}&userId=${user?.id}`,
+      );
+      const { currentVoteValue } = await voteResponse.json();
+      console.log("CurrentVoteValue: ", currentVoteValue);
+
+      const voteValue = voteType === "upVote" ? 1 : -1;
+      console.log("voteValue: ", voteValue);
+
+      if (currentVoteValue === voteValue) {
+        console.log("Användaren har redan röstat: ", voteType);
+        return;
+      }
+
+      await submitVote(user?.id, wordId, voteValue);
+
       setCommunityWords((prevWords) =>
         prevWords.map((word) => {
           if (word.id === wordId) {
@@ -116,6 +131,7 @@ const CommunityWords: React.FC = () => {
         body: JSON.stringify({
           wordId,
           voteType,
+          userId: user?.id,
         }),
       });
 
@@ -130,12 +146,11 @@ const CommunityWords: React.FC = () => {
         ),
       );
 
-      submitVote(user?.id, wordId, voteType);
+      setLoadingMessage("Tack för att du röstade!");
       await fetchCommunityWords();
     } catch (error) {
       console.error("Error voting", error);
     } finally {
-      setLoadingMessage(null);
     }
   };
 
@@ -157,7 +172,18 @@ const CommunityWords: React.FC = () => {
   return (
     <>
       <div className="community-words-wrapper w-full border border-letterTile">
-        <h2 className="community-words-h2">Community Ord:</h2>
+        <h2 className={!loadingMessage ? "community-words-h2" : "hidden"}>
+          Community Ord:
+        </h2>
+        <p
+          className={
+            loadingMessage
+              ? "left-[25px] top-[70px] z-10 h-fit min-h-[28px] w-full text-sm font-thin"
+              : "hidden"
+          }
+        >
+          {loadingMessage}
+        </p>
         <div className="sorting-button-container relative flex flex-nowrap items-center justify-between text-xs font-thin">
           <strong className="font-bold">Sortera:</strong>{" "}
           <p

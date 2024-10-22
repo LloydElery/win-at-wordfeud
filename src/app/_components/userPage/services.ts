@@ -1,11 +1,8 @@
 export async function submitVote(
   userId: string | undefined,
   wordId: number,
-  voteType: string,
+  voteValue: number,
 ) {
-  // voteValue = -1 / 0 / +1 representing "downVote" / no vote / "upVote"
-  const voteValue = voteType === "upVote" ? 1 : -1;
-
   const response = await fetch("/api/user-votes", {
     method: "POST",
     headers: {
@@ -14,11 +11,5 @@ export async function submitVote(
     body: JSON.stringify({ userId, wordId, voteValue }),
   });
 
-  const data = await response.json();
-
-  if (data.response.success) {
-    console.log("Vote Registered", data.response);
-  } else {
-    console.error("Failed to add vote");
-  }
+  if (!response.ok) throw new Error("Failed to submit vote");
 }
