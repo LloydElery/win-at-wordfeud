@@ -13,8 +13,17 @@ import { AdminDeleteWordButton } from "./_ui/AdminDeleteWordButton";
 import { Word } from "../utils/WordInterface";
 
 const SearchForm = ({ query, setQuery }: any) => {
-  const { results, setResults, search, sortByValue, setSortByValue, loading } =
-    useSearch();
+  const {
+    results,
+    setResults,
+    search,
+    sortByValue,
+    setSortByValue,
+    loading,
+    addCommunityWords,
+    setAddCommunityWords,
+  } = useSearch();
+
   const [isVisible, setIsVisible] = useState(true);
   const customSearchFormRef = useRef<any>(null);
 
@@ -49,6 +58,10 @@ const SearchForm = ({ query, setQuery }: any) => {
 
   const handleSortToggle = () => {
     setSortByValue(!sortByValue);
+  };
+
+  const handleCommunityWordsToggle = () => {
+    setAddCommunityWords(!addCommunityWords);
   };
 
   const handleReport = async (word: string) => {
@@ -162,6 +175,16 @@ const SearchForm = ({ query, setQuery }: any) => {
 
         <section className="result-section">
           <div className="result-heading">Resultat:</div>
+          <SignedIn>
+            <label className="sorting-label">
+              <input
+                type="checkbox"
+                checked={addCommunityWords}
+                onChange={handleCommunityWordsToggle}
+              />
+              Inkludera "Community Ord"
+            </label>
+          </SignedIn>
           <label className="sorting-label">
             <input
               type="checkbox"
@@ -194,7 +217,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                           </h2>
                         )}
                     <li
-                      className="relative my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight"
+                      className={`${word.source === "cw" ? "text-red-600" : "text-green-600"} relative my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight`}
                       key={index}
                     >
                       <p>{word.word.toUpperCase()}</p>
@@ -253,7 +276,7 @@ const SearchForm = ({ query, setQuery }: any) => {
                       </SignedOut>{" "}
                       <div className="admin-delete-btn absolute right-0 rounded-full">
                         <AdminDeleteWordButton
-                          wordId={word.id}
+                          wordId={word.id!}
                           word={word.word}
                           table="words"
                           onWordDeleted={handleWordDeletion}
