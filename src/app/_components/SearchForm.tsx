@@ -17,6 +17,7 @@ const SearchForm = ({ query, setQuery }: any) => {
     results,
     setResults,
     search,
+    cwSearch,
     sortByValue,
     setSortByValue,
     loading,
@@ -33,6 +34,9 @@ const SearchForm = ({ query, setQuery }: any) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (addCommunityWords) {
+      cwSearch(query);
+    }
     search(query);
   };
 
@@ -111,7 +115,6 @@ const SearchForm = ({ query, setQuery }: any) => {
   // Keeps track of headings for word by letter count.
   const displayedWordH2ByLength = new Set();
 
-  const result = results.map((result) => {});
   return (
     <>
       <section className="mb-1">

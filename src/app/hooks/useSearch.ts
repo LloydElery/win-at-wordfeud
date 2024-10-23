@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { fetchCommunityWordsFromDatabase } from "../_components/userPage/services";
 import { ICommunityWords } from "../_components/userPage/CommunityWords";
 
 export interface Word {
@@ -25,25 +24,35 @@ export const useSearch = () => {
   const [sortByValue, setSortByValue] = useState(false);
   const [addCommunityWords, setAddCommunityWords] = useState(false);
 
-  const search = async (query: string) => {
+  const cwSearch = async (query: string) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/search?letters=${encodeURIComponent(query)}`,
+        `/api/search?letters=${encodeURIComponent(query)}&table=${"community_words"}`,
       );
       const data = await response.json();
-
-      const communityWordsResponse =
-        (await fetchCommunityWordsFromDatabase()).communityWords || [];
-      const normalizedCommunityWordsResults = communityWordsResponse.map(
+      const communityWordsWithSource = data.words.map(
         (cw: ICommunityWords) => ({
           ...cw,
           source: "cw",
         }),
       );
+      setCommunityResults(communityWordsWithSource);
+    } catch (error) {
+      console.error("Error fetching community words:", error);
+      setCommunityResults([]);
+      setLoading(false);
+    }
+  };
 
+  const search = async (query: string) => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `/api/search?letters=${encodeURIComponent(query)}&table=${"words"}`,
+      );
+      const data = await response.json();
       setResults(data.words || []);
-      setCommunityResults(normalizedCommunityWordsResults);
     } catch (error) {
       console.error("Error fetching search results:", error);
     } finally {
@@ -55,13 +64,6 @@ export const useSearch = () => {
     ? [...results, ...communityResults]
     : results;
 
-  /*   const sortedResults = useMemo(() => {
-    if (sortByValue) {
-      return sortByValueDesc(combinedResults);
-    }
-    return results;
-  }, [results, sortByValue]);
- */
   const sortedResults = useMemo(() => {
     if (sortByValue) {
       return [...combinedResults].sort((a, b) => b.value - a.value);
@@ -74,6 +76,7 @@ export const useSearch = () => {
     setResults,
     loading,
     search,
+    cwSearch,
     sortByValue,
     setSortByValue,
     addCommunityWords,

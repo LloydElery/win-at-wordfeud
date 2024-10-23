@@ -1,102 +1,93 @@
-import { db, words } from "../db";
+import { db } from "../db";
 import { AnyColumn, lte, sql } from "drizzle-orm";
 
 export interface ISearchResult {
   id: number;
   word: string;
   value: number;
+  source?: string;
 }
 
-export async function displaySearchResultsInStages(letters: string) {
-  console.log("New Search Request: ", letters);
+export async function displaySearchResultsInStages(
+  letters: string,
+  table: any,
+) {
   // Sort user input letters in alphabetical order
-  console.time("normalizedLetters");
   const normalizedLetters = normalizeWord(letters);
-  console.timeEnd("normalizedLetters");
 
-  console.time("searchResultsBeforeFiltering");
   const searchResultsBeforeFiltering: ISearchResult[] =
-    await displaySearchResults(normalizedLetters);
-  console.timeEnd("searchResultsBeforeFiltering");
+    await displaySearchResults(normalizedLetters, table);
 
-  console.time("combinedResultsBeforeFiltering");
   let combinedResultsBeforeFiltering: ISearchResult[] =
     searchResultsBeforeFiltering;
-  console.timeEnd("combinedResultsBeforeFiltering");
 
   if (letters.includes(" ")) {
-    console.time("wildcardResultsBeforeFiltering");
     const wildcardResultsBeforeFiltering: ISearchResult[] =
-      await displayWildcardSearchResults(normalizedLetters);
-    console.timeEnd("wildcardResultsBeforeFiltering");
+      await displayWildcardSearchResults(normalizedLetters, table);
 
-    console.time("combinedResultsBeforeFiltering");
     combinedResultsBeforeFiltering = [
       ...combinedResultsBeforeFiltering,
       ...wildcardResultsBeforeFiltering,
     ];
-    console.timeEnd("combinedResultsBeforeFiltering");
   }
 
-  console.time("uniqueCombinedResults");
   const uniqueCombinedResults = filterUniqueResults(
     combinedResultsBeforeFiltering,
   );
-  console.timeEnd("uniqueCombinedResults");
 
-  console.time("formableWords");
   const formableWords = filterFormableWords(
     uniqueCombinedResults,
     letters,
     normalizedLetters,
   );
-  console.timeEnd("formableWords");
 
-  console.time("filteredResults");
   const filteredResults = filterWordsContainingInvalidChars(
     formableWords,
     letters,
     normalizedLetters,
   );
-  console.timeEnd("filteredResults");
 
   // Sortera resultat baserat på längd och bokstavsordning
-  console.time("finalSortedResults");
   const finalSortedResults =
     sortResultsByLengthAndAlphabetically(filteredResults);
-  console.timeEnd("finalSortedResults");
   return finalSortedResults;
 }
 
-export async function displaySearchResults(normalizedLetters: string) {
+export async function displaySearchResults(
+  normalizedLetters: string,
+  table: any,
+) {
   const userInputLetters = normalizedLetters.replace(/\s/g, ""); // Remove wildcard
 
-  const wordLength = sql`char_length(${words.word})`;
+  const wordLength = sql`char_length(${table.word})`;
 
   const searchResults = await db
     .selectDistinct({
-      id: words.id,
-      word: sql<string>`lower(${words.word})`,
-      value: words.word_value,
+      id: table.id,
+      word: sql<string>`lower(${table.word})`,
+      value: table.word_value,
     })
-    .from(words)
+    .from(table)
     .where(lte(wordLength, userInputLetters.length));
 
   return searchResults;
 }
 
-export async function displayWildcardSearchResults(normalizedLetters: string) {
+export async function displayWildcardSearchResults(
+  normalizedLetters: string,
+  table: any,
+) {
   const userInputLettersAndWildcard = normalizedLetters.replace(/\s/g, "_"); // Add wildcard
 
-  const wordLength = sql`char_length(${words.word})`;
+  const wordLength = sql`char_length(${table.word})`;
 
   const wildcardResults = await db
     .selectDistinct({
-      id: words.id,
-      word: sql<string>`lower(${words.word})`,
-      value: words.word_value,
+      id: table.id,
+      word: sql<string>`lower(${table.word})`,
+      value: table.word_value,
     })
-    .from(words)
+    .from(table)
     .where(lte(wordLength, userInputLettersAndWildcard.length));
 
   return wildcardResults;
