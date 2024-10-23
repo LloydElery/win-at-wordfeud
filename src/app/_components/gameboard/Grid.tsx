@@ -1,12 +1,38 @@
 "use client";
+import { useEffect, useState } from "react";
 import GridItem from "./GirdItem";
 import { gridItemMap } from "./Map";
 import { GridItemType, GridProps } from "./T";
 
 const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
+  const [reset, setReset] = useState(false);
+  const [hasSavedLetters, setHasSavedLetters] = useState(false);
+
   const handleInputLetter = (id: number, letter: string) => {
     console.log(`Letter ${letter} placed on square ${id}`);
   };
+
+  const checkForSavedLetters = () => {
+    let hasLetters = false;
+    for (let i = 0; i < 225; i++) {
+      if (localStorage.getItem(`gridItem-${i}`)) {
+        hasLetters = true;
+        break;
+      }
+    }
+    setHasSavedLetters(true);
+  };
+
+  const handleClear = () => {
+    console.log("Tömmer spelbrädan");
+    localStorage.clear();
+    setHasSavedLetters(false);
+    setReset(!reset);
+  };
+
+  useEffect(() => {
+    checkForSavedLetters();
+  }, []);
 
   const create2DGrid = (): GridItemType[][] => {
     return Array.from({ length: size }, (_, row) =>
@@ -43,12 +69,24 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
               <GridItem
                 key={gridItem.id}
                 id={gridItem.id}
-                onInputLetter={handleInputLetter}
+                reset={reset}
+                onInputLetter={(id, letter) => {
+                  handleInputLetter(id, letter);
+                  checkForSavedLetters();
+                }}
               />
             );
           }),
         )}
       </div>
+      {hasSavedLetters && (
+        <button
+          className="m-1 rounded-md border p-1 text-xs"
+          onClick={handleClear}
+        >
+          Töm spelbrädan
+        </button>
+      )}
     </>
   );
 };
