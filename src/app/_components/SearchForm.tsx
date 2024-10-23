@@ -11,6 +11,7 @@ import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
 import { AdminDeleteWordButton } from "./_ui/AdminDeleteWordButton";
 import { Word } from "../utils/WordInterface";
+import { communityWords } from "~/server/db/schema";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const {
@@ -34,10 +35,11 @@ const SearchForm = ({ query, setQuery }: any) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (addCommunityWords) {
+    if (!addCommunityWords) {
+      search(query);
+    } else {
       cwSearch(query);
     }
-    search(query);
   };
 
   const handleFocusInput = () => {
@@ -93,6 +95,13 @@ const SearchForm = ({ query, setQuery }: any) => {
       prevResults.filter((word) => word.id !== wordId),
     );
   };
+
+  useEffect(() => {
+    if (addCommunityWords) {
+      cwSearch(query);
+    }
+    search(query);
+  }, [addCommunityWords]);
 
   useEffect(() => {
     getSavedQuery();
@@ -220,7 +229,20 @@ const SearchForm = ({ query, setQuery }: any) => {
                           </h2>
                         )}
                     <li
-                      className={`${word.source === "cw" ? "text-red-600" : "text-green-600"} relative my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight`}
+                      className={`${
+                        word.source === "cw" ? (
+                          <CircleIcon
+                            content={"cw"}
+                            bgColor="bg-none"
+                            textColor="text-letterTile"
+                            borderColor="border-black"
+                            tooltip={"Community ord"}
+                            placement="right"
+                          />
+                        ) : (
+                          ""
+                        )
+                      } relative my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight`}
                       key={index}
                     >
                       <p>{word.word.toUpperCase()}</p>
@@ -277,6 +299,16 @@ const SearchForm = ({ query, setQuery }: any) => {
                           placement="left"
                         />
                       </SignedOut>{" "}
+                      {word.source && (
+                        <CircleIcon
+                          content={"cw"}
+                          bgColor="bg-gameboardBG absolute left-[110px] bottom-[3px]"
+                          textColor="text-letterTile"
+                          borderColor="border-black"
+                          tooltip={"Community ord"}
+                          placement="right"
+                        />
+                      )}
                       <div className="admin-delete-btn absolute right-0 rounded-full">
                         <AdminDeleteWordButton
                           wordId={word.id!}
