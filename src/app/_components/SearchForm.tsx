@@ -11,10 +11,21 @@ import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
 import { AdminDeleteWordButton } from "./_ui/AdminDeleteWordButton";
 import { Word } from "../utils/WordInterface";
+import { communityWords } from "~/server/db/schema";
 
 const SearchForm = ({ query, setQuery }: any) => {
-  const { results, setResults, search, sortByValue, setSortByValue, loading } =
-    useSearch();
+  const {
+    results,
+    setResults,
+    search,
+    cwSearch,
+    sortByValue,
+    setSortByValue,
+    loading,
+    addCommunityWords,
+    setAddCommunityWords,
+  } = useSearch();
+
   const [isVisible, setIsVisible] = useState(true);
   const customSearchFormRef = useRef<any>(null);
 
@@ -24,7 +35,11 @@ const SearchForm = ({ query, setQuery }: any) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    search(query);
+    if (!addCommunityWords) {
+      search(query);
+    } else {
+      cwSearch(query);
+    }
   };
 
   const handleFocusInput = () => {
@@ -49,6 +64,10 @@ const SearchForm = ({ query, setQuery }: any) => {
 
   const handleSortToggle = () => {
     setSortByValue(!sortByValue);
+  };
+
+  const handleCommunityWordsToggle = () => {
+    setAddCommunityWords(!addCommunityWords);
   };
 
   const handleReport = async (word: string) => {
@@ -78,6 +97,13 @@ const SearchForm = ({ query, setQuery }: any) => {
   };
 
   useEffect(() => {
+    if (addCommunityWords) {
+      cwSearch(query);
+    }
+    search(query);
+  }, [addCommunityWords]);
+
+  useEffect(() => {
     getSavedQuery();
   }, []);
 
@@ -98,7 +124,6 @@ const SearchForm = ({ query, setQuery }: any) => {
   // Keeps track of headings for word by letter count.
   const displayedWordH2ByLength = new Set();
 
-  const result = results.map((result) => {});
   return (
     <>
       <section className="mb-1">
@@ -162,6 +187,16 @@ const SearchForm = ({ query, setQuery }: any) => {
 
         <section className="result-section">
           <div className="result-heading">Resultat:</div>
+          <SignedIn>
+            <label className="sorting-label">
+              <input
+                type="checkbox"
+                checked={addCommunityWords}
+                onChange={handleCommunityWordsToggle}
+              />
+              Inkludera "Community Ord"
+            </label>
+          </SignedIn>
           <label className="sorting-label">
             <input
               type="checkbox"
@@ -194,7 +229,20 @@ const SearchForm = ({ query, setQuery }: any) => {
                           </h2>
                         )}
                     <li
-                      className="relative my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight"
+                      className={`${
+                        word.source === "cw" ? (
+                          <CircleIcon
+                            content={"cw"}
+                            bgColor="bg-none"
+                            textColor="text-letterTile"
+                            borderColor="border-black"
+                            tooltip={"Community ord"}
+                            placement="right"
+                          />
+                        ) : (
+                          ""
+                        )
+                      } relative my-[2px] ml-[0.8rem] grid grid-cols-4 items-center text-sm font-extralight`}
                       key={index}
                     >
                       <p>{word.word.toUpperCase()}</p>
@@ -251,9 +299,19 @@ const SearchForm = ({ query, setQuery }: any) => {
                           placement="left"
                         />
                       </SignedOut>{" "}
+                      {word.source && (
+                        <CircleIcon
+                          content={"cw"}
+                          bgColor="bg-gameboardBG absolute left-[110px] bottom-[3px]"
+                          textColor="text-letterTile"
+                          borderColor="border-black"
+                          tooltip={"Community ord"}
+                          placement="right"
+                        />
+                      )}
                       <div className="admin-delete-btn absolute right-0 rounded-full">
                         <AdminDeleteWordButton
-                          wordId={word.id}
+                          wordId={word.id!}
                           word={word.word}
                           table="words"
                           onWordDeleted={handleWordDeletion}

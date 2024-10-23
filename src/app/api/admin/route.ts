@@ -1,4 +1,3 @@
-import { useUser } from "@clerk/nextjs";
 import { getAuth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -62,7 +61,6 @@ export async function DELETE(req: NextRequest) {
 
   try {
     const table = tableMapping[tableName];
-    console.log("table: ", table);
 
     const wordRecord = await db
       .select({ id: table.id })
