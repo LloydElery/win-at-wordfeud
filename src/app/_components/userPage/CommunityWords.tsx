@@ -14,12 +14,16 @@ import {
 export const dynamic = "force-dynamic";
 export interface ICommunityWords {
   id?: number;
+  word: string;
+  normalized_word: string;
   up_votes: number;
   down_votes: number;
   score: number;
-  word: string;
+  value: number;
+  reports: number;
   created_at: Date;
   status: string;
+  source?: string;
 }
 
 export interface IWordVote {
