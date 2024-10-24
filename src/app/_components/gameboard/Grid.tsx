@@ -26,8 +26,8 @@ const Grid: React.FC<GridProps> = ({ size, specialGridItems }) => {
   const handleClear = () => {
     console.log("Tömmer spelbrädan");
     localStorage.clear();
-    setHasSavedLetters(false);
     setReset(!reset);
+    setHasSavedLetters(false);
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { TiDeleteOutline } from "react-icons/ti";
+import { AiTwotoneDelete } from "react-icons/ai";
 import { ILetterTileProps } from "./LetterTiles";
 
 const ClearQueryTile: React.FC<ILetterTileProps> = ({
@@ -15,7 +15,7 @@ const ClearQueryTile: React.FC<ILetterTileProps> = ({
           className={`letter-tile content-center bg-placeholderLetterTile inner-border inner-border-black`}
           onClick={handleClear}
         >
-          <TiDeleteOutline size={25} color="#6F1515" />
+          <AiTwotoneDelete size={25} color="#6F1515" />
         </div>
       </div>
     </>
