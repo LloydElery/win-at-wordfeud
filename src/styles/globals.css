@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 /* ----- SEARCH ------ */
 
 .search {
@@ -9,7 +19,7 @@
 }
 
 .search-results {
-  @apply max-h-[238px] w-full overflow-auto border;
+  @apply no-scrollbar max-h-[238px] w-full overflow-auto border;
 }
 
 .sorting-label {
