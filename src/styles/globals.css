@@ -67,7 +67,7 @@
 /* ----- MODAL ----- */
 
 .modal-container {
-  @apply absolute left-0 right-0 top-20 z-10 w-full justify-self-center p-2 shadow-md sm:top-[10%] md:max-w-screen-md;
+  @apply fixed left-0 right-0 top-20 z-10 w-full justify-self-center p-2 shadow-md sm:top-[10%] md:max-w-screen-md;
 }
 
 .modal-panel {
