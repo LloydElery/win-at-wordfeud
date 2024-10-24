@@ -46,7 +46,7 @@ const Reports: React.FC = () => {
   return (
     <>
       <div className="w-full border border-letterTile">
-        <div className="relative flex flex-nowrap border">
+        <div className="relative flex flex-nowrap">
           <h2>Rapporterade Ord:</h2>
           <div className="absolute right-2 flex h-full">
             <CircleIcon
