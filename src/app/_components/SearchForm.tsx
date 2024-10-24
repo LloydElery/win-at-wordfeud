@@ -11,7 +11,7 @@ import LetterTilePlaceholders from "./_ui/LetterTilePlaceholders";
 import { RxEyeClosed, RxEyeOpen } from "react-icons/rx";
 import { AdminDeleteWordButton } from "./_ui/AdminDeleteWordButton";
 import { Word } from "../utils/WordInterface";
-import { communityWords } from "~/server/db/schema";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 const SearchForm = ({ query, setQuery }: any) => {
   const {
@@ -27,6 +27,7 @@ const SearchForm = ({ query, setQuery }: any) => {
   } = useSearch();
 
   const [isVisible, setIsVisible] = useState(true);
+  const [expandResults, setExpandResults] = useState(false);
   const customSearchFormRef = useRef<any>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +95,10 @@ const SearchForm = ({ query, setQuery }: any) => {
     setResults((prevResults: Word[]) =>
       prevResults.filter((word) => word.id !== wordId),
     );
+  };
+
+  const handleResultsHeight = () => {
+    setExpandResults(!expandResults);
   };
 
   useEffect(() => {
@@ -209,7 +214,9 @@ const SearchForm = ({ query, setQuery }: any) => {
         {loading ? (
           <LoadingScreen queryLength={query.length} />
         ) : (
-          <div className="search-results border-searchResultsBorder bg-searchResultsBG">
+          <div
+            className={`search-results border-searchResultsBorder bg-searchResultsBG ${expandResults ? "max-h-[450px]" : "max-h-[238px]"} `}
+          >
             <ul className="ml-1 mr-1">
               {results.map((word, index) => {
                 const wordLength = word.word.length;
@@ -323,6 +330,21 @@ const SearchForm = ({ query, setQuery }: any) => {
               })}
             </ul>
           </div>
+        )}
+        {!expandResults ? (
+          <button
+            onClick={handleResultsHeight}
+            className="flex justify-self-center"
+          >
+            <IoIosArrowDown size={20} />
+          </button>
+        ) : (
+          <button
+            onClick={handleResultsHeight}
+            className="flex justify-self-center"
+          >
+            <IoIosArrowUp size={20} />
+          </button>
         )}
       </section>
     </>

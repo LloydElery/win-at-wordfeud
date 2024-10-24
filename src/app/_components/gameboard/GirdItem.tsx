@@ -81,7 +81,7 @@ const GridItem = ({
         {isInputVisible ? (
           <>
             <div
-              className={`h-full w-full animate-pulse bg-placeholderLetterTile before:absolute before:-left-0 before:top-0 before:ml-px before:h-full before:w-[2px] before:animate-blink before:bg-black`}
+              className={`h-full w-full animate-pulse bg-placeholderLetterTile before:-left-0 before:top-0 before:ml-px before:h-full before:w-[2px] before:animate-blink before:bg-black`}
             >
               <input
                 ref={inputRef}

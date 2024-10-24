@@ -52,7 +52,7 @@ export const LoadingScreen: React.FC<{ queryLength: number }> = ({
   };
 
   return (
-    <div className="search-results border-searchResultsBorder bg-searchResultsBG">
+    <div className="search-results max-h-[238px] border-searchResultsBorder bg-searchResultsBG">
       <ul className="ml-1 mr-1">{generateLoadingScreenContent()}</ul>
     </div>
   );

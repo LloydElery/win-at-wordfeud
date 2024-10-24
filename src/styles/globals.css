@@ -19,7 +19,7 @@
 }
 
 .search-results {
-  @apply no-scrollbar max-h-[238px] w-full overflow-auto border;
+  @apply no-scrollbar w-full overflow-auto border;
 }
 
 .sorting-label {
@@ -105,7 +105,7 @@
 /* ----- NAV ----- */
 
 .navigation {
-  @apply fixed bottom-0 flex w-full items-center justify-between bg-primaryBlue p-4 text-xl font-semibold text-white md:max-w-screen-md;
+  @apply fixed bottom-0 left-0 flex w-full items-center justify-between bg-primaryBlue p-4 text-xl font-semibold text-white md:max-w-screen-md;
 }
 
 .nav-content-container {
