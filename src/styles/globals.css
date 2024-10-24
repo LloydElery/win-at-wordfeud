@@ -27,11 +27,11 @@
 }
 
 .result-section {
-  @apply flex flex-nowrap justify-between;
+  @apply flex flex-nowrap justify-between gap-3;
 }
 
 .result-heading {
-  @apply ml-1 w-fit text-xl font-light tracking-wider;
+  @apply ml-1 w-fit text-sm font-light tracking-wider;
 }
 /* ADMIN */
 .admin-section {

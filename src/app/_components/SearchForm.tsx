@@ -191,7 +191,9 @@ const SearchForm = ({ query, setQuery }: any) => {
         </section>
 
         <section className="result-section">
-          <div className="result-heading">Resultat:</div>
+          <div className="result-heading">
+            Resultat: {results.length > 0 ? results.length + "ord" : ""}
+          </div>
           <SignedIn>
             <label className="sorting-label">
               <input
