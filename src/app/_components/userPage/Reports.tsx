@@ -2,6 +2,7 @@
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { DeleteButton } from "../_ui/DeleteButton";
+import CircleIcon from "../_ui/CircleIcon";
 
 interface IReports {
   word: string;
@@ -45,18 +46,32 @@ const Reports: React.FC = () => {
   return (
     <>
       <div className="w-full border border-letterTile">
-        <h2>Rapporterade Ord:</h2>
+        <div className="relative flex flex-nowrap border">
+          <h2>Rapporterade Ord:</h2>
+          <div className="absolute right-2 flex h-full">
+            <CircleIcon
+              content={"?"}
+              bgColor="bg-letterTile"
+              textColor="text-black"
+              borderColor="border-black"
+              tooltip="Ta bort ord från dina rapporterade ord"
+              placement="left"
+            />
+          </div>
+        </div>
         <div className="text-s max-h-[310px] w-full overflow-auto border-t font-thin">
           {reportedWords.length > 0 ? (
             <ul>
               {reportedWords.map((words, index) => (
-                <li key={index}>
+                <li key={index} className="relative flex flex-nowrap">
                   {words.word}
-                  <DeleteButton
-                    itemToDelete={words.word}
-                    apiUrl="/api/report"
-                    deleteHandler={() => handleUIAfterDelete(words.word)}
-                  />
+                  <div className="absolute right-2 flex h-full">
+                    <DeleteButton
+                      itemToDelete={words.word}
+                      apiUrl="/api/report"
+                      deleteHandler={() => handleUIAfterDelete(words.word)}
+                    />
+                  </div>
                 </li>
               ))}
             </ul>
