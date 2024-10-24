@@ -46,7 +46,7 @@ const Reports: React.FC = () => {
   return (
     <>
       <div className="w-full border border-letterTile">
-        <div className="relative flex flex-nowrap">
+        <div className="relative m-1 flex flex-nowrap">
           <h2>Rapporterade Ord:</h2>
           <div className="absolute right-2 flex h-full">
             <CircleIcon
@@ -63,7 +63,7 @@ const Reports: React.FC = () => {
           {reportedWords.length > 0 ? (
             <ul>
               {reportedWords.map((words, index) => (
-                <li key={index} className="relative flex flex-nowrap">
+                <li key={index} className="relative m-1 flex flex-nowrap">
                   {words.word}
                   <div className="absolute right-2 flex h-full">
                     <DeleteButton
