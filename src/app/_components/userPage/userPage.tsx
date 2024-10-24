@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { AiFillSetting, AiOutlineUser } from "react-icons/ai";
+import { AiOutlineUser } from "react-icons/ai";
+import { PiDatabaseLight } from "react-icons/pi";
 import CommunityWords from "./CommunityWords";
 import Reports from "./Reports";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
@@ -28,18 +29,20 @@ const UserPage: React.FC = () => {
     <>
       <SignedOut>
         <ToggleModal
-          IconComponent={AiFillSetting}
+          IconComponent={AiOutlineUser}
           ContentComponent={CustomSignIn}
           title="Login"
         />
       </SignedOut>
       <SignedIn>
         <AdminProvider>
-          <ToggleModal
-            IconComponent={AiOutlineUser}
-            ContentComponent={renderComponent}
-            title={<TextButton onSelectPage={setSelectedPage} />}
-          />
+          <div className="absolute left-10">
+            <ToggleModal
+              IconComponent={PiDatabaseLight}
+              ContentComponent={renderComponent}
+              title={<TextButton onSelectPage={setSelectedPage} />}
+            />
+          </div>
         </AdminProvider>
       </SignedIn>
     </>

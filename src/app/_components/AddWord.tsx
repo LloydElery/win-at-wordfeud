@@ -5,11 +5,13 @@ import WordContributionForm from "./AddWord/WordContributionForm";
 
 const AddWord = () => {
   return (
-    <ToggleModal
-      IconComponent={AiOutlinePlus}
-      ContentComponent={WordContributionForm}
-      title="Lägg till ett ord"
-    />
+    <div className="absolute left-0">
+      <ToggleModal
+        IconComponent={AiOutlinePlus}
+        ContentComponent={WordContributionForm}
+        title="Lägg till ett ord"
+      />
+    </div>
   );
 };
 

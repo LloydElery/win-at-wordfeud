@@ -1,18 +1,14 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { AiOutlineUser } from "react-icons/ai";
+import { SignedIn, UserButton } from "@clerk/nextjs";
+import UserPage from "./userPage/userPage";
+import AddWord from "./AddWord";
 
 export function Nav() {
   return (
     <nav className="navigation">
       <div className="nav-content-container">
         <div className="sign-in-and-profile z-20 flex items-center">
-          <SignedOut>
-            <SignInButton>
-              <button className="rounded-full border border-letterTile bg-gameboardBG">
-                <AiOutlineUser size={30} />
-              </button>
-            </SignInButton>
-          </SignedOut>
+          <AddWord />
+          <UserPage />
           <SignedIn>
             <UserButton />
           </SignedIn>
