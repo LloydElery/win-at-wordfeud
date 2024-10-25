@@ -9,14 +9,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: "Du måste vara inloggad för att lägga till ord i vår databas",
+        message: "User has to be signed in to add a word to the database",
       },
       { status: 401 },
     );
   try {
     const { word } = await req.json();
     const result = await addWordToCommunityWords(word);
-    return NextResponse.json(result);
+
+    if (!result.success) {
+      return NextResponse.json(result, { status: 400 });
+    }
+    console.log(result.result);
+    return NextResponse.json(
+      {
+        success: true,
+        message: "The word has been added to the `community-words` database",
+        result: result,
+      },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("Error adding word", error);
     return NextResponse.json({ error: "Failed to add word" }, { status: 500 });

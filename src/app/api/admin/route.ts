@@ -81,7 +81,8 @@ export async function DELETE(req: NextRequest) {
     }
 
     return NextResponse.json(
-      { message: `Word has been deleted from the database: ${result.word}` },
+      result,
+
       { status: 200 },
     );
   } catch (error) {

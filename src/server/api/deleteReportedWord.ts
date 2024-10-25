@@ -5,6 +5,7 @@ import { userReports } from "../db/schema";
 export async function deleteReportedWordsByUserId(userId: any, wordId: any) {
   const deleteWordFromUserReports = await db
     .delete(userReports)
-    .where(and(eq(userReports.userId, userId), eq(userReports.wordId, wordId)));
+    .where(and(eq(userReports.userId, userId), eq(userReports.wordId, wordId)))
+    .returning();
   return deleteWordFromUserReports;
 }

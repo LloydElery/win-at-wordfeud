@@ -70,6 +70,7 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
 
   try {
     const userReports = await deleteReportedWordsByUserId(userId, wordId);
+
     return NextResponse.json({ userReports }, { status: 200 });
   } catch (error) {
     console.error(error);

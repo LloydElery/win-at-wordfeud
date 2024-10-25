@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { CommunityWordsTable, WordsTable } from "~/app/api/admin/route";
+import { NextResponse } from "next/server";
 
 /**
  * DELETE

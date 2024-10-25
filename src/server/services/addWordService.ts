@@ -28,10 +28,13 @@ export async function addWordToCommunityWords(word: string) {
     return { success: false, message: "Word already exists" };
   }
 
-  const result = await db.insert(communityWords).values({
-    word,
-    normalized_word: normalizedWord,
-  });
+  const result = await db
+    .insert(communityWords)
+    .values({
+      word,
+      normalized_word: normalizedWord,
+    })
+    .returning();
 
   return { success: true, message: "Word added successfully", result };
 }

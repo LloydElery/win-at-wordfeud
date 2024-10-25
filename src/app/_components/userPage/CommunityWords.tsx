@@ -9,9 +9,7 @@ import {
   fetchCommunityWordsFromDatabase,
   fetchCurrentVoteValueFromDatabase,
   setCommunityWordScore,
-  submitVote,
 } from "./services";
-import { RxReset } from "react-icons/rx";
 
 export const dynamic = "force-dynamic";
 export interface ICommunityWords {
@@ -86,7 +84,6 @@ const CommunityWords: React.FC = () => {
         : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     return sorted;
   });
-  //TODO Create a reset button if "vote_value" !== 0 (FrontEnd Hook) (Backend Post??)
   const handleVote = async (
     wordId: number,
     voteType: "upVote" | "downVote",
@@ -107,7 +104,6 @@ const CommunityWords: React.FC = () => {
         );
         return;
       }
-      /* await submitVote(user?.id, wordId, voteValue); */
 
       await setCommunityWordScore(wordId, voteType);
       await fetchCommunityWords();
