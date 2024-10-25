@@ -90,16 +90,75 @@ Assign the "admin" role to specific accounts through the Clerk dashboard.
 
 ### API Documentation
 
+#### Testing the API with Insomnia
+
+To test the API, you can use [Insomnia](https://insomnia.rest/) or[Postman](https://www.postman.com/). Import the following collection into your tool of choice:
+
+1. Set up a new workspace.
+2. Create POST, GET, and DELETE requests for the available API routes.
+3. Use the API endpoints defined above to test functionality.
+
 #### Endpoints
 
-> 1. Search for words
+> 1. **Search for words**
 >    > Endpoint: `/api/search`
 >    > Method: `POST`
 >    > Description: _Find words that can be formd by any number of letter in any random order, input by user._
->    > Specifics: [Link to SEARCH Endpoint]
-> 2. Sumbit a word
+>    > Specifics: [Link to `/search` Endpoint](documentation.md#search)
+> 2. **Sumbit a word**
 >    > Endpoint: `/api/add-word`
 >    > Method: `POST`
 >    > Description: _Add a word to a separate database that can be included in the official searchengine, if a user is logged in and shooses to include `Community Words`._
->    > Specifics: [Link to ADD-WORD Endpoint]
-> 3. Admin / Manage words
+>    > Specifics: [Link to `/add-word` Endpoint](documentation.md#add-word)
+> 3. **Admin**
+>    > Endpoint: `/api/admin`
+>    > Methods: `POST`, `DELETE`
+>    > Description: _Admin verification & deletion of words from the db_
+>    > Specifics: [Link to `/admin` Endpoint](documentation.md#admin)
+
+> 4. **Voting on words**
+>    > Endpoint: `/api/community-words`
+>    > Methods: `POST`, `GET`
+>    > Description: _Updating values in the data-table, transaction -> `api/user-votes` and fetching words and values from the `community-words` table_
+>    > Specifics: [Link to `/community-words` Endpoint](documentation.md#community-words)
+
+> 5. **Reporting words**
+>    > Endpoint: `/api/report`
+>    > Methods: `POST`, `GET`, `DELETE`
+>    > Description: _Filing user-reports, getting a list of user-reported words and deleteing the report listing of a word_
+>    > Specifics: [Link to `/report` Endpoint](documentation.md#`/report`)
+
+> 6. **SAOL Filtering**
+>    > Endpoint: `/api/saol`
+>    > Methods: `POST`
+>    > Description: _Filtering the SAOL Swedish dictionary from unusable words_
+>    > Specifics: [Link to `/saol` Endpoint](documentation.md#saol)
+
+> 7. **Update Word value (ADMIN)**
+>    > Endpoint: `/api/update-word-value`
+>    > Methods: `POST`
+>    > Description: _Calculates the value of new words based on their letters_
+>    > Specifics: [Link to `/update-word-value` Endpoint](documentation.md#update-word-value)
+> 8. **User votes**
+>    > Endpoint: `/api/user-vote`
+>    > Methods: `POST`, `GET`
+>    > Description: _Adds and fetches users votes and "vote_value"_
+>    > Specifics: [Link to `/user-vote` Endpoint](documentation.md#user-vote)
+
+### Deployment
+
+This project is deployed on Vercel. The production URL is available [here](https://win-at-wordfeud.vercel.app/).
+
+If you want to deploy your own version, check out [the official T3 guide for Vercel deployment](https://create.t3.gg/en/deployment/vercel).
+
+### Contributing
+
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature/new-feature).
+3. Commit your changes (git commit -m 'Add new feature').
+4. Push to the branch (git push origin feature/new-feature).
+5. Open a pull request.
+
+### License
+
+This project is licensed under the MIT License.
