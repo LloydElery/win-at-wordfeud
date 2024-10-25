@@ -1,3 +1,5 @@
+import { db } from "~/server/db";
+
 export async function submitVote(
   userId: string | undefined,
   wordId: number,
@@ -34,4 +36,27 @@ export async function fetchCommunityWordsFromDatabase() {
   const { communityWords } = await response.json();
 
   return { communityWords };
+}
+
+export async function setCommunityWordScore(wordId: number, voteType: string) {
+  try {
+    const response = await fetch("/api/community-words", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        wordId,
+        voteType,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to submit vote");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error submitting vote", error);
+    throw error;
+  }
 }

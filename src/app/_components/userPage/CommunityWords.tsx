@@ -8,8 +8,10 @@ import { AdminDeleteWordButton } from "../_ui/AdminDeleteWordButton";
 import {
   fetchCommunityWordsFromDatabase,
   fetchCurrentVoteValueFromDatabase,
+  setCommunityWordScore,
   submitVote,
 } from "./services";
+import { RxReset } from "react-icons/rx";
 
 export const dynamic = "force-dynamic";
 export interface ICommunityWords {
@@ -74,7 +76,6 @@ const CommunityWords: React.FC = () => {
 
   useEffect(() => {
     if (!user) return;
-
     fetchCommunityWords();
   }, [user]);
 
@@ -85,7 +86,7 @@ const CommunityWords: React.FC = () => {
         : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     return sorted;
   });
-
+  //TODO Create a reset button if "vote_value" !== 0 (FrontEnd Hook) (Backend Post??)
   const handleVote = async (
     wordId: number,
     voteType: "upVote" | "downVote",
@@ -93,11 +94,11 @@ const CommunityWords: React.FC = () => {
     try {
       setLoadingMessage("Lägger till din röst...");
 
-      const voteValue = voteType === "upVote" ? 1 : -1;
-
       const currentVoteValue = (
         await fetchCurrentVoteValueFromDatabase(wordId, user?.id!)
       ).currentVoteValue;
+
+      const voteValue = voteType === "upVote" ? 1 : -1;
 
       // Check to see if user already have an active vote that is equal to voteType
       if (currentVoteValue === voteValue) {
@@ -106,20 +107,22 @@ const CommunityWords: React.FC = () => {
         );
         return;
       }
+      /* await submitVote(user?.id, wordId, voteValue); */
 
-      await submitVote(user?.id, wordId, voteValue);
-
-      updateCommunityWordScoreUI(wordId, voteType);
-
-      setLoadingMessage("Tack för att du röstade!");
+      await setCommunityWordScore(wordId, voteType);
       await fetchCommunityWords();
+      setLoadingMessage("Tack för att du röstade!");
+      await updateCommunityWordScoreUI(wordId, voteType);
     } catch (error) {
       console.error("Error voting", error);
     } finally {
     }
   };
 
-  const updateCommunityWordScoreUI = (wordId: number, voteType: string) => {
+  const updateCommunityWordScoreUI = async (
+    wordId: number,
+    voteType: string,
+  ) => {
     // Update "score" UI (+1 / -1)
     setCommunityWords((prevWords) =>
       prevWords.map((word) => {
@@ -228,6 +231,7 @@ const CommunityWords: React.FC = () => {
                       placement="bottom"
                     />
                   </div>
+
                   <div className="word-score absolute right-[125px]">
                     {word.up_votes - word.down_votes}
                   </div>

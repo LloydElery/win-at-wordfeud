@@ -1,6 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { db, words } from "./db";
-import { userReports } from "./db/schema";
+import { communityWords, userReports, userVotes } from "./db/schema";
+import { NextResponse } from "next/server";
 
 // UPDATE 'reports' to add 1 ontop of the current value
 /**
@@ -55,3 +56,33 @@ export async function deleteWordFromDatabase(wordId: number) {
     throw new Error("Failed to delete word");
   }
 }
+
+/**
+ *
+ * Select a specific word by its ID from the "community_words" db
+ */
+export async function getCommunityWordByWordId(wordId: number) {
+  const word = await db
+    .select()
+    .from(communityWords)
+    .where(eq(communityWords.id, wordId))
+    .limit(1);
+
+  if (!word) {
+    return NextResponse.json({ error: "Could not find word" }, { status: 404 });
+  }
+  return word[0];
+}
+
+/**
+ * Checks to see if a user has a vote registered
+ */
+/* async function userHasVoted(wordId: number, userId: any) {
+  const vote = await db
+    .select()
+    .from(userVotes)
+    .where(and(eq(userVotes.user_id, userId), eq(userVotes.word_id, wordId)))
+    .limit(1);
+
+  return vote.length > 0;
+} */

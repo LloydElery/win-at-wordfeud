@@ -44,6 +44,7 @@ export async function GET(req: NextRequest) {
           eq(userVotes.user_id, String(userId)),
         ),
     });
+    console.log("currentVote: ", currentVote);
 
     if (!currentVote) {
       return NextResponse.json({ currentVoteValue: null }, { status: 200 });

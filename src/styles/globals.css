@@ -151,3 +151,16 @@
 .rejected {
   @apply text-red-700;
 }
+
+/* ----- USER VOTES ----- */
+.upVote {
+  @apply text-green-400;
+}
+
+.downVote {
+  @apply text-red-400;
+}
+
+.reset {
+  @apply text-slate-500;
+}
